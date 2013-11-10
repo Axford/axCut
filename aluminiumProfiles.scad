@@ -1,4 +1,5 @@
 //  Modules for the Bosch Rexroth series of aluminium profiles
+//  Sourced from http://www.kjnltd.co.uk/
 //  
 //  Author - Damian Axford
 //  Public Domain
