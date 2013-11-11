@@ -10,6 +10,27 @@ openrail_t = 2.375;
 openrail_r = 0.4;  // radius of corners, approx
 
 
+module openrail_teenut() {
+	$fn=12;
+	
+	vitamin(str("OpenrailTeeNut:"));
+	
+	color(grey80) 
+	render()
+	mirror([0,0,1])
+	union() {
+		tube(6.9/2,5/2,3);
+		
+		linear_extrude(1.6) 
+			difference() {
+				rounded_square(15, 10, 1.5);
+				circle(5/2);
+			}
+			
+	}
+}
+
+
 
 module openrail_slot() {
 	$fn = 12;
@@ -66,6 +87,8 @@ module openrail(l,slots=false,screws=false,screwlen=8) {
 		rotate([0,-90,0]) 
 		for (i=[0:numslots]) {
 			translate([25 + i*50,-openrail_h/2,openrail_t]) screw(M5_lowprofile_screw,screwlen); 
+			
+			translate([25 + i*50,-openrail_h/2,screwlen==8?-1.4:-1.4-openrail_t]) openrail_teenut();
 		}
 	}
 

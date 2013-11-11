@@ -17,6 +17,8 @@ function ORPlateDepth(plate) = plate[1];
 function ORPlateThickness(plate) = plate[2];
 function ORPlateCornerR(plate) = plate[3];
 
+openrail_plate_offset = 16.1;  // z distance from plate surface to centre of v-groove wheels
+
 module ORPlate(plate) {
 	w = ORPlateWidth(plate);
 	d = ORPlateDepth(plate);
@@ -25,7 +27,7 @@ module ORPlate(plate) {
 	rounded_square(w, d, r);
 }
 
-module openrail_plate20($fn=16) {
+module openrail_plate20(wheels=false,$fn=16) {
 	plate = ORPLATE20;
 	w = ORPlateWidth(plate);
 	d = ORPlateDepth(plate);
@@ -61,6 +63,9 @@ module openrail_plate20($fn=16) {
 				circle(r=7.1/2);
 				
 		}
+		
+	if (wheels)
+		openrail_plate20_wheels();
 }
 
 module openrail_plate40($fn=16) {

@@ -55,6 +55,10 @@ BR_20x80 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 
 BR_20x20_TwistLockNut = [5.8,11.3,4,0.8,1.5];
 
 
+// gussets
+// width, wall_thickness, slot width, slot height, slot offset from base, nib depth
+BR_20x20_Gusset = [18, 3, 4.5, 7, 7.7, 1, "BR20x20Gusset"];
+
 module aluProBore(boreType, $fn=16) {
 	union() {
 		circle(r=aluProBore_r(boreType));
@@ -252,16 +256,72 @@ module aluProSection(profileType) {
 }
 
 module aluProExtrusion(profileType, l=100, center=false) {
-	color([0.8,0.8,0.8])
+	vitamin(str("AluExt",l,": Aluminium Extrusion ",l,"mm"));
+
+	color(grey80)
+	render()
 	    translate([0,0,center?-l/2:0]) 
 		linear_extrude(height=l)
 		aluProSection(profileType, center);
 }
 
+
+// width, wall_thickness, slot width, slot height, slot offset from base, nib depth
+//BR_20x20_Gusset = [18, 3, 4.5, 7, 7.7, 1];
+
+module aluProGusset(tg,screws=false) {
+	// sits on z=0
+	// faces along y+ and z+	
+	
+	w = tg[0];
+	t = tg[1];
+	slotw = tg[2];
+	sloth = tg[3];
+	sloto = tg[4];
+	nib = tg[5];
+	
+	vitamin(str(tg[6],": ",tg[6]));
+	
+	color(grey80)
+	render()
+	union() {
+		// ends
+		for (i=[0,1])
+			mirror([0,-i,i])
+			linear_extrude(t) {
+				difference() {
+					translate([-w/2,0,0]) square([w,w]);
+					translate([(-w/2+slotw)/2,sloto,0]) square([slotw,sloth]);
+				}
+			}
+			
+		// nibs - must add these at some point!
+		
+		//sides
+		for (i=[0,1])
+			mirror([i,0,0])
+			translate([w/2-t/2,t,t])
+			rotate([0,-90,0])
+			right_triangle(width=w-t, height=w-t, h=t, center = true);
+	}
+	
+	if (screws) {
+		for (i=[0,1])
+			mirror([0,-i,i]) {
+				translate([0,12,t]) screw(M4_cap_screw,8);
+				translate([0,12,0]) aluProTwistLockNut(BR_20x20_TwistLockNut);
+			}
+	}
+}
+
+
 //BR_20x20_TwistLockNut = [5.8,11.3,4,0.8,1.5];
 // aligned such that the origin is level with the surface of the profile when the nut is locked
 module aluProTwistLockNut(tlnt) {
+	vitamin(str("AluExtTwistNut: Aluminium Extrusion Twist Nut"));
+
 	color("silver")
+	render()
 	translate([0,0,-tlnt[2] -tlnt[3] - (tlnt[4] - tlnt[3])]) 
 	difference() {
 		union() {
