@@ -22,7 +22,7 @@ module cuttingBedFrame() {
 	translate([-bFW/2,-bedDM/2+20,-10]) rotate([0,90,0]) aluProExtrusion(BR_20x40, l=bFW);
 	
 	for (i=[0:bedRibs-1]) {
-		translate([-bedWM/2+10 + i*ribSpacing,ribL/2,-10]) rotate([90,0,0]) aluProExtrusion(BR_20x20, l=ribL);
+		translate([-bedWM/2+10 + i*ribSpacing,ribL/2,-10]) rotate([90,0,0]) aluProExtWithGussets(BR_20x20, ribL, [0,i>0?1:0,0,i<1?1:0], [0,i>0?1:0,0,i<1?1:0], true);
 	}
 	
 	// keeps bed centred at origin
@@ -34,18 +34,11 @@ module cuttingBedFrame() {
 
 
 module xCarriage() {
-	// wheels
-
-	translate([0,-22,20 + wheelOR + 2]) rotate([90,0,0]) openrailwheel();
-	
-	translate([20,-22.4,0 -wheelOR - 2]) rotate([90,0,0]) openrailwheel();
-	translate([-20,-22.4,0 -wheelOR - 2]) rotate([90,0,0]) openrailwheel();
-
-	//mounting plate
-	translate([0,-22-8-5,10]) roundedRectY([70,5,70],10,center=true);
+	// plate
+	translate([0,-20-openrail_plate_offset,10]) rotate([90,0,0]) openrail_plate20(wheels=true);
 
 	// laser optics
-	translate([0,-70,-50]) cylinder(r=25/2,h=100);
+	translate([0,-60,-50]) cylinder(r=25/2,h=100);
 }
 
 module xAxis() {
@@ -55,9 +48,8 @@ module xAxis() {
 
 	translate([-l/2,0,10]) rotate([0,90,0]) aluProExtrusion(BR_20x40, l=l);
 
-	translate([0,-22,20]) { 
-		mirror([0,1,0]) rotate([0,90,0]) openrail(bedWM);
-		translate([0,0,-20]) rotate([0,-90,0]) openrail(bedWM);
+	translate([-bedWM/2,-20,20]) { 
+		rotate([0,90,0]) rotate([0,0,90]) openrail_doubled(bedWM,true,true);
 	}
 
 	translate([l/2 + NEMA_width(NEMA17)/2,-20,10]) rotate([90,0,0]) NEMA(NEMA17);
