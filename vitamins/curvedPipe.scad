@@ -1,7 +1,7 @@
 
-use <vector.scad>   // Author: Juan Gonzalez-Gomez, GPL
-use <maths.scad>    // Author: William A Adams, Public Domain
-use <moreShapes.scad>    // Author: Damian Axford, with elements by nophead, Public Domain
+use <../utils/vector.scad>   // Author: Juan Gonzalez-Gomez, GPL
+use <../utils/maths.scad>    // Author: William A Adams, Public Domain
+use <../utils/moreShapes.scad>    // Author: Damian Axford, with elements by nophead, Public Domain
 
 fudge = 0.01;
 

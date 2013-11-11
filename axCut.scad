@@ -4,26 +4,7 @@ simplify = false;    // reduces complexity of some parts, e.g. alu extrusions
 silicone_color = [1,0.2,0.2,1];
 microbore_color = [0.8,0.65,0.4,1];
 
-include <bom.scad>
-include <config.scad>
-include <colors.scad>
-include <aluminiumProfiles.scad>
-include <stepper-motors.scad>
-include <ball-bearings.scad>
-include <screws.scad>
-include <washers.scad>
-include <nuts.scad>
-use <parametric_involute_gear_v5.0.scad>
-use <gear_calculator.scad>
-use <roundedRect.scad>
-use <2DShapes.scad>
-use <maths.scad>
-use <vector.scad>
-use <curvedPipe.scad>
-use <microbore.scad>
-use <moreShapes.scad>
-use <openrail.scad>
-use <openrailwheel.scad>
+include <config/config.scad>
 
 
 perim = 0.7;

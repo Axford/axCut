@@ -1,7 +1,7 @@
 microbore_color = [0.8,0.65,0.4,1];
 
 use <curvedPipe.scad>
-use <moreShapes.scad>
+use <../utils/moreShapes.scad>
 
 // modules are repeated to allow for longer hierarchical chains
 
@@ -157,4 +157,4 @@ module microboreTest() {
 	translate([0,50,0]) microboreElbow() { microborePipe(); microborePipe(); }
 }
 
-microboreTest();
+*microboreTest();

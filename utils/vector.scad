@@ -343,7 +343,7 @@ module Test_vector4()
 
 //-------- Perform tests......
 
-Test_vector4();
+//Test_vector4();
 
 
 /*

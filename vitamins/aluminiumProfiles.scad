@@ -4,7 +4,7 @@
 //  Author - Damian Axford
 //  Public Domain
 
-use <moreShapes.scad>
+use <../utils/moreShapes.scad>
 
 eta = 0.01;
 
