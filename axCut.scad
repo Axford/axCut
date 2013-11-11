@@ -1,46 +1,7 @@
-use_realistic_colors = true;
-simplify = false;    // reduces complexity of some parts, e.g. alu extrusions
-
-silicone_color = [1,0.2,0.2,1];
-microbore_color = [0.8,0.65,0.4,1];
-
 include <config/config.scad>
 
 
-perim = 0.7;
-layers = 0.3;
-2perim = 2*perim;
-4perim = 4*perim;
-eta = 0.001;
 
-
-
-bedW = 850;
-bedD = 600;
-bedH = 300;
-bedM = 30;  // bed margin, applied all round
-bedO = 60;  //bedOvershoot - applies to width only
-
-bedWM = bedW + 2*bedM;  // with margins
-bedDM = bedD + 2*bedM;
-
-bedRibs = 6;  // number of ribs (along y axis)
-
-bedVPos = 200;
-
-xO = 50;  // xOvershoot
-xVPos = 300;  // height of x axis above datum
-yVPos = 270;  // height of y axis - to centreline of 2040 profile
-
-wheelOR = 19/2;  // radius to bearing surface, approx
-
-rightW = 120;  // width of right casing, excludes outer panelling, runs from edge of bed margin
-leftW = 120;
-backD = 160;  // depth of back casing
-frontD = 25;  // depth of front casing
-
-claddingC = 5;  // cladding clearance, inc thickness
-claddingT = 3;  // cladding thickness
 
 
 module cuttingBed() {

@@ -39,6 +39,7 @@ include <../vitamins/curvedPipe.scad>
 include <../vitamins/microbore.scad>
 include <../vitamins/openrail.scad>
 include <../vitamins/openrailwheel.scad>
+include <../vitamins/openrailplates.scad>
 
 module rod(d , l) {
     vitamin(str("RD", d, round(l), ": Smooth rod ", d, "mm x ", round(l), "mm"));
