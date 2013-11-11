@@ -16,7 +16,27 @@ module v_cone() {
 	cylinder(r1=cone_minor_radius,r2=cone_major_radius,h=v_width/2, center=true);
 }
 
-module openrailwheel() {
+module openrail_eccentric_spacer() {
+	vitamin(str("OpenRailEccentricSpacer:"));
+	
+	color(grey80)
+		render()
+		tube(8/2,5/2,5,$fn=6,center=false);
+}
+
+module openrail_spacer() {
+	vitamin(str("OpenRailSpacer:"));
+	
+	color(grey80)
+		render()
+		tube(7/2,5/2,5,center=false);
+}
+
+module openrail_wheel() {
+	vitamin(str("DelrinVGrooveWheel:"));
+
+	color(grey20)
+	render()
 	difference() {
 		union() {
 			difference() {

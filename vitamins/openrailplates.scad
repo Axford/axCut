@@ -4,6 +4,8 @@
 // 
 // Plates are centred in XY plane, upper face is at z=0
 
+include <openrailwheel.scad>
+
 
 //           width, depth, thickness, corner r
 
@@ -23,14 +25,14 @@ module ORPlate(plate) {
 	rounded_square(w, d, r);
 }
 
-module ORPlate20($fn=16) {
+module openrail_plate20($fn=16) {
 	plate = ORPLATE20;
 	w = ORPlateWidth(plate);
 	d = ORPlateDepth(plate);
 	r = ORPlateCornerR(plate);
 	t = ORPlateThickness(plate);
 	
-	vitamin(str("OpenRail Plate 20"));
+	vitamin(str("OpenRailPlate20:"));
 	color(grey50) 
 		render() 
 		translate([0,0,-t])
@@ -38,14 +40,113 @@ module ORPlate20($fn=16) {
 		difference() {
 			ORPlate(plate);
 	
-			// holes
-			circle(r=5.2/2);
+			// inner holes, 10mm centres, 5.2mm diameter
+			for (x=[-1,1])
+				translate([x*10,0,0]) 
+				circle(r=5.2/2);
+				
+			for (y=[-1,1])
+				translate([0,y*10,0]) 
+				circle(r=5.2/2);
+				
+			// outer holes, 22.3mm centres, 5.2 dia
+			for (x=[0,1],y=[-1:1]) 
+				translate([x*22.3,y*22.3,0])
+				circle(r=5.2/2);
+			
+			
+			// outer holes, 22.3 centres, 7.1 dia
+			for (y=[-1:1]) 
+				translate([-22.3,y*22.3,0])
+				circle(r=7.1/2);
+				
+		}
+}
+
+module openrail_plate40($fn=16) {
+	plate = ORPLATE40;
+	w = ORPlateWidth(plate);
+	d = ORPlateDepth(plate);
+	r = ORPlateCornerR(plate);
+	t = ORPlateThickness(plate);
+	
+	vitamin(str("OpenRailPlate40:"));
+	color(grey50) 
+		render() 
+		translate([0,0,-t])
+		linear_extrude(t) 
+		difference() {
+			ORPlate(plate);
+	
+			// inner holes, 10mm centres, 5.2mm diameter
+			for (y=[-1:1])
+				translate([0,y*10,0]) 
+				circle(r=5.2/2);
+				
+			// inner columns of holes, 10mm centres, 5.2 dia
+			for (x=[-1,1],y=[-3,-2,0,2,3]) 
+				translate([x*10,y*10,0])
+				circle(r=5.2/2);
+			
+			// inner rows of holes, 20mm centres, 5.2 dia
+			for (x=[-2:2],y=[-1,1]) 
+				translate([x*20,y*10,0])
+				circle(r=5.2/2);
+			
+			// outer rows, 10mm/42.3 centres, 5.2 dia
+			for (x=[-1:1],y=[-1,1]) 
+				translate([x*10,y*42.3,0])
+				circle(r=5.2/2);
+			
+			// right holes, 22.3 centres, 5.2 dia
+			for (y=[-1:1]) 
+				translate([32.3,y*42.3,0])
+				circle(r=5.2/2);
+			for (y=[-1,1]) 
+				translate([22.3,y*42.3,0])
+				circle(r=5.2/2);
+			
+			
+			// left holes, 22.3 centres, 7.1 dia
+			for (y=[-1:1]) 
+				translate([-32.3,y*42.3,0])
+				circle(r=7.1/2);
+			for (y=[-1,1]) 
+				translate([-22.3,y*42.3,0])
+				circle(r=7.1/2);
+				
 		}
 }
 
 
 
+module openrail_plate20_wheels() {
+	// wheels sit below the plate
+	
+	// place at corners
+	for (x=[-1,1],y=[-1,1])
+		translate([x*22.3,y*22.3,0]) {
+			screw(M5_cap_screw,25);
+			if (x<0 && y<0) { 
+				translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_eccentric_spacer();
+			} else {
+				translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_spacer();
+			}
+			
+			translate([0,0,-ORPlateThickness(ORPLATE20)-2.5-5]) mirror([0,0,1]) ball_bearing(BB625_2RS);
+			translate([0,0,-ORPlateThickness(ORPLATE20)-10]) mirror([0,0,1]) washer(M5_washer);
+			translate([0,0,-ORPlateThickness(ORPLATE20)-11-2.5])  ball_bearing(BB625_2RS);
+			
+			translate([0,0,-ORPlateThickness(ORPLATE20)-10.5]) openrail_wheel();
+			
+			translate([0,0,-ORPlateThickness(ORPLATE20)-15]) mirror([0,0,1]) nut(M5_nut,nyloc=true);
+			
+		}
+	
+	
+	
+}
 
 
 // example usage:
-// ORPlate20();
+// openrail_plate20();

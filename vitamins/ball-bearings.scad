@@ -7,8 +7,10 @@
 //
 // Ball bearings
 //
+// id, od, t, label
 BB624 = [4, 13, 5, "624"];            // 624 ball bearing for idlers
 BB608 = [8, 22, 7, "608"];            // 608 bearings for wades
+BB625_2RS = [5, 16, 5, "625_2RS"];    //  625 bearings for Delrin v groove wheels
 
 function ball_bearing_diameter(type) = type[1];
 function ball_bearing_width(type) = type[2];
