@@ -255,6 +255,7 @@ module aluProSection(profileType) {
 		
 }
 
+
 module aluProExtrusion(profileType, l=100, center=false) {
 	vitamin(str("AluExt",l,": Aluminium Extrusion ",l,"mm"));
 
@@ -264,6 +265,33 @@ module aluProExtrusion(profileType, l=100, center=false) {
 		linear_extrude(height=l)
 		aluProSection(profileType, center);
 }
+
+
+
+// set gusset array values to 1 to indicate where a gusset should be present
+// numbering is anticlockwise from y+
+module aluProExtWithGussets(profileType, l=100, startGussets=[0,0,0,0], endGussets=[0,0,0,0], screws=false, gussetType=BR_20x20_Gusset) {
+	aluProExtrusion(profileType, l);
+	
+	// gussets
+	for (i=[0:3]) {
+		//start
+		if (startGussets[i]==1)
+			rotate([0,0,i*90]) 
+			translate([0,10,0]) 
+			aluProGusset(gussetType, screws=screws);
+		
+		
+		//end
+		if (endGussets[i]==1)
+			rotate([0,0,i*90]) 
+			translate([0,10,l]) 
+			mirror([0,0,1])
+			aluProGusset(gussetType, screws=screws);
+	}
+}
+
+
 
 
 // width, wall_thickness, slot width, slot height, slot offset from base, nib depth
