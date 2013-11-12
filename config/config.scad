@@ -156,7 +156,7 @@ bedRibs = 6;  // number of ribs (along y axis)
 
 bedVPos = 200;
 
-xO = 50;  // xOvershoot
+xO = 60;  // xOvershoot
 xVPos = 300;  // height of x axis above datum
 yVPos = 270;  // height of y axis - to centreline of 2040 profile
 
@@ -172,6 +172,7 @@ claddingT = 3;  // cladding thickness
 // frame centre lines, x/y relative to centre of bed, base of frame at z=0
 //  centres lines lying in x axis
 frameCX = [-bedDM/2 - frontD+10,
+			bedDM/2 + claddingC + 10,
 			bedDM/2 + backD - 10];
 
 //  centres lines lying in y axis

@@ -17,7 +17,11 @@ function ORPlateDepth(plate) = plate[1];
 function ORPlateThickness(plate) = plate[2];
 function ORPlateCornerR(plate) = plate[3];
 
-openrail_plate_offset = 16.1;  // z distance from plate surface to centre of v-groove wheels
+openrail_plate_offset = 16.1;  // z distance from plate surface to centre of v-groove wheels with doubled rails
+
+openrail_plate_offset2 = 13.7;    //  z distance from plate surface to centre of v-groove wheels with singel rail
+
+openrail_outercentres = 22.3;
 
 module ORPlate(plate) {
 	w = ORPlateWidth(plate);
@@ -68,7 +72,7 @@ module openrail_plate20(wheels=false,$fn=16) {
 		openrail_plate20_wheels();
 }
 
-module openrail_plate40($fn=16) {
+module openrail_plate40(wheels=false,$fn=16) {
 	plate = ORPLATE40;
 	w = ORPlateWidth(plate);
 	d = ORPlateDepth(plate);
@@ -121,35 +125,46 @@ module openrail_plate40($fn=16) {
 				circle(r=7.1/2);
 				
 		}
+		
+	if (wheels)
+		openrail_plate40_wheels();
 }
 
 
+
+module openrail_wheel_assembly() {
+	screw(M5_cap_screw,25);
+	if (x<0 && y<0) { 
+		translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_eccentric_spacer();
+	} else {
+		translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_spacer();
+	}
+	
+	translate([0,0,-ORPlateThickness(ORPLATE20)-2.5-5]) mirror([0,0,1]) ball_bearing(BB625_2RS);
+	translate([0,0,-ORPlateThickness(ORPLATE20)-10]) mirror([0,0,1]) washer(M5_washer);
+	translate([0,0,-ORPlateThickness(ORPLATE20)-11-2.5])  ball_bearing(BB625_2RS);
+	
+	translate([0,0,-ORPlateThickness(ORPLATE20)-10.5]) openrail_wheel();
+	
+	translate([0,0,-ORPlateThickness(ORPLATE20)-15]) mirror([0,0,1]) nut(M5_nut,nyloc=true);
+}
 
 module openrail_plate20_wheels() {
 	// wheels sit below the plate
 	
 	// place at corners
 	for (x=[-1,1],y=[-1,1])
-		translate([x*22.3,y*22.3,0]) {
-			screw(M5_cap_screw,25);
-			if (x<0 && y<0) { 
-				translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_eccentric_spacer();
-			} else {
-				translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_spacer();
-			}
-			
-			translate([0,0,-ORPlateThickness(ORPLATE20)-2.5-5]) mirror([0,0,1]) ball_bearing(BB625_2RS);
-			translate([0,0,-ORPlateThickness(ORPLATE20)-10]) mirror([0,0,1]) washer(M5_washer);
-			translate([0,0,-ORPlateThickness(ORPLATE20)-11-2.5])  ball_bearing(BB625_2RS);
-			
-			translate([0,0,-ORPlateThickness(ORPLATE20)-10.5]) openrail_wheel();
-			
-			translate([0,0,-ORPlateThickness(ORPLATE20)-15]) mirror([0,0,1]) nut(M5_nut,nyloc=true);
-			
-		}
+		translate([x*22.3,y*22.3,0])
+		openrail_wheel_assembly();
+}
+
+module openrail_plate40_wheels() {
+	// wheels sit below the plate
 	
-	
-	
+	// place at corners
+	for (x=[-1,1],y=[-1,1])
+		translate([x*32.3,y*42.3,0])
+		openrail_wheel_assembly();
 }
 
 
