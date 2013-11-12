@@ -45,26 +45,30 @@ module openrail_plate20(wheels=false,$fn=16) {
 		linear_extrude(t) 
 		difference() {
 			ORPlate(plate);
+			
+			if (!simplify) {
 	
-			// inner holes, 10mm centres, 5.2mm diameter
-			for (x=[-1,1])
-				translate([x*10,0,0]) 
-				circle(r=5.2/2);
+				// inner holes, 10mm centres, 5.2mm diameter
+				for (x=[-1,1])
+					translate([x*10,0,0]) 
+					circle(r=5.2/2);
 				
-			for (y=[-1,1])
-				translate([0,y*10,0]) 
-				circle(r=5.2/2);
+				for (y=[-1,1])
+					translate([0,y*10,0]) 
+					circle(r=5.2/2);
 				
-			// outer holes, 22.3mm centres, 5.2 dia
-			for (x=[0,1],y=[-1:1]) 
-				translate([x*22.3,y*22.3,0])
-				circle(r=5.2/2);
+				// outer holes, 22.3mm centres, 5.2 dia
+				for (x=[0,1],y=[-1:1]) 
+					translate([x*22.3,y*22.3,0])
+					circle(r=5.2/2);
 			
 			
-			// outer holes, 22.3 centres, 7.1 dia
-			for (y=[-1:1]) 
-				translate([-22.3,y*22.3,0])
-				circle(r=7.1/2);
+				// outer holes, 22.3 centres, 7.1 dia
+				for (y=[-1:1]) 
+					translate([-22.3,y*22.3,0])
+					circle(r=7.1/2);
+				
+			}
 				
 		}
 		

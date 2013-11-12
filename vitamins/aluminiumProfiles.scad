@@ -228,29 +228,37 @@ module aluProSection(profileType) {
 	w = profileType[3][0];
 	sx = -(x-1)*w/2;
 	sy = -(y-1)*w/2;
-
-	difference() {
-		union() {
-			for (i=[0:x-1])
-				for (j=[0:y-1])
-					translate([sx + w * i, sy + w * j,0]) aluProBasicSection(profileType);
+	
+	w1 = profileType[2][0];
+	
+	if (simplify) {
+		// simple rectangle
+		square([w1 * x,w1 * y],center=true);
+	
+	} else {
+		difference() {
+			union() {
+				for (i=[0:x-1])
+					for (j=[0:y-1])
+						translate([sx + w * i, sy + w * j,0]) aluProBasicSection(profileType);
 			
-			// fill-in sides
+				// fill-in sides
+				if (y > 1)
+					for (i=[0:y-2])
+						for (j=[0,1]) 
+							mirror([j,0,0])
+								translate([sx + (x-1) * w/2, sy + i*w + w/2,0])
+									aluProSide(profileType[3]);
+			}
+
+			// remove hollows
 			if (y > 1)
 				for (i=[0:y-2])
 					for (j=[0,1]) 
 						mirror([j,0,0])
-							translate([sx + (x-1) * w/2, sy + i*w + w/2,0])
-								aluProSide(profileType[3]);
+							translate([sx + (x-1) * w/2, sy + i*w,0])
+								rotate([0,0,90]) aluProHollow(profileType[2]);
 		}
-
-		// remove hollows
-		if (y > 1)
-			for (i=[0:y-2])
-				for (j=[0,1]) 
-					mirror([j,0,0])
-						translate([sx + (x-1) * w/2, sy + i*w,0])
-							rotate([0,0,90]) aluProHollow(profileType[2]);
 	}
 		
 }
@@ -419,18 +427,26 @@ module aluProGusset(tg,screws=false) {
 module aluProTwistLockNut(tlnt) {
 	vitamin(str("AluExtTwistNut: Aluminium Extrusion Twist Nut"));
 
-	color("silver")
-	render()
-	translate([0,0,-tlnt[2] -tlnt[3] - (tlnt[4] - tlnt[3])]) 
-	difference() {
-		union() {
-			translate([0,0,tlnt[2]-0.5-eta]) cube([tlnt[1],tlnt[0],1+2*eta],center=true);
-			translate([0,0,(tlnt[2]-1)/2]) rotate([90,0,0]) trapezoidPrism(tlnt[1],tlnt[0],tlnt[2]-1,-(tlnt[1] - tlnt[0])/2,tlnt[0],center=true);
-			
-			translate([0,0,tlnt[3]/2 + tlnt[2]-eta]) cube([tlnt[0],tlnt[0],tlnt[3] + eta],center=true);
-		}
+	if (simplify) {
+		color("silver")
+		render()
+		translate([0,0,-tlnt[2] -tlnt[3] - (tlnt[4] - tlnt[3])])
+		translate([0,0,(tlnt[2]-1)/2]) rotate([90,0,0]) trapezoidPrism(tlnt[1],tlnt[0],tlnt[2]-1,-(tlnt[1] - tlnt[0])/2,tlnt[0],center=true);
 	
-		translate([0,0,-1]) cylinder(h=20, r=tlnt[2]/2, $fn=8);
+	} else {
+		color("silver")
+		render()
+		translate([0,0,-tlnt[2] -tlnt[3] - (tlnt[4] - tlnt[3])]) 
+		difference() {
+			union() {
+				translate([0,0,tlnt[2]-0.5-eta]) cube([tlnt[1],tlnt[0],1+2*eta],center=true);
+				translate([0,0,(tlnt[2]-1)/2]) rotate([90,0,0]) trapezoidPrism(tlnt[1],tlnt[0],tlnt[2]-1,-(tlnt[1] - tlnt[0])/2,tlnt[0],center=true);
+			
+				translate([0,0,tlnt[3]/2 + tlnt[2]-eta]) cube([tlnt[0],tlnt[0],tlnt[3] + eta],center=true);
+			}
+	
+			translate([0,0,-1]) cylinder(h=20, r=tlnt[2]/2, $fn=8);
+		}
 	}
 }
 

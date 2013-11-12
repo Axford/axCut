@@ -44,30 +44,70 @@ module xCarriage() {
 	translate([0,0,0]) rotate([90,0,0]) openrail_plate20(wheels=true);
 
 	// laser optics
-	translate([0,-25,-50]) cylinder(r=25/2,h=100);
+	translate([0,-30,-50]) cylinder(r=25/2,h=100);
+	
+	// bracket
+	translate([-25,-50,-15]) roundedRect([50,50,6],6,center=false);
 }
 
 module xAxis() {
 
 	t  =ORPlateThickness(ORPLATE20);
-	l = frameCY[2] - frameCY[1] + 2*(openrail_plate_offset2 + 10 - t);
+	l = frameCY[3] - frameCY[0] - 2*(openrail_plate_offset + 10);
 
-	translate([-l/2,0,openrail_outercentres+10]) rotate([0,90,0]) aluProExtrusion(BR_20x20, l=l);
+	railLen = bedWM + ORPlateWidth(ORPLATE20)/2;
+	
+	// drive belt centres
+	beltCX = [-railLen/2 - 15 , railLen/2 + 30];
+	beltCY = [-12 - openrail_plate_offset];
+	beltCZ = [16];
+	
+	beltIR = pulley_ir(T5x10_metal_pulley);
 
-	translate([-bedWM/2,-10,openrail_outercentres + 20]) { 
-		rotate([0,90,0]) rotate([0,0,90]) openrail_doubled(bedWM,true,true);
+	
+	translate([-l/2,10,0]) 
+		rotate([0,90,0]) 
+		aluProExtrusion(BR_20x40, l=l);
+
+	translate([-railLen/2,-10,10]) { 
+		rotate([0,90,0]) rotate([0,0,90]) openrail_doubled(railLen,true,true);
 	}
 
-	translate([l/2 + t + NEMA_width(NEMA17)/2,0,ORPlateWidth(ORPLATE40)/2-5]) rotate([0,0,0]) NEMA(NEMA17);
+	// motor assembly
+	translate([beltCX[1],beltCY[0],beltCZ[0]]) {
+		rotate([0,180,0]) {
+			NEMA(NEMA17);
+			metal_pulley(T5x10_metal_pulley);
+		}
+		
+		translate([0,18,-3]) roundedRect([50,80,6],6,center=true);
+	}
+
+	// idler assembly
+	translate([beltCX[0],beltCY[0],beltCZ[0]]) {
+		rotate([0,180,0]) metal_pulley(T5x10_metal_pulley);
+		
+		translate([0,25,-3]) roundedRect([20,70,6],6,center=true);
+		
+		translate([0,25,-29]) roundedRect([20,70,6],6,center=true);
+	}
 	
-	translate([0,-openrail_plate_offset-10,openrail_outercentres+10]) xCarriage();
+	// belt
+	translate([0,0,beltCZ[0] - 15])
+		belt(T5x10, beltCX[0], beltCY[0], beltIR , beltCX[1], beltCY[0], beltIR, gap = 0); 
+
+
+	translate([0,-openrail_plate_offset-10,0]) 	
+		xCarriage();	
+	
+	
 	
 	// y carriages
 	for (i=[0,1])
 		mirror([i,0,0])
-		translate([frameCY[2] + 10 + openrail_plate_offset2,0,0]) 
-		rotate([0,90,0]) 
-		openrail_plate40(wheels=true);
+		translate([frameCY[3] - 10 - openrail_plate_offset,0,0]) 
+		rotate([0,90,180]) 
+		openrail_plate20(wheels=true);
 }
 
 
@@ -106,7 +146,7 @@ module frame() {
 	// corner posts
 	for (x=[0,3],y=[0,2])
 		BR20x20WGBP([frameCY[x],frameCX[y],frameCZ[0]+20], 
-		            [frameCY[x],frameCX[y],frameCZ[2]+10],
+		            [frameCY[x],frameCX[y],frameCZ[3]+10],
 		            roll=0,
 		            startGussets=[y==0?1:0,x==3?1:0,y==0?0:1,x==0?1:0], 
 		            endGussets=[0,0,0,0]);
@@ -114,7 +154,7 @@ module frame() {
 	// inner posts
 	for (x=[1,2],y=[0,2])
 		BR20x40WGBP([frameCY[x] + (x==1?-10:+10),frameCX[y],frameCZ[0]+20], 
-		            [frameCY[x] + (x==1?-10:+10),frameCX[y],frameCZ[3]+10],
+		            [frameCY[x] + (x==1?-10:+10),frameCX[y],frameCZ[4]+10],
 		            roll=90,
 		            startGussets=[x==1?1:0,
 		            			  x==2&&y==2?1:0,
@@ -127,8 +167,8 @@ module frame() {
 	
 	// left/right top ribs
 	for (i=[0,3]) {
-		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[2]], 
-		            [frameCY[i],frameCX[2]-10,frameCZ[2]],
+		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[3]], 
+		            [frameCY[i],frameCX[2]-10,frameCZ[3]],
 		            roll=0,
 		            startGussets=[1,0,0,0], 
 		            endGussets=[1,0,0,0]);
@@ -136,51 +176,84 @@ module frame() {
 	
 	// inner top ribs
 	for (i=[1,2]) {
-		BR20x40WGBP([frameCY[i] + (i==1?-10:10),frameCX[0]+10,frameCZ[3]], 
-		            [frameCY[i] + (i==1?-10:10),frameCX[2]-10,frameCZ[3]],
+		BR20x40WGBP([frameCY[i] + (i==1?-10:10),frameCX[0]+10,frameCZ[4]], 
+		            [frameCY[i] + (i==1?-10:10),frameCX[2]-10,frameCZ[4]],
 		            roll=90,
 		            startGussets=[0,0,0,0,1,1], 
 		            endGussets=[0,0,0,0,1,1]);
 	}
 	
 	// y rails
-	for (i=[1,2]) {
-		BR20x40WGBP([frameCY[i],frameCX[0]+10,frameCZ[1]], 
-		            [frameCY[i],frameCX[2]-10,frameCZ[1]],
+	for (i=[0,3]) {
+		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[2]], 
+		            [frameCY[i],frameCX[2]-10,frameCZ[2]],
 		            roll=0,
-		            startGussets=[1,0,0,1,0,0], 
-		            endGussets=[1,0,0,1,0,0]);
+		            startGussets=[1,0,1,0], 
+		            endGussets=[1,0,1,0]);
 	}
 	
 	// top back
-	BR20x40WGBP([frameCY[1]+10,frameCX[2],frameCZ[3]-10], 
-		            [frameCY[2]-10,frameCX[2],frameCZ[3]-10],
+	BR20x40WGBP([frameCY[1]+10,frameCX[2],frameCZ[4]-10], 
+		            [frameCY[2]-10,frameCX[2],frameCZ[4]-10],
 		            roll=90,
 		            startGussets=[0,1,0,1,0,0], 
 		            endGussets=[0,1,0,1,0,0]);
 		            
 	// mid back
-	BR20x40WGBP([frameCY[1]+10,frameCX[2],frameCZ[1]], 
-		            [frameCY[2]-10,frameCX[2],frameCZ[1]],
+	BR20x20WGBP([frameCY[1]+10,frameCX[2],frameCZ[2]], 
+		            [frameCY[2]-10,frameCX[2],frameCZ[2]],
 		            roll=90,
-		            startGussets=[1,1,0,1,0,0], 
-		            endGussets=[1,1,0,1,0,0]);
+		            startGussets=[1,0,1,0], 
+		            endGussets=[1,0,1,0]);
+		            
+	BR20x20WGBP([frameCY[1]+10,frameCX[1],frameCZ[1]], 
+		            [frameCY[2]-10,frameCX[1],frameCZ[1]],
+		            roll=90,
+		            startGussets=[0,0,1,1], 
+		            endGussets=[0,0,1,1]);
+		            
+	for (x=[0,2],y=[0,2]) {
+		BR20x20WGBP([frameCY[x]+(x==0?10:30),frameCX[y],frameCZ[1]], 
+		            [frameCY[x+1]-(x==0?30:10),frameCX[y],frameCZ[1]],
+		            roll=0,
+		            startGussets=[0,0,0,1], 
+		            endGussets=[0,0,0,1]);
+	}
+	
 	
 	// top beams
 	for (x=[0,2],y=[0,2]) {
-		BR20x20WGBP([frameCY[x]+(x==0?10:30),frameCX[y],frameCZ[2]], 
-		            [frameCY[x+1]-(x==0?30:10),frameCX[y],frameCZ[2]],
+		BR20x20WGBP([frameCY[x]+(x==0?10:30),frameCX[y],frameCZ[3]], 
+		            [frameCY[x+1]-(x==0?30:10),frameCX[y],frameCZ[3]],
 		            roll=0,
 		            startGussets=[(x==0&&y==0?1:0),0,(x==0&&y==2?1:0),1], 
 		            endGussets=[(x==2&&y==0?1:0),0,(x==2&&y==2?1:0),1]);
 	}
 	
 	// top hinge beam
-	BR20x40WGBP([frameCY[1]+10,frameCX[1]+10,frameCZ[3]], 
-		            [frameCY[2]-10,frameCX[1]+10,frameCZ[3]],
+	BR20x40WGBP([frameCY[1]+10,frameCX[1]+10,frameCZ[4]], 
+		            [frameCY[2]-10,frameCX[1]+10,frameCZ[4]],
 		            roll=0,
 		            startGussets=[1,0,0,0,0,0], 
 		            endGussets=[1,0,0,0,0,0]);
+	
+	// top of z ribs
+	for (i=[1,2]) {
+		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[1]], 
+		            [frameCY[i],frameCX[2]-10,frameCZ[1]],
+		            roll=0,
+		            startGussets=[1,0,1,0], 
+		            endGussets=[1,0,1,0]);
+	}
+	
+	// z rib posts
+	for (x=[1,2])
+		BR20x20WGBP([frameCY[x],frameCX[1],frameCZ[0]+20], 
+		            [frameCY[x],frameCX[1],frameCZ[1]-10],
+		            roll=0,
+		            startGussets=[1,0,0,0], 
+		            endGussets=[1,0,0,0]);
+	
 	
 	end("frame");
 	
@@ -188,7 +261,10 @@ module frame() {
 
 module zAssembly() {
 	h = NEMA_length(NEMA17);
+	
+	rodLen = frameCZ[1] - frameCZ[0] - 30;
 
+	// motor assemblies
 	for (x=[0,1], y=[-1,1]) 
 		mirror([x,0,0])
 		translate([(bedWM/2  + claddingC + NEMA_width(NEMA17)/2 + 20), y*(bedDM/2-40-NEMA_width(NEMA17)/2),0]) {
@@ -201,15 +277,19 @@ module zAssembly() {
 
 		// coupling
 		translate([0,0,h+4]) cylinder(h=25, r= 15/2);
-
-		// linear rod
-		translate([-NEMA_width(NEMA17)/2-10,0,40]) cylinder(h=yVPos-60, r= 10/2);
-	
-		// bearing
-
-		
 	}
 	
+	// linear rod assemblies
+	for (x=[0,1]) 
+		mirror([x,0,0])
+		translate([(bedWM/2  + claddingC + NEMA_width(NEMA17)/2 + 20), -(bedDM/2-40-NEMA_width(NEMA17)/2),0]) {
+		
+			// linear rod
+			translate([-NEMA_width(NEMA17)/2-10,0,40]) cylinder(h=rodLen, r= 10/2);
+	
+			// bearing
+	
+	}
 }
 
 module laserTube() {
@@ -218,25 +298,68 @@ module laserTube() {
 
 module laserTubeAssembly() {
 
-	translate([-350, frameCX[2]-50,frameCZ[1]+50]) rotate([0,90,0]) laserTube();
+	translate([-350, frameCX[2]-50,frameCZ[2]+50]) rotate([0,90,0]) laserTube();
 
 }
 
 module yAssembly() {
 
 	railLen = bedD + ORPlateDepth(ORPLATE40);
+	
+	w = NEMA_width(NEMA17);
+	d = w + 20;
+	
+	beltIR = pulley_ir(T5x10_metal_pulley);
 
-	translate([0,0,frameCZ[1]]) xAxis();
+	beltCX = [frameCY[2] + 30 +  w/2];
+	beltCY = [frameCX[0] + 20, 
+			  frameCX[2] - NEMA_width(NEMA17)/2 - 10];
+	beltCZ = [frameCZ[1] + 10];
+	
+	
+
+	translate([0,0,frameCZ[2]])
+		xAxis();
 	
 	// rails
 	for (i=[0,1])
 		mirror([i,0,0])
-		translate([-frameCY[2]-10,-bedDM/2 + 15,frameCZ[1]]) 
+		translate([frameCY[3]-10,-bedDM/2 + 15,frameCZ[2] + 10]) 
 		rotate([-90,0,0])
 	 {
-			translate([0,20,0]) openrail(railLen,true,true);
-			translate([0,-20,0,]) mirror([0,1,0]) openrail(railLen,true,true);
+			translate([0,20,0]) openrail_doubled(railLen,true,true);
 		}
+		
+	// motors
+	for (i=[0,1])
+		mirror([i,0,0]) {
+			translate([beltCX[0], beltCY[1], beltCZ[0]]) {
+				rotate([0,0,90]) NEMA(NEMA17);
+				metal_pulley(T5x10_metal_pulley);
+			
+		
+				translate([-w/2,-w/2,0]) roundedRect([w,d,6],6);
+			}	
+		}
+	
+	
+	// belts
+	for (i=[0,1])
+		mirror([i,0,0]) 
+		translate([0,0,beltCZ[0] + 15])
+		belt(T5x10, beltCX[0], beltCY[0], beltIR , beltCX[0], beltCY[1], beltIR, gap = 0);
+	
+	
+	// idlers
+	for (i=[0,1])
+		mirror([i,0,0]) {
+			translate([beltCX[0], beltCY[0], beltCZ[0]]) {
+				metal_pulley(T5x10_metal_pulley);
+			
+				translate([-20,-30,0]) roundedRect([40,40,6],6);
+			}	
+		}
+	
 }
 
 laserTubeAssembly();
