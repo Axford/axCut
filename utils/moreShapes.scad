@@ -259,7 +259,6 @@ module tube(or, ir, h, center = true) {
 }
 
 
-
 module moreShapesExamples() {
 	arrangeShapesOnGrid(xSpacing=100, ySpacing=80, cols=4, showLocalAxes=true) {
 		roundedRect([50,30,20], 5);
