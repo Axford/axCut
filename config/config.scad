@@ -160,8 +160,6 @@ xO = 50;  // xOvershoot
 xVPos = 300;  // height of x axis above datum
 yVPos = 270;  // height of y axis - to centreline of 2040 profile
 
-wheelOR = 19/2;  // radius to bearing surface, approx
-
 rightW = 120;  // width of right casing, excludes outer panelling, runs from edge of bed margin
 leftW = 120;
 backD = 160;  // depth of back casing
@@ -169,3 +167,21 @@ frontD = 25;  // depth of front casing
 
 claddingC = 5;  // cladding clearance, inc thickness
 claddingT = 3;  // cladding thickness
+
+
+// frame centre lines, x/y relative to centre of bed, base of frame at z=0
+//  centres lines lying in x axis
+frameCX = [-bedDM/2 - frontD+10,
+			bedDM/2 + backD - 10];
+
+//  centres lines lying in y axis
+frameCY = [-bedWM/2-rightW+10,  
+		   -bedWM/2 - claddingC-10,
+		   bedWM/2 + claddingC + 10,
+           bedWM/2 + leftW-10];     
+           
+//  centres lines lying in z axis
+frameCZ = [20, 
+           270,   //  y rails
+		   360,   // outer corners
+           390];  // top

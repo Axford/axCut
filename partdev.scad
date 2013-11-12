@@ -16,4 +16,5 @@ rotate([0,-90,0]) {
 *belt(T5x10, 10, 11-4.87, 4.87, 200, 20, 11);
 
 
-aluProExtWithGussets(BR_20x20, 100, [1,1,0,0], [1,0,1,0], true);
+BR20x40WG(100,startGussets=[1,1,0,1,1,1], 
+		            endGussets=[1,1,0,1,0,1]);

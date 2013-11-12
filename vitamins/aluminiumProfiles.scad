@@ -268,9 +268,13 @@ module aluProExtrusion(profileType, l=100, center=false) {
 
 
 
+// utility functions to generate common profiles with gussets
 // set gusset array values to 1 to indicate where a gusset should be present
 // numbering is anticlockwise from y+
-module aluProExtWithGussets(profileType, l=100, startGussets=[0,0,0,0], endGussets=[0,0,0,0], screws=false, gussetType=BR_20x20_Gusset) {
+module BR20x20WG(l=100, startGussets=[0,0,0,0], endGussets=[0,0,0,0], screws=true) {
+	gussetType=BR_20x20_Gusset;
+	profileType = BR_20x20;
+	
 	aluProExtrusion(profileType, l);
 	
 	// gussets
@@ -291,6 +295,73 @@ module aluProExtWithGussets(profileType, l=100, startGussets=[0,0,0,0], endGusse
 	}
 }
 
+// same as above, but between points
+module BR20x20WGBP(p1,p2,roll=0,startGussets=[0,0,0,0], endGussets=[0,0,0,0], screws=true) {
+	v = subv(p2,p1);
+	l = mod(v);
+	translate(p1) orientate(v,roll=roll) BR20x20WG(l, startGussets, endGussets, screws);
+}
+
+// for 20x40...  gusset numbering is from y+ anticlockwise
+module BR20x40WG(l=100, startGussets=[0,0,0,0,0,0], endGussets=[0,0,0,0,0,0], screws=true) {
+	gussetType=BR_20x20_Gusset;
+	profileType = BR_20x40;
+	
+	aluProExtrusion(profileType, l);
+	
+	// gussets
+	
+	for (i=[0,1]) {
+	
+		//y+
+		if (i==0?startGussets[0]==1:endGussets[0]==1)
+			translate([0,20,i==0?0:l]) 
+			rotate([0,0,0])
+			mirror([0,0,i]) 
+			aluProGusset(gussetType, screws=screws);
+	
+	
+		//y-
+		if (i==0?startGussets[3]==1:endGussets[3]==1)
+			translate([0,-20,i==0?0:l]) 
+			rotate([0,0,180])
+			mirror([0,0,i]) 
+			aluProGusset(gussetType, screws=screws);
+		
+		// x-
+		for (j=[0,1])
+			if (i==0?startGussets[1+j]==1:endGussets[1+j]==1)
+			translate([-10,10-j*20,i==0?0:l]) 
+			rotate([0,0,90])
+			mirror([0,0,i]) 
+			aluProGusset(gussetType, screws=screws);
+	
+		// x+
+		for (j=[0,1])
+			if (i==0?startGussets[4+j]==1:endGussets[4+j]==1)
+			translate([10,-10+j*20,i==0?0:l]) 
+			rotate([0,0,270])
+			mirror([0,0,i]) 
+			aluProGusset(gussetType, screws=screws);
+	
+	}
+}
+
+// same as above, but between points
+module BR20x40WGBP(p1,p2,roll=0,startGussets=[0,0,0,0,0,0], endGussets=[0,0,0,0,0,0], screws=true) {
+	v = subv(p2,p1);
+	l = mod(v);
+	translate(p1) orientate(v,roll=roll) BR20x40WG(l, startGussets, endGussets, screws);
+}
+
+
+
+
+module aluProExtrusionBetweenPoints(p1,p2,profileType=BR_20x20,roll=0) {
+	v = subv(p2,p1);
+	l = mod(v);
+	translate(p1) orientate(v,roll=roll) aluProExtrusion(profileType, l);
+}
 
 
 

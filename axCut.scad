@@ -56,7 +56,77 @@ module xAxis() {
 }
 
 
-module outerFrame() {
+
+module frame() {
+	
+	assembly("frame");
+	
+	// base
+	// front/back
+	for (i=[0,1]) {
+		aluProExtrusionBetweenPoints([frameCY[0]-10,frameCX[i],frameCZ[0]], 
+		                             [frameCY[3]+10,frameCX[i],frameCZ[0]],
+		                             BR_20x40,
+		                             90);
+	}
+	
+	// ribs
+	for (i=[0:3]) {
+		BR20x40WGBP([frameCY[i],frameCX[0]+10,frameCZ[0]], 
+		            [frameCY[i],frameCX[1]-10,frameCZ[0]],
+		            roll=0,
+		            startGussets=[0,i%2,i%2,0,(i+1)%2,(i+1)%2], 
+		            endGussets=[0,i%2,i%2,0,(i+1)%2,(i+1)%2]);
+	}
+	
+	// corner posts
+	for (x=[0,3],y=[0,1])
+		BR20x20WGBP([frameCY[x],frameCX[y],frameCZ[0]+20], 
+		            [frameCY[x],frameCX[y],frameCZ[2]+10],
+		            roll=0,
+		            startGussets=[y==0?1:0,x==3?1:0,y==0?0:1,x==0?1:0], 
+		            endGussets=[0,0,0,0]);
+		            
+	// inner posts
+	for (x=[1,2],y=[0,1])
+		BR20x40WGBP([frameCY[x] + (x==1?-10:+10),frameCX[y],frameCZ[0]+20], 
+		            [frameCY[x] + (x==1?-10:+10),frameCX[y],frameCZ[3]+10],
+		            roll=90,
+		            startGussets=[x==1?1:0,
+		            			  x==2&&y==1?1:0,
+		            			  x==1&&y==1?1:0,
+		            			  x==2?1:0,
+		            			  x==1&&y==0?1:0,
+		            			  x==2&&y==0?1:0], 
+		            endGussets=[0,0,0,0,0,0]);
+	
+	
+	// left/right top ribs
+	for (i=[0,3]) {
+		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[2]], 
+		            [frameCY[i],frameCX[1]-10,frameCZ[2]],
+		            roll=0,
+		            startGussets=[1,0,0,0], 
+		            endGussets=[1,0,0,0]);
+	}
+	
+	// inner top ribs
+	for (i=[1,2]) {
+		BR20x40WGBP([frameCY[i] + (i==1?-10:+10),frameCX[0]+10,frameCZ[3]], 
+		            [frameCY[i] + (i==1?-10:+10),frameCX[1]-10,frameCZ[3]],
+		            roll=90,
+		            startGussets=[0,0,0,0,1,1], 
+		            endGussets=[0,0,0,0,1,1]);
+	}
+	
+	// 
+	
+	end("frame");
+	
+}
+
+
+module outerFrame2() {
 	w = bedWM + leftW + rightW;
 	d = bedDM + backD + frontD;
 	h = xVPos + 100;
@@ -168,12 +238,12 @@ module laserTubeAssembly() {
 
 }
 
-laserTubeAssembly();
+*laserTubeAssembly();
 
-outerFrame();
+frame();
 
-zAssembly();
+*zAssembly();
 
 translate([0,0,bedVPos]) cuttingBedFrame();
 
-translate([0,0,xVPos]) xAxis();
+*translate([0,0,xVPos]) xAxis();

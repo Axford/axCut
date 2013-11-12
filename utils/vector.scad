@@ -31,6 +31,9 @@ function unitv(v) = v/mod(v);
 //-- Return the angle between two vectores
 function anglev(u,v) = acos( dot(u,v) / (mod(u)*mod(v)) );
 
+// -- Return u - v
+function subv(u,v) = [u[0]-v[0], u[1]-v[1], u[2]-v[2]];
+
 //----------------------------------------------------------
 //--  Draw a point in the position given by the vector p  
 //----------------------------------------------------------
