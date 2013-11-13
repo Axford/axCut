@@ -7,7 +7,7 @@
 //
 bom = 2;                        // 0 no bom, 1 assemblies and stls, 2 vitamins as well
 exploded = 0;                   // 1 for exploded view
-simplify = true;    // reduces complexity of some parts, e.g. alu extrusions
+simplify = false;    // reduces complexity of some parts, e.g. alu extrusions
 
 show_jigs = true;               // show printed jigs required to build the machine
 show_support = true;            // show support structures, must be set when generating STLs
@@ -158,14 +158,16 @@ bedVPos = 200;
 
 zTravel = 200;
 
+xCarriagePos = -bedD/2 + 300;
+
 xO = 60;  // xOvershoot
 xVPos = 300;  // height of x axis above datum
 yVPos = 270;  // height of y axis - to centreline of 2040 profile
 
-rightW = 120;  // width of right casing, excludes outer panelling, runs from edge of bed margin
-leftW = 120;
+rightW = 130;  // width of right casing, excludes outer panelling, runs from edge of bed margin
+leftW = rightW;
 backD = 180;  // depth of back casing
-frontD = 25;  // depth of front casing
+frontD = 40;  // depth of front casing
 
 claddingC = 5;  // cladding clearance, inc thickness
 claddingT = 3;  // cladding thickness
@@ -180,13 +182,19 @@ frameCX = [-bedDM/2 - frontD+10,
 
 //  centres lines lying in y axis
 frameCY = [-bedWM/2-rightW+10,  
-		   -bedWM/2 - claddingC-10,
-		   bedWM/2 + claddingC + 10,
+		   -bedWM/2- 70,   // y rail
+		   -bedWM/2 - claddingC-20,   
+		   bedWM/2 + claddingC + 20,
+		   bedWM/2 + 70,   // y rail
            bedWM/2 + leftW-10];     
            
 //  centres lines lying in z axis
 frameCZ = [20, 
-		   255,   //  top of z rails	
-           300,   //  y rails
-		   360,   // outer corners
-           410];  // top
+		   245,   //  top of z rails	
+           255,   //  y rails
+		   380,   // outer corners
+           380];  // top
+
+
+showSealingBelts = false;
+

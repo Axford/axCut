@@ -17,25 +17,43 @@ module line(start, end, r) {
 	}
 }
 
-module roundedRect(size, radius, center=false) {
+module roundedRect(size, radius, center=false, shell=0) {
 	x = size[0];
 	y = size[1];
 	z = size[2];
 	
 	translate([center?-x/2:0, center?-y/2:0, center?-z/2:0])
 	linear_extrude(height=z) 
-	hull() {
-		translate([radius, radius, 0])
-		circle(r=radius);
+	difference() {
+		hull() {
+			translate([radius, radius, 0])
+			circle(r=radius);
 		
-		translate([x - radius, radius, 0])
-		circle(r=radius);
+			translate([x - radius, radius, 0])
+			circle(r=radius);
 		
-		translate([x - radius, y - radius, 0])
-		circle(r=radius);
+			translate([x - radius, y - radius, 0])
+			circle(r=radius);
 		
-		translate([radius, y - radius, 0])
-		circle(r=radius);
+			translate([radius, y - radius, 0])
+			circle(r=radius);
+		}
+		
+		if (shell > 0) {
+			hull() {
+			translate([radius + shell, radius + shell, 0])
+			circle(r=radius);
+		
+			translate([x - radius - shell, radius + shell, 0])
+			circle(r=radius);
+		
+			translate([x - radius - shell, y - radius - shell, 0])
+			circle(r=radius);
+		
+			translate([radius + shell, y - radius - shell, 0])
+			circle(r=radius);
+		}
+		}
 	}
 }
 
