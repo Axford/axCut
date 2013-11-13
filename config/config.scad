@@ -7,7 +7,7 @@
 //
 bom = 2;                        // 0 no bom, 1 assemblies and stls, 2 vitamins as well
 exploded = 0;                   // 1 for exploded view
-simplify = false;    // reduces complexity of some parts, e.g. alu extrusions
+simplify = true;    // reduces complexity of some parts, e.g. alu extrusions
 
 show_jigs = true;               // show printed jigs required to build the machine
 show_support = true;            // show support structures, must be set when generating STLs
@@ -156,13 +156,15 @@ bedRibs = 6;  // number of ribs (along y axis)
 
 bedVPos = 200;
 
+zTravel = 200;
+
 xO = 60;  // xOvershoot
 xVPos = 300;  // height of x axis above datum
 yVPos = 270;  // height of y axis - to centreline of 2040 profile
 
 rightW = 120;  // width of right casing, excludes outer panelling, runs from edge of bed margin
 leftW = 120;
-backD = 160;  // depth of back casing
+backD = 180;  // depth of back casing
 frontD = 25;  // depth of front casing
 
 claddingC = 5;  // cladding clearance, inc thickness
@@ -172,7 +174,8 @@ claddingT = 3;  // cladding thickness
 // frame centre lines, x/y relative to centre of bed, base of frame at z=0
 //  centres lines lying in x axis
 frameCX = [-bedDM/2 - frontD+10,
-			bedDM/2 + claddingC + 10,
+			bedDM/2 + claddingC + 10,  // back of bed
+			bedDM/2 + claddingC + 70,  // behind x axis
 			bedDM/2 + backD - 10];
 
 //  centres lines lying in y axis

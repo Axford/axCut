@@ -44,7 +44,7 @@ module xCarriage() {
 	translate([0,0,0]) rotate([90,0,0]) openrail_plate20(wheels=true);
 
 	// laser optics
-	translate([0,-30,-50]) cylinder(r=25/2,h=100);
+	translate([0,-30,-50]) color("red") cylinder(r=25/2,h=100);
 	
 	// bracket
 	translate([-25,-50,-15]) roundedRect([50,50,6],6,center=false);
@@ -118,7 +118,7 @@ module frame() {
 	
 	// base
 	// front/back
-	for (i=[0,2]) {
+	for (i=[0,3]) {
 		aluProExtrusionBetweenPoints([frameCY[0]-10,frameCX[i],frameCZ[0]], 
 		                             [frameCY[3]+10,frameCX[i],frameCZ[0]],
 		                             BR_20x40,
@@ -128,7 +128,7 @@ module frame() {
 	// ribs
 	for (i=[0:3]) {
 		BR20x40WGBP([frameCY[i],frameCX[0]+10,frameCZ[0]], 
-		            [frameCY[i],frameCX[2]-10,frameCZ[0]],
+		            [frameCY[i],frameCX[3]-10,frameCZ[0]],
 		            roll=0,
 		            startGussets=[0,i%2,i%2,0,(i+1)%2,(i+1)%2], 
 		            endGussets=[0,i%2,i%2,0,(i+1)%2,(i+1)%2]);
@@ -138,13 +138,13 @@ module frame() {
 	ix = frameCY[2] *1/3;
 	for (i=[0,1]) mirror([i,0,0])
 	BR20x40WGBP([ix,frameCX[0]+10,frameCZ[0]], 
-		            [ix,frameCX[2]-10,frameCZ[0]],
+		            [ix,frameCX[3]-10,frameCZ[0]],
 		            roll=0,
 		            startGussets=[0,1,1,0,0,0], 
 		            endGussets=[0,1,1,0,0,0,0]);
 	
 	// corner posts
-	for (x=[0,3],y=[0,2])
+	for (x=[0,3],y=[0,3])
 		BR20x20WGBP([frameCY[x],frameCX[y],frameCZ[0]+20], 
 		            [frameCY[x],frameCX[y],frameCZ[3]+10],
 		            roll=0,
@@ -152,13 +152,13 @@ module frame() {
 		            endGussets=[0,0,0,0]);
 		            
 	// inner posts
-	for (x=[1,2],y=[0,2])
+	for (x=[1,2],y=[0,3])
 		BR20x40WGBP([frameCY[x] + (x==1?-10:+10),frameCX[y],frameCZ[0]+20], 
 		            [frameCY[x] + (x==1?-10:+10),frameCX[y],frameCZ[4]+10],
 		            roll=90,
 		            startGussets=[x==1?1:0,
-		            			  x==2&&y==2?1:0,
-		            			  x==1&&y==2?1:0,
+		            			  x==2&&y==3?1:0,
+		            			  x==1&&y==3?1:0,
 		            			  x==2?1:0,
 		            			  x==1&&y==0?1:0,
 		            			  x==2&&y==0?1:0], 
@@ -168,7 +168,7 @@ module frame() {
 	// left/right top ribs
 	for (i=[0,3]) {
 		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[3]], 
-		            [frameCY[i],frameCX[2]-10,frameCZ[3]],
+		            [frameCY[i],frameCX[3]-10,frameCZ[3]],
 		            roll=0,
 		            startGussets=[1,0,0,0], 
 		            endGussets=[1,0,0,0]);
@@ -177,7 +177,7 @@ module frame() {
 	// inner top ribs
 	for (i=[1,2]) {
 		BR20x40WGBP([frameCY[i] + (i==1?-10:10),frameCX[0]+10,frameCZ[4]], 
-		            [frameCY[i] + (i==1?-10:10),frameCX[2]-10,frameCZ[4]],
+		            [frameCY[i] + (i==1?-10:10),frameCX[3]-10,frameCZ[4]],
 		            roll=90,
 		            startGussets=[0,0,0,0,1,1], 
 		            endGussets=[0,0,0,0,1,1]);
@@ -186,22 +186,22 @@ module frame() {
 	// y rails
 	for (i=[0,3]) {
 		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[2]], 
-		            [frameCY[i],frameCX[2]-10,frameCZ[2]],
+		            [frameCY[i],frameCX[3]-10,frameCZ[2]],
 		            roll=0,
 		            startGussets=[1,0,1,0], 
 		            endGussets=[1,0,1,0]);
 	}
 	
 	// top back
-	BR20x40WGBP([frameCY[1]+10,frameCX[2],frameCZ[4]-10], 
-		            [frameCY[2]-10,frameCX[2],frameCZ[4]-10],
+	BR20x40WGBP([frameCY[1]+10,frameCX[3],frameCZ[4]-10], 
+		            [frameCY[2]-10,frameCX[3],frameCZ[4]-10],
 		            roll=90,
 		            startGussets=[0,1,0,1,0,0], 
 		            endGussets=[0,1,0,1,0,0]);
 		            
 	// mid back
-	BR20x20WGBP([frameCY[1]+10,frameCX[2],frameCZ[2]], 
-		            [frameCY[2]-10,frameCX[2],frameCZ[2]],
+	BR20x20WGBP([frameCY[1]+10,frameCX[3],frameCZ[2]], 
+		            [frameCY[2]-10,frameCX[3],frameCZ[2]],
 		            roll=90,
 		            startGussets=[1,0,1,0], 
 		            endGussets=[1,0,1,0]);
@@ -212,7 +212,7 @@ module frame() {
 		            startGussets=[0,0,1,1], 
 		            endGussets=[0,0,1,1]);
 		            
-	for (x=[0,2],y=[0,2]) {
+	for (x=[0,2],y=[0,3]) {
 		BR20x20WGBP([frameCY[x]+(x==0?10:30),frameCX[y],frameCZ[1]], 
 		            [frameCY[x+1]-(x==0?30:10),frameCX[y],frameCZ[1]],
 		            roll=0,
@@ -222,25 +222,33 @@ module frame() {
 	
 	
 	// top beams
-	for (x=[0,2],y=[0,2]) {
+	for (x=[0,2],y=[0,3]) {
 		BR20x20WGBP([frameCY[x]+(x==0?10:30),frameCX[y],frameCZ[3]], 
 		            [frameCY[x+1]-(x==0?30:10),frameCX[y],frameCZ[3]],
 		            roll=0,
-		            startGussets=[(x==0&&y==0?1:0),0,(x==0&&y==2?1:0),1], 
-		            endGussets=[(x==2&&y==0?1:0),0,(x==2&&y==2?1:0),1]);
+		            startGussets=[(x==0&&y==0?1:0),0,(x==0&&y==3?1:0),1], 
+		            endGussets=[(x==2&&y==0?1:0),0,(x==2&&y==3?1:0),1]);
 	}
-	
-	// top hinge beam
-	BR20x40WGBP([frameCY[1]+10,frameCX[1]+10,frameCZ[4]], 
-		            [frameCY[2]-10,frameCX[1]+10,frameCZ[4]],
+		            
+	// top laser casing beam
+	BR20x20WGBP([frameCY[1]+10,frameCX[2],frameCZ[4]], 
+		            [frameCY[2]-10,frameCX[2],frameCZ[4]],
 		            roll=0,
-		            startGussets=[1,0,0,0,0,0], 
-		            endGussets=[1,0,0,0,0,0]);
+		            startGussets=[1,0,0,0], 
+		            endGussets=[1,0,0,0]);
+	
+	
+	// mid laser casing beam
+	BR20x20WGBP([frameCY[1]+10,frameCX[2],frameCZ[1]], 
+		            [frameCY[2]-10,frameCX[2],frameCZ[1]],
+		            roll=0,
+		            startGussets=[1,0,0,0], 
+		            endGussets=[1,0,0,0]);
 	
 	// top of z ribs
 	for (i=[1,2]) {
 		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[1]], 
-		            [frameCY[i],frameCX[2]-10,frameCZ[1]],
+		            [frameCY[i],frameCX[3]-10,frameCZ[1]],
 		            roll=0,
 		            startGussets=[1,0,1,0], 
 		            endGussets=[1,0,1,0]);
@@ -298,7 +306,7 @@ module laserTube() {
 
 module laserTubeAssembly() {
 
-	translate([-350, frameCX[2]-50,frameCZ[2]+50]) rotate([0,90,0]) laserTube();
+	translate([-350, frameCX[3]-50,frameCZ[2]+50]) rotate([0,90,0]) laserTube();
 
 }
 
@@ -313,12 +321,12 @@ module yAssembly() {
 
 	beltCX = [frameCY[2] + 30 +  w/2];
 	beltCY = [frameCX[0] + 20, 
-			  frameCX[2] - NEMA_width(NEMA17)/2 - 10];
+			  frameCX[3] - NEMA_width(NEMA17)/2 - 10];
 	beltCZ = [frameCZ[1] + 10];
 	
 	
 
-	translate([0,0,frameCZ[2]])
+	translate([0,-bedD/2+60,frameCZ[2]])
 		xAxis();
 	
 	// rails
@@ -362,9 +370,135 @@ module yAssembly() {
 	
 }
 
+
+module cladding() {
+	assembly("cladding");
+	
+	w1 = frameCY[3] - frameCY[0] + 20;
+	w2 = frameCY[2] - frameCY[1] + 20;
+	
+	d1 = frameCX[3] - frameCX[0] + 20;
+	d2 = frameCX[1] - frameCX[0];
+	
+	// bottom
+	color(grey20)
+		translate([-w1/2, frameCX[0] - 10, -3])
+		cube([w1, d1, 3]);
+		
+	// inner bottom
+	color(grey20)
+		translate([0,0,40])
+		render()
+		linear_extrude(3)
+		difference() {
+			translate([-w2/2, frameCX[0] - 10, 0])
+				square([w2, d2]);
+			
+			// inner posts
+			for (x=[1,2],y=[0,3])
+				translate([frameCY[x] + (x==1?-20:20),frameCX[y],0])
+				roundedSquare([62,62],3,center=true);
+			
+			// rear inner posts
+			for (x=[1,2],y=[1])
+				translate([frameCY[x],frameCX[y] + 10,0])
+				roundedSquare([22,42],3,center=true);
+			
+			// stepper brackets
+			// ??
+			
+			// linear rod brackets
+			// ??
+			
+		}
+		
+
+	// left/right outer panels
+	for (i=[0,1])
+		mirror([i,0,0])
+		color(grey20)
+		translate([frameCY[3]+10, frameCX[0] - 10, 0])
+		cube([3, d1, frameCZ[3] + 10]);
+	
+	
+	// left/right inner lower panels
+	for (i=[0,1])
+		mirror([i,0,0])
+		color("orange")
+		render()
+		translate([frameCY[2]-13, frameCX[0] - 10, 43])
+		difference() {
+			cube([3, d2, frameCZ[1] - 13]);
+			
+			// vertical slots for bed
+			translate([-2,23,-10]) cube([10,46,frameCZ[1]-73+10]);
+	
+			translate([-2, bedDM -17,-10]) cube([10,50,frameCZ[1]-73+10]);
+		}
+		
+	// left/right inner upper panels
+	for (i=[0,1])
+		mirror([i,0,0])
+		color("orange")
+		render()
+		translate([frameCY[2]-13, frameCX[0] - 10, frameCZ[1]+30])
+		difference() {
+			cube([3, frameCX[2] - frameCX[0], frameCZ[4] - frameCZ[1]-20]);
+			
+			// slot for x axis travel and laser path
+			translate([-2,70,-10]) roundedRectX([10,d1,70],10);
+		}
+		
+	// inner lower back
+	color("orange")
+		translate([frameCY[1],frameCX[1]-13,43])
+		render()
+		cube([w2-20,3,frameCZ[1]-33]);
+	
+	// inner upper back
+	color("orange")
+		translate([frameCY[1]+10,frameCX[2]-13,frameCZ[1]+13])
+		render()
+		cube([w2-40,3,frameCZ[4] - frameCZ[1]-3]);
+	
+	// inner shelf
+	color("orange")
+		translate([0,frameCX[1]-10,frameCZ[1]+10])
+		render()
+		linear_extrude(3)
+		difference() {
+			translate([-w2/2, 0, 0])
+				square([w2, frameCX[3] - frameCX[1]  +20]);
+			
+			// punch out for rear posts
+			
+		}
+	
+		
+	// front / back sides
+	for (i=[0,1],j=[0,1])
+		mirror([i,0,0])
+		color(grey20)
+		render()
+		translate([frameCY[2]-10, j==0?frameCX[0] - 10: frameCX[3]+13, 0])
+		rotate([90,0,0])
+		linear_extrude(3)
+		polygon( points=[[0, 0], 
+						 [frameCY[3]-frameCY[2]+20, 0],
+						 [frameCY[3]-frameCY[2]+20, frameCZ[3]+10],
+						 [40, frameCZ[4]+10],
+						 [0, frameCZ[4]+10]] );
+
+	
+	end("cladding");
+}
+
+
 laserTubeAssembly();
 
 frame();
+
+cladding();
 
 zAssembly();
 
