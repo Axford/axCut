@@ -136,6 +136,8 @@ belt_clearance = 0.2;                   // clearance of belt clamp slots
 
 Z_bar_dia = Z_bearings[2];
 
+Z_screw_dia = 5;
+
 Y_idler_bearing = BB624;
 X_idler_bearing = BB624;
 
@@ -147,7 +149,7 @@ bedW = 850;
 bedD = 600;
 bedH = 300;
 bedM = 30;  // bed margin, applied all round
-bedO = 60;  //bedOvershoot - applies to width only
+bedO = 70;  //bedOvershoot - applies to width only
 
 bedWM = bedW + 2*bedM;  // with margins
 bedDM = bedD + 2*bedM;
@@ -197,4 +199,8 @@ frameCZ = [20,
 
 
 showSealingBelts = false;
+
+bedBearingOffset = 40;    // distance from centreline of front rail to centreline of rod
+bedMotorYOffset = 20;  // distance from centreline of front/back rails to centreline of motor
+
 

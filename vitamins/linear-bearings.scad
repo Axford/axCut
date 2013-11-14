@@ -13,6 +13,7 @@ LM6UU  = [19, 12,  6];
 LM4UU  = [12,  8,  4];
 
 function bearing_radius(type) = type[1] / 2;
+function bearing_height(type) = type[0];
 
 module linear_bearing(type) {
     vitamin(str("LM",type[2],"UU: ","LM",type[2],"UU linear bearing"));

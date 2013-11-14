@@ -41,16 +41,16 @@ include <../vitamins/openrail.scad>
 include <../vitamins/openrailwheel.scad>
 include <../vitamins/openrailplates.scad>
 
-module rod(d , l) {
+module rod(d , l, center=true) {
     vitamin(str("RD", d, round(l), ": Smooth rod ", d, "mm x ", round(l), "mm"));
     color(rod_color)
-        cylinder(r = d / 2, h = l, center = true);
+        cylinder(r = d / 2, h = l, center = center);
 }
 
-module studding(d , l) {
+module studding(d , l, center=false) {
     vitamin(str("ST", d, round(l),": Threaded rod M", d, " x ", round(l), "mm"));
     color(studding_color)
-        cylinder(r = d / 2, h = l, center = true);
+        cylinder(r = d / 2, h = l, center = center);
 }
 
 module wire(color, strands, length)
