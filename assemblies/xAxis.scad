@@ -1,14 +1,63 @@
 
+xCarriageBracket_width = ORPlateWidth(ORPLATE20);
+xCarriageBracket_height = xCarriageBracket_width - 20;
+xCarriageBracket_thickness = 9;
 
-module xCarriage() {
-	// plate
-	translate([0,0,0]) rotate([90,0,0]) openrail_plate20(wheels=true);
 
-	// laser optics
-	translate([0,-30,-50]) color("red") cylinder(r=25/2,h=100);
+module xCarriageBracket() {
+	ct = xCarriageBracket_thickness;
+	cw = xCarriageBracket_width;
+	ch = xCarriageBracket_height;
+
+	color("blue")
+		render()
+		difference() {
+			linear_extrude(ct) 
+				difference() {
+					roundedSquare([cw,ch],10);
+			
+					// screw holes
+					for (x=[-1,1],y=[-1,1])
+						translate([x*22.3,y*22.3,ct])
+						circle(screw_clearance_radius(M5_cap_screw));
+				}
+				
+			// screw countersinks
+			for (x=[-1,1],y=[-1,1])
+				translate([x*22.3,y*22.3,thick_wall])
+				cylinder(r=screw_head_radius(M5_cap_screw), h=ct);
+		}
+}
+
+
+
+module xCarriageAssembly() {
+	ct = xCarriageBracket_thickness;
+	cw = xCarriageBracket_width;
+	ch = xCarriageBracket_height;
 	
-	// bracket
-	translate([-25,-50,-15]) roundedRect([50,50,6],6,center=false);
+	// plate
+	translate([0,0,0]) 
+		rotate([90,0,0]) {
+			openrail_plate20(wheels=true);
+
+
+			translate([-laserHeadBody_tubeOffsetX, 
+					   -(laserHeadBody_mountScrew2Y - laserHeadBody_mountScrew1Y),
+					   ct])
+				laserHead();
+	
+			// bracket
+			xCarriageBracket();
+			
+				
+				
+			// long screws
+			for (x=[-1,1],y=[-1,1])
+				translate([x*22.3,y*22.3,thick_wall])
+				screw(M5_cap_screw, 30);
+		
+		}
 }
 
 module xAxisAssembly() {
@@ -59,7 +108,7 @@ module xAxisAssembly() {
 
 
 	translate([0,-openrail_plate_offset-10,0]) 	
-		xCarriage();	
+		xCarriageAssembly();	
 	
 	
 	

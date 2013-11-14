@@ -12,7 +12,7 @@ module bedBearingClamp(incBearing=true) {
 	x1 = NEMA_width(NEMA17)/2 + 10;
 	x2 = NEMA_width(NEMA17)/2 - 4;
 	
-	y1 = bedMotorYOffset + NEMA_width(NEMA17)/2 - 20;
+	y1 = bedMotorYOffset - 20;
 	y2 = bedBearingOffset - 20;
 
 	bh = bearing_height(Z_bearings);

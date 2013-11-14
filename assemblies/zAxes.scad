@@ -52,7 +52,7 @@ module zAxesAssembly() {
 	// motor assemblies
 	for (x=[0,1], y=[-1,1]) 
 		mirror([x,0,0])
-		translate([(frameCY[3] + NEMA_width(NEMA17)/2 + 10), y*(bedDM/2-bedMotorYOffset-NEMA_width(NEMA17)/2),0]) 
+		translate([(frameCY[3] + NEMA_width(NEMA17)/2 + 10), y*(bedDM/2-bedMotorYOffset),0]) 
 		zMotorAssembly();
 		
 	

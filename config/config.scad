@@ -201,6 +201,6 @@ frameCZ = [20,
 showSealingBelts = false;
 
 bedBearingOffset = 40;    // distance from centreline of front rail to centreline of rod
-bedMotorYOffset = 20;  // distance from centreline of front/back rails to centreline of motor
+bedMotorYOffset = 40;  // distance from centreline of front/back rails to centreline of motor
 
 
