@@ -11,12 +11,12 @@ include <assemblies/yAxes.scad>
 
 laserAssembly();
 
-*frameAssembly();
+frameAssembly();
 
 zAxesAssembly();
 
 translate([0,0,bedVPos]) bedAssembly();
 
-*yAxesAssembly();
+yAxesAssembly();
 
 *claddingAssembly();
