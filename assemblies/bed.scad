@@ -10,6 +10,8 @@ module bed() {
 module bedBearingClamp(incBearing=true) {
 
 	x1 = NEMA_width(NEMA17)/2 + 10;
+	x2 = NEMA_width(NEMA17)/2 - 4;
+	
 	y1 = bedMotorYOffset + NEMA_width(NEMA17)/2 - 20;
 	y2 = bedBearingOffset - 20;
 
@@ -52,8 +54,16 @@ module bedBearingClamp(incBearing=true) {
 			}
 			
 			// mount plate
-			translate([0,0,z1]) 
-				cube([x1+10, thick_wall, bh + default_wall]);
+			difference() {
+				translate([br,0,-20]) 
+					cube([x1+2, thick_wall, 40]);
+			
+				// screw holes
+				for (i=[0,1])
+					translate([x2,-1 ,10 - i*20])
+					rotate([-90,0,0])	
+					cylinder(r=screw_clearance_radius(M5_cap_screw),h=10);	
+			}
 				
 			// fillets
 			translate([x1-10 + default_wall/2,thick_wall,10]) 
@@ -73,6 +83,17 @@ module bedBearingClamp(incBearing=true) {
 					cylinder(r=nut_radius(M5_nut), h=nut_thickness(M5_nut)+2, $fn=6);	
 			}
 		}
+		
+	// t-nuts and screws
+	for (i=[0,1]) {
+		translate([x2,thick_wall ,10 - i*20])
+			rotate([-90,0,0])
+			screw(M4_cap_screw, 8);
+		
+		translate([x2,0 ,10 - i*20])
+			rotate([-90,90,0])
+			aluProTwistLockNut(BR_20x20_TwistLockNut);
+	}
 
 	// bearing
 	if (incBearing)
