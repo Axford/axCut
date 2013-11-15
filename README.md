@@ -10,8 +10,6 @@ Clone the respository and open axCut.scad in latest version of OpenSCAD to view 
 
 Latest WIP image(s):
 
-![wip image](https://raw.github.com/Axford/axCut/master/images/axCut_wip6.png)
+![wip image](https://raw.github.com/Axford/axCut/master/images/axCut_wip7a.png)
 
-![wip image](https://raw.github.com/Axford/axCut/master/images/axCut_wip5b.png)
-
-![wip image](https://raw.github.com/Axford/axCut/master/images/axCut_wip4a.png)
+![wip image](https://raw.github.com/Axford/axCut/master/images/axCut_wip7b.png)
