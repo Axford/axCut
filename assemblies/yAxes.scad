@@ -76,6 +76,12 @@ module yAxesAssembly() {
 				translate([-30,-15,0]) roundedRect([40,30,6],6);
 			}	
 		}
+		
+		
+	// mirror
+	translate([frameCY[1]-9,frameCX[3]-42,frameCZ[2] + 53])
+		rotate([0,0,45])
+		laserMirror();
 	
 	
 	// sealing belts

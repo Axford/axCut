@@ -72,6 +72,7 @@ M8_nut_depth = 6.5;
 include <colors.scad>
 include <utils.scad>
 include <vitamins.scad>
+include <assemblies.scad>
 
 endstop_wires    = [2, 1.4, "A"];   // 7 strands of 0.2
 motor_wires      = [4, 1.4, "B"];
@@ -203,4 +204,4 @@ showSealingBelts = false;
 bedBearingOffset = 40;    // distance from centreline of front rail to centreline of rod
 bedMotorYOffset = 40;  // distance from centreline of front/back rails to centreline of motor
 
-
+showLaserBeam = true;

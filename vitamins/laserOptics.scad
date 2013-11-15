@@ -31,6 +31,10 @@ laserHeadFocusingTube_LensHousingHeight = 19;
 laserHeadFocusingTube_tipRadius = 8.5/2;
 laserHeadFocusingTube_tipHeight = 14.5;
 
+laserMirror_width = 56;
+laserMirror_depth = 23;
+laserMirror_radius = 30/2;
+
 
 module laserHeadFocusingTube() {
 	r = laserHeadFocusingTube_radius;
@@ -46,7 +50,7 @@ module laserHeadFocusingTube() {
 		render()
 		union() {
 			//upper tube
-			cylinder(r=r, h=h);
+			tube(or=r, ir=r-2, h=h, center=false);
 		
 			//lens housing
 			translate([0,0,-lhh]) 
@@ -156,3 +160,38 @@ module laserHead() {
 	
 	laserHeadBody();
 }
+
+
+
+
+
+module laserMirror() {
+	vitamin("laserMirror:");
+	
+	w = laserMirror_width;
+	d = laserMirror_depth;
+	r = laserMirror_radius;
+	
+
+
+	rotate([90,0,0])
+		translate([-w/2,0,-3]) {
+			//bracket
+			color(grey20)
+			difference() {
+		
+				roundedRect([w,w,d],5);
+		
+				translate([w/2,w/2,-1])
+					cylinder(r=r, h=d+2);
+			}
+			
+			// laser beams!
+			for (i=[0,1])
+				color([1,0,0,0.5])
+				translate([w/2,w/2,d*2/3])
+				rotate([0,45 - i*90,0])
+				cylinder(r=1, h=500);
+		}
+}
+

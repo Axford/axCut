@@ -8,6 +8,8 @@ module xCarriageBracket() {
 	ct = xCarriageBracket_thickness;
 	cw = xCarriageBracket_width;
 	ch = xCarriageBracket_height;
+	
+	vitamin("xCarriageBracket");
 
 	color("blue")
 		render()
@@ -36,14 +38,18 @@ module xCarriageAssembly() {
 	cw = xCarriageBracket_width;
 	ch = xCarriageBracket_height;
 	
+	assembly("xCarriage");
+	
 	// plate
 	translate([0,0,0]) 
 		rotate([90,0,0]) {
+			// plate
 			openrail_plate20(wheels=true);
 
 
+			// laser head
 			translate([-laserHeadBody_tubeOffsetX, 
-					   -(laserHeadBody_mountScrew2Y - laserHeadBody_mountScrew1Y),
+					   -16,
 					   ct])
 				laserHead();
 	
@@ -58,6 +64,8 @@ module xCarriageAssembly() {
 				screw(M5_cap_screw, 30);
 		
 		}
+		
+	end("xCarriage");
 }
 
 module xAxisAssembly() {
@@ -68,7 +76,7 @@ module xAxisAssembly() {
 	railLen = bedWM + ORPlateWidth(ORPLATE20)/2;
 	
 	// drive belt centres
-	beltCX = [-railLen/2 - 15 , railLen/2 + 30];
+	beltCX = [frameCY[1] , railLen/2 + 30];
 	beltCY = [-12 - openrail_plate_offset];
 	beltCZ = [16];
 	
@@ -93,13 +101,32 @@ module xAxisAssembly() {
 		translate([-25,-23,-6]) roundedRect([50,60,6],6);
 	}
 
-	// idler assembly
+	// idler/mirror assembly
 	translate([beltCX[0],beltCY[0],beltCZ[0]]) {
-		rotate([0,180,0]) metal_pulley(T5x10_metal_pulley);
+	
+		// idler screw
+		screw(M5_cap_screw);
 		
-		translate([-10,-10,-6]) roundedRect([20,50,6],6);
+		// idler
+		rotate([0,180,0]) 
+			metal_pulley(T5x10_metal_pulley);
 		
-		translate([-10,-10,-32]) roundedRect([20,50,6],6);
+		// bracket
+		translate([-32,-53,-6]) {
+			roundedRect([58,91,6],6);
+		
+			// brace
+			translate([0,43,-20])
+				cube([5,20,20]);
+		}
+		
+		
+		
+		
+		// mirror
+		translate([-9,-31,0])
+			rotate([0,0,135])
+			laserMirror();
 	}
 	
 	// belt

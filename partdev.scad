@@ -1,5 +1,6 @@
 include <config/config.scad>
 
+
 *translate([-10,10,0]) openrail_doubled(100,true,true);
 
 *translate([0,-10,0]) aluProExtrusion(BR_20x20, 100);
@@ -21,4 +22,10 @@ rotate([0,-90,0]) {
 		            
 		            
 		            
-laserHead();
+*laserHead();
+
+*laserMirror();
+
+yAxesAssembly();
+
+laserAssembly();
