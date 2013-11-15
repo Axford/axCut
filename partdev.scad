@@ -24,8 +24,9 @@ rotate([0,-90,0]) {
 		            
 *laserHead();
 
-*laserMirror();
+laserMirror();
 
-yAxesAssembly();
+*yAxesAssembly();
 
-laserAssembly();
+*laserAssembly();
+

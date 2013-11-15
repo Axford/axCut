@@ -7,7 +7,7 @@ module claddingAssembly() {
 	w2 = frameCY[3] - frameCY[2] + 20;
 	
 	d1 = frameCX[3] - frameCX[0] + 20;
-	d2 = frameCX[1] - frameCX[0];
+	d2 = frameCX[3] - frameCX[0] + 20;
 	
 	// bottom
 	color(grey20)
@@ -57,7 +57,7 @@ module claddingAssembly() {
 		render()
 		translate([frameCY[3]-13, frameCX[0] - 10, 43])
 		difference() {
-			cube([3, d2, frameCZ[1] - 13]);
+			cube([3, d2, frameCZ[1] + 8]);
 			
 			// vertical slots for bed
 			translate([-2,38,-10]) 
@@ -72,34 +72,41 @@ module claddingAssembly() {
 		mirror([i,0,0])
 		color("orange")
 		render()
-		translate([frameCY[3]-13, frameCX[0] - 10, frameCZ[1]+30])
+		translate([frameCY[3]-13, frameCX[0] - 10, frameCZ[1]+51])
 		difference() {
-			cube([3, frameCX[2] - frameCX[0], frameCZ[4] - frameCZ[1]-20]);
+			cube([3, frameCX[2] - frameCX[0], frameCZ[4] - frameCZ[1]-41]);
 			
 			// slot for x axis travel and laser path
-			translate([-2,70,-10]) roundedRectX([10,d1,70],10);
+			translate([-2,70,-2]) roundedRectX([10,bedDM + 15,40],10);
 		}
 		
-	// inner lower back
-	color("orange")
-		translate([frameCY[2],frameCX[1]-13,43])
+	// lower back
+	color(polycarbonate_color)
+		translate([frameCY[2]+10,frameCX[3]+10,0])
+		rotate([-45,0,0])
 		render()
-		cube([w2-20,3,frameCZ[1]-33]);
+		cube([w2-40,3,frameCZ[1]-10]);
+		
+	// upper back
+	color("orange")
+		translate([frameCY[2]+10,frameCX[3]+10,frameCZ[1]-10])
+		render()
+		cube([w2-40,3,frameCZ[3]-frameCZ[1] + 20]);
 	
 	// inner upper back
 	color("orange")
-		translate([frameCY[2]+10,frameCX[2]-13,frameCZ[1]+13])
+		translate([frameCY[2]+10,frameCX[2]-13,frameCZ[1]-10])
 		render()
-		cube([w2-40,3,frameCZ[4] - frameCZ[1]-3]);
-	
+		cube([w2-40,3,frameCZ[4] - frameCZ[1] + 20]);
+		
 	// inner shelf
 	color("orange")
-		translate([0,frameCX[1]-10,frameCZ[1]+10])
+		translate([0,frameCX[2]-10,frameCZ[1]-13])
 		render()
 		linear_extrude(3)
 		difference() {
-			translate([-w2/2, 0, 0])
-				square([w2, frameCX[3] - frameCX[1]  +20]);
+			translate([-w2/2+20, 0, 0])
+				square([w2-40, frameCX[3] - frameCX[2]  +20]);
 			
 			// punch out for rear posts
 			
@@ -137,7 +144,7 @@ module claddingAssembly() {
 	
 	
 	// lid
-	color([1,0.8,0.5,0.5])
+	color(polycarbonate_color)
 		translate([frameCY[2]+10,frameCX[2]-10,frameCZ[3]+10])
 		render()
 		rotate([-40,0,0])

@@ -2,7 +2,7 @@
 
 module yAxesAssembly() {
 
-	railLen = bedD + ORPlateDepth(ORPLATE40);
+	railLen = bedD + ORPlateDepth(ORPLATE40)/2 + 30;
 	
 	w = NEMA_width(NEMA17);
 	d = w + 10;
@@ -16,7 +16,7 @@ module yAxesAssembly() {
 	
 	
 	// xAxis
-	translate([0,xCarriagePos+60,frameCZ[2] + 20 + openrail_plate_offset])
+	translate([0,xCarriagePos+60,frameCZ[2] + openrail_groove_offset])
 		xAxisAssembly();
 	
 	
@@ -41,7 +41,7 @@ module yAxesAssembly() {
 	// openrails
 	for (i=[0,1])
 		mirror([i,0,0])
-		translate([frameCY[4] + 10,-bedDM/2 + 40,frameCZ[2] + 10]) 
+		translate([frameCY[4] + 10,-bedDM/2 + 20,frameCZ[2] + 10]) 
 		rotate([-90,90,0])
 	 {
 			translate([0,20,0]) openrail_doubled(railLen,true,true);
@@ -79,7 +79,7 @@ module yAxesAssembly() {
 		
 		
 	// mirror
-	translate([frameCY[1]-9,frameCX[3]-42,frameCZ[2] + 53])
+	translate([frameCY[1]-laserMirror_fixingOffset,frameCX[3]-laserMirror_fixingOffset - 15,frameCZ[2] + 34])
 		rotate([0,0,45])
 		laserMirror();
 	

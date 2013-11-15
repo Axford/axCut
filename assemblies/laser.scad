@@ -5,7 +5,7 @@ module laserTube() {
 
 module laserAssembly() {
 
-	translate([-350, frameCX[3]-50,frameCZ[1]+90]) 
+	translate([-350, frameCX[3]-50,frameCZ[2]+60]) 
 		rotate([0,90,0]) 
 		laserTube();
 

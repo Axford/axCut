@@ -10,6 +10,9 @@ openrail_t = 2.375;
 openrail_r = 0.4;  // radius of corners, approx
 
 
+openrail_groove_offset =  10 + openrail_t; // distance from centre of 20x20 rail to centreline of v-groove with doubled rails
+
+
 module openrail_teenut() {
 	$fn=12;
 	

@@ -17,7 +17,7 @@ function ORPlateDepth(plate) = plate[1];
 function ORPlateThickness(plate) = plate[2];
 function ORPlateCornerR(plate) = plate[3];
 
-openrail_plate_offset = 16.1;  // z distance from plate surface to centre of v-groove wheels with doubled rails
+openrail_plate_offset = ORPlateThickness(ORPLATE20) + 10.5;  // z distance from plate surface to centre of v-groove wheels with doubled rails
 
 openrail_plate_offset2 = 13.7;    //  z distance from plate surface to centre of v-groove wheels with singel rail
 
@@ -136,9 +136,9 @@ module openrail_plate40(wheels=false,$fn=16) {
 
 
 
-module openrail_wheel_assembly() {
+module openrail_wheel_assembly(useEccentricSpacer=false) {
 	screw(M5_cap_screw,25);
-	if (x<0 && y<0) { 
+	if (useEccentricSpacer) { 
 		translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_eccentric_spacer();
 	} else {
 		translate([0,0,-ORPlateThickness(ORPLATE20)]) mirror([0,0,1]) openrail_spacer();
@@ -168,7 +168,7 @@ module openrail_plate40_wheels() {
 	// place at corners
 	for (x=[-1,1],y=[-1,1])
 		translate([x*32.3,y*42.3,0])
-		openrail_wheel_assembly();
+		openrail_wheel_assembly(x<0 && y<0);
 }
 
 

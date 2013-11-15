@@ -80,14 +80,14 @@ module frameAssembly() {
 	BR20x20WGBP([frameCY[2]+10,frameCX[3],frameCZ[1]], 
 		            [frameCY[3]-10,frameCX[3],frameCZ[1]],
 		            roll=90,
-		            startGussets=[1,0,1,0], 
-		            endGussets=[1,0,1,0]);
+		            startGussets=[1,0,0,0], 
+		            endGussets=[1,0,0,0]);
 		            
-	BR20x20WGBP([frameCY[2]+10,frameCX[1],frameCZ[1]], 
-		            [frameCY[3]-10,frameCX[1],frameCZ[1]],
+	BR20x20WGBP([frameCY[2]+10,frameCX[2],frameCZ[1]], 
+		            [frameCY[3]-10,frameCX[2],frameCZ[1]],
 		            roll=90,
-		            startGussets=[0,0,1,1], 
-		            endGussets=[0,0,1,1]);
+		            startGussets=[0,0,0,1], 
+		            endGussets=[0,0,0,1]);
 	
 	
 	// top beams
@@ -118,9 +118,9 @@ module frameAssembly() {
 	}
 	
 	// z rib posts
-	for (x=[2,3])
-		BR20x20WGBP([frameCY[x],frameCX[1],frameCZ[0]+20], 
-		            [frameCY[x],frameCX[1],frameCZ[1]-10],
+	*for (x=[2,3])
+		BR20x20WGBP([frameCY[x],frameCX[2],frameCZ[0]+20], 
+		            [frameCY[x],frameCX[2],frameCZ[1]-10],
 		            roll=0,
 		            startGussets=[1,0,0,0], 
 		            endGussets=[1,0,0,0]);

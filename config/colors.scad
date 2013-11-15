@@ -93,7 +93,9 @@ z_coupling_color                 = plastic_part_color("red");
 z_limit_switch_bracket_color     = plastic_part_color("lime");
 z_motor_bracket_color            = plastic_part_color("lime");
 
-silicone_color = [1,0.2,0.2,1];
-microbore_color = [0.8,0.65,0.4,1];
+silicone_color 					 = [1,0.2,0.2,1];
+microbore_color 				 = [0.8,0.65,0.4,1];
 
-belt_color = "firebrick";
+belt_color 						 = "white";
+
+polycarbonate_color 			 = [1,0.8,0.5,0.5];
