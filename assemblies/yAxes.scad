@@ -16,7 +16,7 @@ module yAxesAssembly() {
 	
 	
 	// xAxis
-	translate([0,xCarriagePos+60,frameCZ[2] + openrail_groove_offset])
+	translate([0,yCarriagePos + 35,frameCZ[2] + openrail_groove_offset])
 		xAxisAssembly();
 	
 	

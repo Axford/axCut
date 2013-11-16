@@ -161,7 +161,8 @@ bedVPos = 200;
 
 zTravel = 200;
 
-xCarriagePos = +bedD/2  -25 -300;    // -25 is the calibrated offset - don't change!
+yCarriagePos = +bedD/2 -300;    // -25 is the calibrated offset - don't change
+xCarriagePos = -bedW/2;
 
 xO = 60;  // xOvershoot
 xVPos = 300;  // height of x axis above datum

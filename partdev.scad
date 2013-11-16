@@ -1,5 +1,10 @@
 include <config/config.scad>
 
+// animation
+xCarriagePos = -bedW/2 + (0.5+cos($t*360)/2) * bedW;
+yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
+echo($t);
+
 
 *translate([-10,10,0]) openrail_doubled(100,true,true);
 
@@ -26,9 +31,10 @@ rotate([0,-90,0]) {
 
 *laserMirror();
 
-*yAxesAssembly();
+yAxesAssembly();
 
 *laserAssembly();
 
-laserPowerSupply();
+*laserPowerSupply();
 
+*cableChainLink();

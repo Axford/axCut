@@ -128,6 +128,30 @@ module yCarriageAssembly() {
 	end("yCarriage");
 }
 
+module xAxisCableChain() {
+	
+	z = 60;  // vertical offset to mounting point, relative to xAxis coord frame
+	
+	
+	xExcess = ((xCarriagePos + bedW/2))/2;
+	echo(xExcess);
+	
+	*translate([xCarriagePos + 30,0,z])
+		frame();
+	
+	// silicone tube
+	color(silicone_color)
+		curvedPipe([ [frameCY[3],0,10],
+					[xCarriagePos - xExcess - 30,0,10],
+					[xCarriagePos - xExcess - 30,0,z],
+					[xCarriagePos + 30,0,z]
+				   ],
+					3,
+					[z/2-5,z/2-5],
+					5,
+					3);
+}
+
 
 module xRailAssembly() {
 
@@ -159,8 +183,12 @@ module xRailAssembly() {
 	}
 	
 	// xCarriage
-	translate([0,-openrail_plate_offset - openrail_groove_offset,0]) 	
+	translate([xCarriagePos,-openrail_plate_offset - openrail_groove_offset,0]) 	
 		xCarriageAssembly();
+	
+	
+	// cable chain
+	xAxisCableChain();
 	
 	
 	// y belt clips
