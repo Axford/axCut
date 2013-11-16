@@ -162,10 +162,21 @@ module laserHeadBody() {
 
 
 
-module laserHead() {
+module laserHead(laserBeamLength=0) {
+
+	toz = laserHeadBody_tubeOffsetZ;
+	toy = laserHeadBody_tubeOffsetY;
+	tox = laserHeadBody_tubeOffsetX;
+	
 	vitamin("laserHead:");
 	
 	laserHeadBody();
+	
+	// laser beam
+	color([1,0,0,0.5])
+		translate([tox,0,toz])
+		rotate([90,0,0])
+		cylinder(r=1, h=laserBeamLength);
 }
 
 
@@ -257,7 +268,7 @@ module laserMirrorBase() {
 
 
 
-module laserMirror() {
+module laserMirror(laserBeamLengths=[0,0]) {
 	vitamin("laserMirror:");
 	
 	w = laserMirror_width;
@@ -276,7 +287,7 @@ module laserMirror() {
 				color([1,0,0,0.5])
 				translate([w/2,w/2, 2*d + laserMirror_separation + 4])
 				rotate([0,45 - i*90,0])
-				cylinder(r=1, h=500);
+				cylinder(r=1, h=laserBeamLengths[i]);
 		}
 }
 

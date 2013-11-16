@@ -33,6 +33,10 @@ rotate([0,-90,0]) {
 
 yAxesAssembly();
 
+*frameAssembly();
+
+*claddingAssembly();
+
 *laserAssembly();
 
 *laserPowerSupply();

@@ -22,21 +22,30 @@ module xCarriageBracket() {
 
 	color("blue")
 		render()
-		difference() {
-			linear_extrude(ct) 
-				difference() {
-					roundedSquare([cw,ch],10);
+		union() {
+			difference() {
+				linear_extrude(ct) 
+					difference() {
+						roundedSquare([cw,ch],10);
 			
-					// screw holes
-					for (x=[-1,1],y=[-1,1])
-						translate([x*22.3,y*22.3,ct])
-						circle(screw_clearance_radius(M5_cap_screw));
-				}
+						// screw holes
+						for (x=[-1,1],y=[-1,1])
+							translate([x*22.3,y*22.3,ct])
+							circle(screw_clearance_radius(M5_cap_screw));
+					}
 				
-			// screw countersinks
-			for (x=[-1,1],y=[-1,1])
-				translate([x*22.3,y*22.3,thick_wall])
-				cylinder(r=screw_head_radius(M5_cap_screw), h=ct);
+				// screw countersinks
+				for (x=[-1,1],y=[-1,1])
+					translate([x*22.3,y*22.3,thick_wall])
+					cylinder(r=screw_head_radius(M5_cap_screw), h=ct);
+			}
+		
+			// cable chain bracket
+			translate([12,ch/2-1,0])
+				cube([20,19,ct]);
+			translate([12,ch/2 + 9,-36])
+				cube([20,9,37]);
+		
 		}
 }
 
@@ -60,7 +69,7 @@ module xCarriageAssembly() {
 			translate([-laserHeadBody_tubeOffsetX, 
 					   -42,
 					   ct])
-				laserHead();
+				laserHead(100);
 	
 			// bracket
 			xCarriageBracket();
@@ -226,7 +235,7 @@ module xRailAssembly() {
 	// mirror
 	translate([frameCY[1] - laserMirror_fixingOffset, -mirrorYOffset, -10])
 		rotate([0,0,135])
-		laserMirror();
+		laserMirror([bedD - (yCarriagePos + bedD/2), xCarriagePos + bedW/2 + 80]);
 	
 	
 	
