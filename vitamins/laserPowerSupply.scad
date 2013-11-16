@@ -10,8 +10,65 @@ module laserPowerSupply() {
 
 	//body
 	color("copper")
-		render()
-		cube([laserPowerSupply_width, laserPowerSupply_depth, laserPowerSupply_height]);
+		render() 
+		union() {
+			// bottom
+			cube([laserPowerSupply_width, laserPowerSupply_depth, 1]);
+			
+			//top
+			translate([0,0,laserPowerSupply_height-1])
+				cube([laserPowerSupply_width, laserPowerSupply_depth, 1]);
+			
+			//left
+			cube([1, laserPowerSupply_depth, laserPowerSupply_height]);
+			
+			//front
+			rotate([90,0,0])
+				linear_extrude(1) 
+				difference() {
+					square([laserPowerSupply_width, laserPowerSupply_height]);
+					
+					// grills
+					for (i=[0:6],j=[0,1])
+						translate([44 + i*39/7,30 + j*32,0])
+						square([3,30]);
+						
+					for (i=[0:9])
+						translate([97 + i*54/10, 45,0])
+						square([3,30]);
+				}
+				
+			// right
+			translate([laserPowerSupply_width-1,0,0])
+			rotate([90,0,90])
+				linear_extrude(1) 
+				difference() {
+					square([laserPowerSupply_depth, laserPowerSupply_height]);
+					
+					// grills
+					for (i=[0:7],j=[0,1])
+						translate([45 + i*50/8,20 + j*32,0])
+						square([3,30]);
+				}
+				
+			// back
+			translate([laserPowerSupply_width-1,laserPowerSupply_depth-1,0])
+			rotate([90,0,180])
+				linear_extrude(1) 
+				difference() {
+					square([laserPowerSupply_width, laserPowerSupply_height]);
+					
+					// fan grill
+					translate([95,laserPowerSupply_height/2,0])
+						circle(77/2);
+				}
+		
+		}
+		
+	// dark interior
+	color(grey20)
+		translate([5,5,5])
+		cube([laserPowerSupply_width-10, laserPowerSupply_depth-10, laserPowerSupply_height-10]);
 		
 	// connectors
 	color("green")
@@ -31,6 +88,24 @@ module laserPowerSupply() {
 		rotate([90,0,0])
 		cylinder(r=3,h=3);
 		
+	// red lead
+	translate([145,laserPowerSupply_depth,65])
+		rotate([-90,0,0]) {
+			color("white")
+				cylinder(r=17/2, h=19);
+			
+			color("red")
+				cylinder(r=4/2, h=80);
+			
+		}
+		
+	
+	// blue lead
+	translate([23,laserPowerSupply_depth,laserPowerSupply_height/2])
+		rotate([-90,0,0]) 
+			color("blue")
+				cylinder(r=2/2, h=50);
+				
 		
 	// mounting feet
 	for (x=[0,1],y=[0,1])

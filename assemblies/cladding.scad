@@ -43,7 +43,7 @@ module claddingAssembly() {
 		
 
 	// left/right outer panels
-	for (i=[0,1])
+	*for (i=[0,1])
 		mirror([i,0,0])
 		color(grey20)
 		translate([frameCY[5]+10, frameCX[0] - 10, 0])
