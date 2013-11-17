@@ -4,7 +4,7 @@
 // nop.head@gmail.com
 // hydraraptor.blogspot.com
 //
-include <../conf/config.scad>
+//include <../config/config.scad>
 
 heater_width = 12;
 heater_length = 19;

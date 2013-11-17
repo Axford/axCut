@@ -7,7 +7,7 @@
 //
 // Couples the leadscrews to the motor
 //
-include <../conf/config.scad>
+//include <../config/config.scad>
 
 actual_dia = [ undef, undef, undef, undef, undef, 4.82, 5.65, undef, 7.8];  // measured, doesn't match standard thread data
 

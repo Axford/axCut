@@ -2,7 +2,7 @@
 
 module yAxesAssembly() {
 
-	railLen = bedD + ORPlateDepth(ORPLATE40)/2 + 30;
+	railLen = bedDM + ORPlateDepth(ORPLATE20)/2;
 	
 	w = NEMA_width(NEMA17);
 	d = w + 10;
@@ -52,7 +52,7 @@ module yAxesAssembly() {
 		mirror([i,0,0]) {
 			translate([beltCX[0], beltCY[1], beltCZ[0]]) {
 				rotate([0,0,90]) NEMA(NEMA17);
-				metal_pulley(T5x10_metal_pulley);
+				metal_pulley(pulley_type);
 			
 		
 				translate([-d+w/2,-w/2,0]) roundedRect([d,w,6],6);
@@ -71,7 +71,7 @@ module yAxesAssembly() {
 	for (i=[0,1])
 		mirror([i,0,0]) {
 			translate([beltCX[0], beltCY[0], beltCZ[0]]) {
-				metal_pulley(T5x10_metal_pulley);
+				metal_pulley(pulley_type);
 			
 				translate([-30,-15,0]) roundedRect([40,30,6],6);
 			}	

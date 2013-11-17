@@ -14,7 +14,7 @@ show_support = true;            // show support structures, must be set when gen
 
 // Real-world colors for various parts & vitamins
 use_realistic_colors = true;    // true for "real" colors, false for "distinct" colors (useful during design and for build instructions)
-printed_plastic_color = "blue";
+printed_plastic_color = "orange";
 cable_strip_real_color = "fuchsia";
 belt_real_color = "yellow";
 bulldog_real_color ="black";
@@ -68,6 +68,13 @@ M8_clearance_radius = 8.4 / 2;
 M8_nut_radius = 15.4 / 2;
 M8_nut_depth = 6.5;
 
+Z_screw_dia = 6;            // Studding for Z axis
+
+//
+// Feature sizes
+//
+default_wall = 3;
+thick_wall = 4;
 
 include <colors.scad>
 include <utils.scad>
@@ -90,7 +97,7 @@ thermistor_wires_hole_radius = wire_hole_radius(thermistor_wires);
 
 cnc_sheets = false;                 // If sheets are cut by CNC we can use slots, etc instead of just round holes
 base_nuts = false;                  // Need something under the base if using nuts
-pulley_type = T5x8_plastic_pulley;
+pulley_type = T5x10_metal_pulley;
 
 Z_bearings = LM10UU;
 
@@ -98,13 +105,10 @@ X_motor = NEMA17;
 Y_motor = NEMA17;
 Z_motor = NEMA17;
 
-pulley_type = T2p5x16_metal_pulley;
-
 X_belt = T2p5x6;
 Y_belt = T2p5x6;
 
 motor_shaft = 5;
-Z_screw_dia = 6;            // Studding for Z axis
 
 Z_nut_radius = M6_nut_radius;
 Z_nut_depth = M6_nut_depth;
@@ -121,11 +125,7 @@ hex_screw = M3_hex_screw;
 frame_soft_screw = No6_screw;               // Used when sheet material is soft, e.g. wood
 frame_thin_screw = M4_cap_screw;            // Used with nuts when sheets are thin
 frame_thick_screw = M4_pan_screw;           // Used with tapped holes when sheets are thick and hard, e.g. plastic or metal
-//
-// Feature sizes
-//
-default_wall = 3;
-thick_wall = 4;
+
 
 screw_clearance_radius = screw_clearance_radius(cap_screw);
 nut = screw_nut(cap_screw);
@@ -137,8 +137,6 @@ belt_clearance = 0.2;                   // clearance of belt clamp slots
 
 Z_bar_dia = Z_bearings[2];
 
-Z_screw_dia = 5;
-
 Y_idler_bearing = BB624;
 X_idler_bearing = BB624;
 
@@ -146,10 +144,14 @@ X_idler_bearing = BB624;
 
 ///  
 
-bedW = 850;
-bedD = 600;
-bedH = 300;
+// OpenRail lengths  1000, 750
+
 bedM = 30;  // bed margin, applied all round
+
+bedW = 1000 - ORPlateWidth(ORPLATE20)/2 - 2*bedM;  //  adjusted to make full use of 1000mm rails
+bedD = 750 - ORPlateWidth(ORPLATE20)/2 - 2*bedM;  // adjusted to make full use of 750mm rails
+
+bedH = 300;
 bedO = 70;  //bedOvershoot - applies to width only
 
 bedWM = bedW + 2*bedM;  // with margins
@@ -161,8 +163,8 @@ bedVPos = 200;
 
 zTravel = 200;
 
-yCarriagePos = +bedD/2 -300;    // -25 is the calibrated offset - don't change
-xCarriagePos = -bedW/2;
+yCarriagePos = +bedD/2 -300;   // +-bedD
+xCarriagePos = -bedW/2;    // +-bedW
 
 xO = 60;  // xOvershoot
 xVPos = 300;  // height of x axis above datum
@@ -206,3 +208,7 @@ bedBearingOffset = 40;    // distance from centreline of front rail to centrelin
 bedMotorYOffset = 40;  // distance from centreline of front/back rails to centreline of motor
 
 showLaserBeam = true;
+
+echo("Overall width = ", (frameCY[5]-frameCY[0]+16));
+echo("Overall depth = ", (frameCX[3]-frameCX[0]+16));
+echo("Overall height = ", (frameCZ[4]-frameCZ[0]+26));

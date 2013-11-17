@@ -38,17 +38,19 @@ BR_2SA = [1,1,0,0];
 
 // Profiles - combination of elements
 
-BR_20x20 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 1];
-BR_20x20_1S = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_1S, 1, 1];
-BR_20x20_2S = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_2S, 1, 1];
-BR_20x20_3S = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_3S, 1, 1];
-BR_20x20_2SA = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_2SA, 1, 1];
+BR_20x20 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 1, "BR_20x20"];
+BR_20x20_1S = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_1S, 1, 1, "BR_20x20_1S"];
+BR_20x20_2S = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_2S, 1, 1, "BR_20x20_2S"];
+BR_20x20_3S = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_3S, 1, 1, "BR_20x20_3S"];
+BR_20x20_2SA = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_2SA, 1, 1, "BR_20x20_2SA"];
 
-BR_20x40 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 2];
+BR_20x40 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 2, "BR_20x40"];
 
-BR_20x60 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 3];
+BR_20x60 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 3, "BR_20x60"];
 
-BR_20x80 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 4];
+BR_20x80 = [BR_20x20_Bore, BR_20x20_Core, BR_20x20_Corner, BR_20x20_Side, BR_0, 1, 4, "BR_20x80"];
+
+function aluPro_label(type) = type[7];
 
 //twistLockNutType
 
@@ -265,7 +267,7 @@ module aluProSection(profileType) {
 
 
 module aluProExtrusion(profileType, l=100, center=false) {
-	vitamin(str("AluExt",l,": Aluminium Extrusion ",l,"mm"));
+	vitamin(str("AluExt",aluPro_label(profileType),"_",l,": Aluminium Extrusion ",aluPro_label(profileType)," ",l,"mm"));
 
 	color(grey80)
 	render()

@@ -9,7 +9,7 @@ module laserPowerSupply() {
 	vitamin("laserPowerSupply:");
 
 	//body
-	color("copper")
+	color("orange")
 		render() 
 		union() {
 			// bottom
@@ -110,7 +110,7 @@ module laserPowerSupply() {
 	// mounting feet
 	for (x=[0,1],y=[0,1])
 		if (x>0 || y>0)
-		color("copper")
+		color("orange")
 		render()
 		translate([23.5 + x*122, y*laserPowerSupply_depth, 0])
 		rotate([0,0,(y-1)*180])

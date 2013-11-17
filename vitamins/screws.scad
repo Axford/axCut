@@ -158,3 +158,14 @@ module screw_and_washer(type, length, spring = false) {
             screw(type, length);
     }
 }
+
+
+module screw_washer_and_nut(screw_type, nut_type, length, offset, nyloc=false) {
+	screw(screw_type, length);
+	
+	translate([0,0,-offset])
+		mirror([0,0,1])
+		nut_and_washer(nut_type, nyloc);
+}
+
+

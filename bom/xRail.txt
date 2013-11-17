@@ -1,0 +1,16 @@
+xRail:
+Vitamins:
+  1 Aluminium Extrusion BR_20x20 1170mm
+  1 Belt T5 x 10mm x 2185mm
+  1 M5 cap screw x undefmm
+ 20 M5 low profile screw x 10mm
+  1 NEMA17 x 47mm stepper motor
+  2 Openrail1000:Openrail 1000mm
+ 20 OpenrailTeeNut:
+  2 T5 pulley 10 teeth
+  1 laserMirror:
+
+Printed:
+
+Sub-assemblies:
+  1 xCarriage

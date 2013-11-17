@@ -4,7 +4,7 @@
 // nop.head@gmail.com
 // hydraraptor.blogspot.com
 //
-include <../conf/config.scad>
+//include <../config/config.scad>
 
 MK4_heater = [ 12.76, 15.88, 8.22, (15.88 / 2 - 4.5), (12.76 / 2 - 0.5 - 2.5 / 2),  (-15.88 / 2 + 5), 9.5];
 MK5_heater = [ 12.76, 12.76, 8.22, (12.76 / 2 - 3.75), (12.76 / 2 - 0.5 - 2.5 / 2), (-12.76 / 2 + 4), 7.5];
