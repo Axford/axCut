@@ -79,7 +79,6 @@ thick_wall = 4;
 include <colors.scad>
 include <utils.scad>
 include <vitamins.scad>
-include <assemblies.scad>
 
 endstop_wires    = [2, 1.4, "A"];   // 7 strands of 0.2
 motor_wires      = [4, 1.4, "B"];
@@ -212,3 +211,7 @@ showLaserBeam = true;
 echo("Overall width = ", (frameCY[5]-frameCY[0]+16));
 echo("Overall depth = ", (frameCX[3]-frameCX[0]+16));
 echo("Overall height = ", (frameCZ[4]-frameCZ[0]+26));
+
+
+include <assemblies.scad>
+

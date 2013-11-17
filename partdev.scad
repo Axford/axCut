@@ -27,7 +27,10 @@ rotate([0,-90,0]) {
 
 *translate([-350,0,-100]) xAxisAssembly();
 
-xCarriageBracket_stl();		            
+*xCarriageBracket_stl();		            
+
+
+claddingSheets();
 		            
 *laserHead();
 
@@ -37,9 +40,11 @@ xCarriageBracket_stl();
 
 *yAxesAssembly();
 
-*frameAssembly();
-
-*claddingAssembly();
+translate([-650,400,0]) {
+	frameAssembly();
+	claddingAssembly();
+	translate([0,0,bedVPos]) bedAssembly();
+}
 
 *laserAssembly();
 

@@ -96,9 +96,10 @@ module complexRoundSquare(size,rads1=[0,0], rads2=[0,0], rads3=[0,0], rads4=[0,0
 		}
 	}
 }
-module roundedSquare(pos=[10,10],r=2) {
+module roundedSquare(pos=[10,10],r=2,center=true) {
+	translate([center?0:r,center?0:r,0])
 	minkowski() {
-		square([pos[0]-r*2,pos[1]-r*2],center=true);
+		square([pos[0]-r*2,pos[1]-r*2],center=center);
 		circle(r=r);
 	}
 }
