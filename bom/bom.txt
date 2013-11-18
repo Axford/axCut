@@ -8,9 +8,10 @@ Vitamins:
   B   i   a   x   a   a   a   x   t   r
   e   n   m   i   g   i   g   e   o   o
   d   g   e   s   e   l   e   s   r   d
+   |   |  8|   |   |   |   |   |   |   | 12 20x20TGusset:
+   |   |  8|   |   |   |   |   |   |   |  8 20x40HeavyGusset:
    |   |   |   |   |  1|   |   |   |   |  1 Aluminium Extrusion BR_20x20 1170mm
    |   |  8|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 350mm
-   |   |  4|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 65mm
   6|   |   |   |   |   |   |   |   |   |  6 Aluminium Extrusion BR_20x20 670mm
    |   |  6|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 870mm
    |   |  3|   |   |   |   |   |   |   |  3 Aluminium Extrusion BR_20x20 990mm
@@ -18,13 +19,13 @@ Vitamins:
    |   |  2|   |   |   |   |   |   |   |  2 Aluminium Extrusion BR_20x40 1200mm
    |   |  6|   |   |   |   |   |   |   |  6 Aluminium Extrusion BR_20x40 870mm
    |   |  1|   |   |   |   |   |   |   |  1 Aluminium Extrusion BR_20x40 990mm
- 32|   |152|   |   |   |   |   |   |   |216 Aluminium Extrusion Twist Nut
+ 32|   |180|   |   |   |   |   |   |   |244 Aluminium Extrusion Twist Nut
    |   |   |   |  8|   | 16|   |   |   | 24 Ball bearing 625_2RS 5mm x 16mm x 5mm
- 12|   | 76|   |   |   |   |   |   |   |104 BR20x20Gusset
+ 12|   | 40|   |   |   |   |   |   |   | 60 BR20x20Gusset
    |   |   |   |   |   |   |   |   |   |  2 Belt T5 x 10mm x 1665mm
    |   |   |   |   |  1|   |   |   |   |  1 Belt T5 x 10mm x 2185mm
    |   |   |   |   |   |   |   | 16|   | 16 M3 cap screw x 20mm
- 32|   |152|   |   |   |   |   |   |   |216 M4 cap screw x 8mm
+ 32|   |180|   |   |   |   |   |   |   |244 M4 cap screw x 8mm
    |   |   |   |  4|   |  8|   |   |   | 12 M5 cap screw x 25mm
    |   |   |   |  4|   |  8|   |   |   | 12 M5 cap screw x 30mm
    |   |   |   |   |  1|   |   |   |   |  1 M5 cap screw x undefmm
@@ -49,11 +50,13 @@ Vitamins:
    |   |   |   |   |   |   |   |   |   |  1 Overall width = ", 119
    |   |   |   |   |  2|   |   |   |   |  6 T5 pulley 10 teeth
    |   |   |   |   |   |   |   |   |  2|  2 Smooth rod 10mm x 195mm
+   |   |   |   |   |   |   |   |   |   |  4 M6 selftap screw T25 x 16mm
    |   |   |   |   |   |   |   |  4|   |  4 Threaded rod M6 x 165mm
    |   |   |   |   |   |   |   |  4|   |  4 Neoprene tubing OD 8mm ID 5mm x 16mm
    |   |   |   |  2|   |   |   | 16|   | 18 Washer M3 x 7mm x 0.5mm
-   |   |   |   |  2|   |   |   |   |   |  2 Washer M4 x 9mm x 0.8mm
+   |   | 36|   |  2|   |   |   |   |   | 54 Washer M4 x 9mm x 0.8mm
    |   |   |   |  4|   |  8|   |   |   | 12 Washer M5 x 10mm x 1mm
+   |   |   |   |   |   |   |   |   |   |  4 Washer M6 x 12mm x 1.5mm
    |   |   |   |  1|   |   |   |   |   |  1 laserHead:
    |   |   |   |   |  1|   |   |   |   |  2 laserMirror:
    |   |   |   |   |   |  2|   |   |   |  2 yCarriageBracket
