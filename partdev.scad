@@ -7,15 +7,16 @@ yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
 
 
 
-BR20x20WGBP([-50,0,0],[-50,0,100]);
+*BR20x20WGBP([-50,0,0],[-50,0,100]);
 		   
-translate([0,0,0]) 20x20TGusset(width=100-20, screws=true, coreScrew=true);        
+*translate([0,0,0]) 20x20TGusset(width=100-20, screws=true, coreScrew=true);        
 		            
-BR20x20WGBP([0,10,0],[0,100,0], startGussets=[0,1,0,1]);
+*BR20x20WGBP([0,10,0],[0,100,0], startGussets=[0,1,0,1]);
+
+20x40HeavyGusset(screws=true);
 
 
-
-
+BR20x40WGBP([0,0,-10],[0,100,-10],90);
 
 
 

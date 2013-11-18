@@ -58,8 +58,8 @@ BR_20x20_TwistLockNut = [5.8,11.3,4,0.8,1.5];
 
 
 // gussets
-// width, wall_thickness, slot width, slot height, slot offset from base, nib depth
-BR_20x20_Gusset = [18, 3, 4.5, 7, 7.7, 1, "BR20x20Gusset"];
+// width, wall_thickness, slot width, slot height, slot offset from base, nib depth, nib width, label
+BR_20x20_Gusset = [18, 3, 4.5, 7, 7.7, 1, 5.8, "BR20x20Gusset"];
 
 module aluProBore(boreType, $fn=16) {
 	union() {
@@ -375,10 +375,8 @@ module aluProExtrusionBetweenPoints(p1,p2,profileType=BR_20x20,roll=0) {
 
 
 
-// width, wall_thickness, slot width, slot height, slot offset from base, nib depth
-//BR_20x20_Gusset = [18, 3, 4.5, 7, 7.7, 1];
 
-module aluProGusset(tg,screws=false) {
+module aluProGusset(tg,screws=false,nibs=true) {
 	// sits on z=0
 	// faces along y+ and z+	
 	
@@ -388,10 +386,12 @@ module aluProGusset(tg,screws=false) {
 	sloth = tg[3];
 	sloto = tg[4];
 	nib = tg[5];
+	nibw = tg[6];
 	
-	vitamin(str(tg[6],": ",tg[6]));
+	vitamin(str(tg[7],": ",tg[7]));
 	
-	color(grey80)
+	//color(grey80)
+	color(plastic_part_color())  // colour as plastic for axCut build
 	render()
 	union() {
 		// ends
@@ -400,11 +400,23 @@ module aluProGusset(tg,screws=false) {
 			linear_extrude(t) {
 				difference() {
 					translate([-w/2,0,0]) square([w,w]);
+					
+					// slot for screw
 					translate([(-w/2+slotw)/2,sloto,0]) square([slotw,sloth]);
 				}
 			}
 			
 		// nibs - must add these at some point!
+		if (nibs && !simplify)
+			for (i=[0,1],j=[0,1])
+			mirror([0,-i,i])
+			rotate([0,-90,0])
+			translate([j*(w-2*nib),0,-nibw/2])
+			linear_extrude(nibw)
+			polygon([[0,0],
+			         [2*nib,0],
+			         [nib,-nib],
+			         [-nib,-nib]]);
 		
 		//sides
 		for (i=[0,1])
@@ -412,6 +424,14 @@ module aluProGusset(tg,screws=false) {
 			translate([w/2-t/2,t,t])
 			rotate([0,-90,0])
 			right_triangle(width=w-t, height=w-t, h=t, center = true);
+	
+		// tips
+		if (!simplify)
+			for (i=[0,1])
+			mirror([0,-i,i])
+			translate([w/2-t-eta,w-1,t-eta])
+			rotate([0,-90,0])
+			right_triangle(width=1, height=1, h=w-2*t+2*eta, center=false);
 	}
 	
 	if (screws) {

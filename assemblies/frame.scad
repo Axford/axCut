@@ -17,9 +17,13 @@ module frameAssembly() {
 	for (i=[0,2,3,5]) {
 		BR20x40WGBP([frameCY[i],frameCX[0]+10,frameCZ[0]], 
 		            [frameCY[i],frameCX[3]-10,frameCZ[0]],
-		            roll=0,
-		            startGussets=[0,i%2,i%2,0,(i+1)%2,(i+1)%2], 
-		            endGussets=[0,i%2,i%2,0,(i+1)%2,(i+1)%2]);
+		            roll=0);
+		            
+		for (j=[0,1])
+			translate([frameCY[i] + (i<3?10:-10),frameCX[0+j*3] + (j==0?10:-10),frameCZ[0]])
+			mirror([i>2?1:0,j,0])
+			rotate([0,90,0])
+			20x40HeavyGusset_stl(screws=true);
 	}
 	
 	// infill ribs
@@ -36,7 +40,7 @@ module frameAssembly() {
 		BR20x20WGBP([frameCY[x],frameCX[y],frameCZ[0]+20], 
 		            [frameCY[x],frameCX[y],frameCZ[3]+10],
 		            roll=0,
-		            startGussets=[y==0?1:0,x==5?1:0,y==0?0:1,x==0?1:0], 
+		            startGussets=[y==0?1:0,0,y==0?0:1,0], 
 		            endGussets=[0,0,0,0]);
 		            
 	// inner posts
@@ -44,9 +48,9 @@ module frameAssembly() {
 		BR20x20WGBP([frameCY[x],frameCX[y],frameCZ[0]+20], 
 		            [frameCY[x],frameCX[y],frameCZ[4]+10],
 		            roll=90,
-		            startGussets=[x==2?1:0,
+		            startGussets=[0,
 		            			  y==3?1:0,
-		            			  x==3?1:0,
+		            			  0,
 		            			  y==0?1:0], 
 		            endGussets=[0,0,0,0]);
 	
@@ -94,7 +98,17 @@ module frameAssembly() {
 	for (x=[0,3],y=[0,3]) {
 		translate([(frameCY[x] + frameCY[x+2])/2,frameCX[y],frameCZ[3]])
 			rotate([180,0,0]) 
-			20x20TGusset(width=(frameCY[x+2]-frameCY[x]-20), screws=true, coreScrew=false);
+			20x20TGusset_stl(width=(frameCY[x+2]-frameCY[x]-20), screws=true, coreScrew=false);
+	}
+	
+	// bottom front/back sides
+	for (x=[0,3],y=[0,3]) 
+		translate([(frameCY[x] + frameCY[x+2])/2,frameCX[y],frameCZ[0]+30]) {
+			20x20TGusset_stl(width=(frameCY[x+2]-frameCY[x]-20), screws=true, coreScrew=false);
+			
+			// additional t-slot fixings into base
+			translate([0,0,default_wall - 10]) screw_and_washer(M4_cap_screw,8);
+			translate([0,0,-10]) rotate([0,0,90]) aluProTwistLockNut(BR_20x20_TwistLockNut);
 	}
 		            
 	// top laser casing beam

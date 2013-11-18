@@ -33,7 +33,7 @@ module yAxesAssembly() {
 	for (x=[0,3],y=[0,3]) {
 		translate([(frameCY[x] + frameCY[x+2])/2,frameCX[y],frameCZ[2]])
 			rotate([180,0,0]) 
-			20x20TGusset(width=(frameCY[x+2]-frameCY[x]-20), screws=true, coreScrew=true, coreSide=y==0?false:true);
+			20x20TGusset_stl(width=(frameCY[x+2]-frameCY[x]-20), screws=true, coreScrew=true, coreSide=y==0?false:true);
 	}
 	
 	// openrails

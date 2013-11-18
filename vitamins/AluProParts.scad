@@ -14,7 +14,7 @@
 // gussets protruding along z+  (print orientation)
 // endSide:  false= y-, true=y+
 
-module 20x20TGusset(width=100, coreSide=true, screws=false, coreScrew=false) {
+module 20x20TGusset_stl(width=100, coreSide=true, screws=false, coreScrew=false) {
 	
 	h1 = 20;  // web height
 	
@@ -25,6 +25,8 @@ module 20x20TGusset(width=100, coreSide=true, screws=false, coreScrew=false) {
 	core_screw = M6_selftap_screw;   // S6x16
 	  
 	sw = 5;  // slow width, between centres
+	
+	vitamin("20x20TGusset:");
 	
 	color(plastic_part_color())
 		translate([0,0,-h1/2])
@@ -118,4 +120,76 @@ module 20x20TGusset(width=100, coreSide=true, screws=false, coreScrew=false) {
 			
 		}
 	
+}
+
+
+
+
+// heavy duty 90 degree gusset to join 20x40 profile
+// designed for the base of the axCut machine
+
+module 20x40HeavyGusset_stl(screws=false) {
+	// sits on z=0
+	// faces along y+ and z+	
+	w = 40;
+	t = default_wall;
+	slotw = screw_clearance_radius(M4_cap_screw) * 2;
+	sloth = slotw * 1.5;
+	nib = 1;   // depth of nib
+	nibw = 5.8;  // width of nib
+	
+	vitamin("20x40HeavyGusset:");
+	
+	//color(grey80)
+	color(plastic_part_color())  // colour as plastic for axCut build
+	render()
+	union() {
+		// ends
+		for (i=[0,1])
+			mirror([0,-i,i])
+			linear_extrude(t) {
+				difference() {
+					translate([-w/2,0,0]) square([w,w]);
+					
+					// slots for screw, 20mm centres
+					for (j=[0,1],k=[0,1])
+						translate([-10 + j*w/2 - slotw/2, 9 + k*20, 0]) 
+						square([slotw,sloth]);
+				}
+			}
+			
+		// nibs - must add these at some point!
+		if (!simplify)
+			for (i=[0,1],j=[0,1],k=[0,1])
+			mirror([0,-i,i])
+			rotate([0,-90,0])
+			translate([j*(w-2*nib),0,-10 + k*20 -nibw/2])
+			linear_extrude(nibw)
+			polygon([[0,0],
+			         [2*nib,0],
+			         [nib,-nib],
+			         [-nib,-nib]]);
+		
+		//sides and inner rib
+		for (i=[0:2])
+			translate([-w/2+t/2 + i*(w-t)/2 ,t-eta,t-eta])
+			rotate([0,-90,0])
+			right_triangle(width=w-t, height=w-t, h=t, center = true);
+	
+		// tips
+		if (!simplify)
+			for (i=[0,1])
+			mirror([0,-i,i])
+			translate([w/2-t-eta,w-1,t-eta])
+			rotate([0,-90,0])
+			right_triangle(width=1, height=1, h=w-2*t+2*eta, center=false);
+	}
+	
+	if (screws) {
+		for (i=[0,1],j=[0,1],k=[0,1])
+			mirror([0,-i,i]) {
+				translate([-10 + k*20,12 + j*20,t]) screw(M4_cap_screw,8);
+				translate([-10 + k*20,12 + j*20,0]) aluProTwistLockNut(BR_20x20_TwistLockNut);
+			}
+	}
 }
