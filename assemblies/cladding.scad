@@ -70,6 +70,10 @@ module claddingFrontDoor() {
 	cube([cladding_doorWidth, cladding_doorHeight, cladding_thickness]);
 }
 
+module claddingBackDoor() {
+	cube([cladding_doorWidth, cladding_doorHeight + 40, cladding_thickness]);
+}
+
 module claddingBackTop() {
 	cube([cladding_doorWidth,cladding_topDepth,cladding_thickness]);
 }
@@ -146,12 +150,11 @@ module claddingAssembly() {
 		rotate([0,-90,0])
 		claddingInnerUpperSide();
 		
-	// lower back
-	color(polycarbonate_color)
+	// back door
+	color(grey20)
 		translate([frameCY[2]+10,frameCX[3]+10,0])
-		rotate([-45,0,0])
-		render()
-		cube([cladding_innerWidth-40,3,frameCZ[1]-10]);
+		rotate([45,0,0])
+		claddingBackDoor();
 		
 	// upper back
 	color("orange")
@@ -257,6 +260,14 @@ module claddingSheets() {
 					      i*(cladding_sideWidth + cladding_cutMargin),0,0])
 				rotate([0,0,0])
 				claddingTopSide();
+				
+			translate([cladding_outerDepth + cladding_cutMargin +
+					      2*(cladding_outerHeight + cladding_cutMargin) +
+					      2*(cladding_sideWidth + cladding_cutMargin) +
+					   cladding_doorHeight + 40,
+					   0,0])
+				rotate([0,0,90])
+				claddingBackDoor();
 
 
 		}

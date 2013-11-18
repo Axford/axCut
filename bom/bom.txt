@@ -1,70 +1,71 @@
 Vitamins:
-              X       Y            
-              c       c            
-              a       a            
-              r       r       Z    
-      F   X   r   X   r   Z   m    
-      r   a   i   r   i   a   o   Z
-  B   a   x   a   a   a   x   t   r
-  e   m   i   g   i   g   e   o   o
-  d   e   s   e   l   e   s   r   d
-   |   |   |   |  1|   |   |   |   |  1 Aluminium Extrusion BR_20x20 1170mm
-   |  8|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 350mm
-   |  4|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 65mm
-  6|   |   |   |   |   |   |   |   |  6 Aluminium Extrusion BR_20x20 670mm
-   |  6|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 870mm
-   |  3|   |   |   |   |   |   |   |  3 Aluminium Extrusion BR_20x20 990mm
-  2|   |   |   |   |   |   |   |   |  2 Aluminium Extrusion BR_20x40 1100mm
-   |  2|   |   |   |   |   |   |   |  2 Aluminium Extrusion BR_20x40 1200mm
-   |  6|   |   |   |   |   |   |   |  6 Aluminium Extrusion BR_20x40 870mm
-   |  1|   |   |   |   |   |   |   |  1 Aluminium Extrusion BR_20x40 990mm
- 32|152|   |   |   |   |   |   |   |216 Aluminium Extrusion Twist Nut
-   |   |   |  8|   | 16|   |   |   | 24 Ball bearing 625_2RS 5mm x 16mm x 5mm
- 12| 76|   |   |   |   |   |   |   |104 BR20x20Gusset
-   |   |   |   |   |   |   |   |   |  2 Belt T5 x 10mm x 1665mm
-   |   |   |   |  1|   |   |   |   |  1 Belt T5 x 10mm x 2185mm
-   |   |   |   |   |   |   | 16|   | 16 M3 cap screw x 20mm
- 32|152|   |   |   |   |   |   |   |216 M4 cap screw x 8mm
-   |   |   |  4|   |  8|   |   |   | 12 M5 cap screw x 25mm
-   |   |   |  4|   |  8|   |   |   | 12 M5 cap screw x 30mm
-   |   |   |   |  1|   |   |   |   |  1 M5 cap screw x undefmm
-   |   |   |  4|   |  8|   |   |   | 12 DelrinVGrooveWheel:
-   |   |   |  2|   |   |   |   |   |  2 M3 hex screw x 16mm
-   |   |   |  2|   |   |   |   |   |  2 M4 hex screw x 20mm
-  2|   |   |   |   |   |   |   |   |  2 LM10UU linear bearing
-   |   |   |   | 20|   |   |   |   | 50 M5 low profile screw x 10mm
-   |   |   |   |  1|   |   |  4|   |  7 NEMA17 x 47mm stepper motor
-   |   |   |  2|   |   |   |   |   |  2 Nut M3
-  4|   |   |   |   |   |   |   |   |  4 Nut M5
-   |   |   |   |   |   |   | 16|   | 16 Nyloc nut M3
-   |   |   |  2|   |   |   |   |   |  2 Nyloc nut M4
-   |   |   |  4|   |  8|   |   |   | 12 Nyloc nut M5
-   |   |   |  1|   |  2|   |   |   |  3 OpenRailPlate20:
-   |   |   |  4|   |  8|   |   |   | 12 OpenRailSpacer:
-   |   |   |   |  2|   |   |   |   |  2 Openrail1000:Openrail 1000mm
-   |   |   |   |   |   |   |   |   |  4 Openrail750:Openrail 750mm
-   |   |   |   | 20|   |   |   |   | 50 OpenrailTeeNut:
-   |   |   |   |   |   |   |   |   |  1 Overall depth = ", 90
-   |   |   |   |   |   |   |   |   |  1 Overall height = ", 38
-   |   |   |   |   |   |   |   |   |  1 Overall width = ", 119
-   |   |   |   |  2|   |   |   |   |  6 T5 pulley 10 teeth
-   |   |   |   |   |   |   |   |  2|  2 Smooth rod 10mm x 195mm
-   |   |   |   |   |   |   |  4|   |  4 Threaded rod M6 x 165mm
-   |   |   |   |   |   |   |  4|   |  4 Neoprene tubing OD 8mm ID 5mm x 16mm
-   |   |   |  2|   |   |   | 16|   | 18 Washer M3 x 7mm x 0.5mm
-   |   |   |  2|   |   |   |   |   |  2 Washer M4 x 9mm x 0.8mm
-   |   |   |  4|   |  8|   |   |   | 12 Washer M5 x 10mm x 1mm
-   |   |   |  1|   |   |   |   |   |  1 laserHead:
-   |   |   |   |  1|   |   |   |   |  2 laserMirror:
-   |   |   |   |   |  2|   |   |   |  2 yCarriageBracket
+                  X       Y            
+      C           c       c            
+      l           a       a            
+      a           r       r       Z    
+      d   F   X   r   X   r   Z   m    
+      d   r   a   i   r   i   a   o   Z
+  B   i   a   x   a   a   a   x   t   r
+  e   n   m   i   g   i   g   e   o   o
+  d   g   e   s   e   l   e   s   r   d
+   |   |   |   |   |  1|   |   |   |   |  1 Aluminium Extrusion BR_20x20 1170mm
+   |   |  8|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 350mm
+   |   |  4|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 65mm
+  6|   |   |   |   |   |   |   |   |   |  6 Aluminium Extrusion BR_20x20 670mm
+   |   |  6|   |   |   |   |   |   |   |  8 Aluminium Extrusion BR_20x20 870mm
+   |   |  3|   |   |   |   |   |   |   |  3 Aluminium Extrusion BR_20x20 990mm
+  2|   |   |   |   |   |   |   |   |   |  2 Aluminium Extrusion BR_20x40 1100mm
+   |   |  2|   |   |   |   |   |   |   |  2 Aluminium Extrusion BR_20x40 1200mm
+   |   |  6|   |   |   |   |   |   |   |  6 Aluminium Extrusion BR_20x40 870mm
+   |   |  1|   |   |   |   |   |   |   |  1 Aluminium Extrusion BR_20x40 990mm
+ 32|   |152|   |   |   |   |   |   |   |216 Aluminium Extrusion Twist Nut
+   |   |   |   |  8|   | 16|   |   |   | 24 Ball bearing 625_2RS 5mm x 16mm x 5mm
+ 12|   | 76|   |   |   |   |   |   |   |104 BR20x20Gusset
+   |   |   |   |   |   |   |   |   |   |  2 Belt T5 x 10mm x 1665mm
+   |   |   |   |   |  1|   |   |   |   |  1 Belt T5 x 10mm x 2185mm
+   |   |   |   |   |   |   |   | 16|   | 16 M3 cap screw x 20mm
+ 32|   |152|   |   |   |   |   |   |   |216 M4 cap screw x 8mm
+   |   |   |   |  4|   |  8|   |   |   | 12 M5 cap screw x 25mm
+   |   |   |   |  4|   |  8|   |   |   | 12 M5 cap screw x 30mm
+   |   |   |   |   |  1|   |   |   |   |  1 M5 cap screw x undefmm
+   |   |   |   |  4|   |  8|   |   |   | 12 DelrinVGrooveWheel:
+   |   |   |   |  2|   |   |   |   |   |  2 M3 hex screw x 16mm
+   |   |   |   |  2|   |   |   |   |   |  2 M4 hex screw x 20mm
+  2|   |   |   |   |   |   |   |   |   |  2 LM10UU linear bearing
+   |   |   |   |   | 20|   |   |   |   | 50 M5 low profile screw x 10mm
+   |   |   |   |   |  1|   |   |  4|   |  7 NEMA17 x 47mm stepper motor
+   |   |   |   |  2|   |   |   |   |   |  2 Nut M3
+  4|   |   |   |   |   |   |   |   |   |  4 Nut M5
+   |   |   |   |   |   |   |   | 16|   | 16 Nyloc nut M3
+   |   |   |   |  2|   |   |   |   |   |  2 Nyloc nut M4
+   |   |   |   |  4|   |  8|   |   |   | 12 Nyloc nut M5
+   |   |   |   |  1|   |  2|   |   |   |  3 OpenRailPlate20:
+   |   |   |   |  4|   |  8|   |   |   | 12 OpenRailSpacer:
+   |   |   |   |   |  2|   |   |   |   |  2 Openrail1000:Openrail 1000mm
+   |   |   |   |   |   |   |   |   |   |  4 Openrail750:Openrail 750mm
+   |   |   |   |   | 20|   |   |   |   | 50 OpenrailTeeNut:
+   |   |   |   |   |   |   |   |   |   |  1 Overall depth = ", 90
+   |   |   |   |   |   |   |   |   |   |  1 Overall height = ", 38
+   |   |   |   |   |   |   |   |   |   |  1 Overall width = ", 119
+   |   |   |   |   |  2|   |   |   |   |  6 T5 pulley 10 teeth
+   |   |   |   |   |   |   |   |   |  2|  2 Smooth rod 10mm x 195mm
+   |   |   |   |   |   |   |   |  4|   |  4 Threaded rod M6 x 165mm
+   |   |   |   |   |   |   |   |  4|   |  4 Neoprene tubing OD 8mm ID 5mm x 16mm
+   |   |   |   |  2|   |   |   | 16|   | 18 Washer M3 x 7mm x 0.5mm
+   |   |   |   |  2|   |   |   |   |   |  2 Washer M4 x 9mm x 0.8mm
+   |   |   |   |  4|   |  8|   |   |   | 12 Washer M5 x 10mm x 1mm
+   |   |   |   |  1|   |   |   |   |   |  1 laserHead:
+   |   |   |   |   |  1|   |   |   |   |  2 laserMirror:
+   |   |   |   |   |   |  2|   |   |   |  2 yCarriageBracket
 
 Printed:
-   |   |   |  1|   |   |   |   |   |  1 xBeltClamp.stl
-   |   |   |  1|   |   |   |   |   |  1 xCarriageBracket.stl
-   |   |   |   |   |   |   |  8|   |  8 z_coupling.stl
+   |   |   |   |  1|   |   |   |   |   |  1 xBeltClamp.stl
+   |   |   |   |  1|   |   |   |   |   |  1 xCarriageBracket.stl
+   |   |   |   |   |   |   |   |  8|   |  8 z_coupling.stl
 
 Sub-assemblies:
   1 bed
+  1 cladding
   1 frame
   1 xAxis
   1 xCarriage

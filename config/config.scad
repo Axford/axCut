@@ -195,10 +195,10 @@ frameCY = [-bedWM/2-rightW+10,
            
 //  centres lines lying in z axis
 frameCZ = [20, 
-		   245,   //  top of z rails	
-           265,   //  y rails
-		   380,   // outer corners
-           380];  // top
+		   zTravel + 45,   //  top of z rails	
+           zTravel + 65,   //  y rails
+		   zTravel + 180,   // outer corners
+           zTravel + 180];  // top
 
 
 showSealingBelts = false;

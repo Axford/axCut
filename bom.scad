@@ -2,7 +2,7 @@ include <config/config.scad>
 
 bom = 2;
 
-*laserAssembly();
+laserAssembly();
 
 frameAssembly();
 
@@ -12,7 +12,7 @@ translate([0,0,bedVPos]) bedAssembly();
 
 yAxesAssembly();
 
-*claddingAssembly();
+claddingAssembly();
 
 
 *translate([frameCY[3] - 10, laserPowerSupply_depth,40])
