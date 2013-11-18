@@ -80,7 +80,7 @@ module bedBearingClamp(incBearing=true) {
 					cube([20, y1 + 10, 10]);
 			
 				translate([x1,y1, 9]) 
-					cylinder(r=nut_radius(M5_nut), h=nut_thickness(M5_nut)+2, $fn=6);	
+					cylinder(r=nut_radius(M5_nut), h=nut_thickness(M6_nut)+2, $fn=6);	
 			}
 		}
 		
@@ -103,7 +103,7 @@ module bedBearingClamp(incBearing=true) {
 		
 	// nut
 	translate([x1,y1,10])
-		nut(M5_nut);
+		nut(M6_nut);
 }
 
 module bedAssembly() {
