@@ -31,11 +31,9 @@ module yAxesAssembly() {
 	
 	// end brackets for rails
 	for (x=[0,3],y=[0,3]) {
-		BR20x20WGBP([frameCY[x]+10,frameCX[y],frameCZ[2]], 
-		            [frameCY[x+2]-10,frameCX[y],frameCZ[2]],
-		            roll=0,
-		            startGussets=[0,0,0,1], 
-		            endGussets=[0,0,0,1]);
+		translate([(frameCY[x] + frameCY[x+2])/2,frameCX[y],frameCZ[2]])
+			rotate([180,0,0]) 
+			20x20TGusset(width=(frameCY[x+2]-frameCY[x]-20), screws=true, coreScrew=true, coreSide=y==0?false:true);
 	}
 	
 	// openrails

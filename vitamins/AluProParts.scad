@@ -14,7 +14,7 @@
 // gussets protruding along z+  (print orientation)
 // endSide:  false= y-, true=y+
 
-module 20x20TGusset(width=100, endSide=true, screws=false) {
+module 20x20TGusset(width=100, coreSide=true, screws=false, coreScrew=false) {
 	
 	h1 = 20;  // web height
 	
@@ -27,6 +27,7 @@ module 20x20TGusset(width=100, endSide=true, screws=false) {
 	sw = 5;  // slow width, between centres
 	
 	color(plastic_part_color())
+		translate([0,0,-h1/2])
 		render()
 		union() {
 		
@@ -35,9 +36,13 @@ module 20x20TGusset(width=100, endSide=true, screws=false) {
 				difference() {
 					square([width,20],center=true);
 					
-					// ancillary fixings
-					for (i=[0:2])
-						translate([-width/4 + i*(width/4),0,0])
+					// centre fixing
+					circle(screw_clearance_radius(screws));
+					
+					// outer ancillary fixings
+					if (width > 60)
+						for (i=[0:2])
+						translate([-20 + i*20,0,0])
 						circle(screw_clearance_radius(screws));
 				}
 			
@@ -88,29 +93,29 @@ module 20x20TGusset(width=100, endSide=true, screws=false) {
 					}
 		
 					// ancillary fixings
-					for (i=[0,1])
+					if (width > 60)
+						for (i=[0,1])
 						mirror([i,0,0])
-						translate([-width/4,h1/2,0])
+						translate([-20,h1/2,0])
 						circle(screw_clearance_radius(screws));
 				}
 		}
 		
-	if (screws) {
-		// core screw
-		mirror([0,endSide?0:1,0])
-			translate([0,10 - default_wall,h1/2])
-			rotate([90,0,0])
-			screw_and_washer(core_screw,16);
-		
-		// t-nuts 
+	if (coreScrew) 
+		mirror([0,coreSide?0:1,0])
+		translate([0,10 - default_wall,0])
+		rotate([90,0,0])
+		screw_and_washer(core_screw,16);
+	
+	if (screws)
 		for (i=[0,1],j=[0,1])
-			mirror([i,0,0]) {
-				translate([width/2,0,h1/2 + j*(h1/2 + gh/2)])
-					rotate([0,-90,0]) {
-						translate([0,0,default_wall]) screw_and_washer(M4_cap_screw,8);
-						translate([0,0,0]) rotate([0,0,90]) aluProTwistLockNut(BR_20x20_TwistLockNut);
-					}
-				
-			}
-	}
+		mirror([i,0,0]) {
+			translate([width/2,0,j*(h1/2 + gh/2)])
+				rotate([0,-90,0]) {
+					translate([0,0,default_wall]) screw_and_washer(M4_cap_screw,8);
+					translate([0,0,0]) rotate([0,0,90]) aluProTwistLockNut(BR_20x20_TwistLockNut);
+				}
+			
+		}
+	
 }

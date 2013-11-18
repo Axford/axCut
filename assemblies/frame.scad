@@ -90,13 +90,11 @@ module frameAssembly() {
 		            endGussets=[0,0,0,1]);
 	
 	
-	// top beams
+	// top front/back of sides
 	for (x=[0,3],y=[0,3]) {
-		BR20x20WGBP([frameCY[x]+10,frameCX[y],frameCZ[3]], 
-		            [frameCY[x+2]-10,frameCX[y],frameCZ[3]],
-		            roll=0,
-		            startGussets=[(x==0&&y==0?1:0),0,(x==0&&y==3?1:0),1], 
-		            endGussets=[(x==3&&y==0?1:0),0,(x==3&&y==3?1:0),1]);
+		translate([(frameCY[x] + frameCY[x+2])/2,frameCX[y],frameCZ[3]])
+			rotate([180,0,0]) 
+			20x20TGusset(width=(frameCY[x+2]-frameCY[x]-20), screws=true, coreScrew=false);
 	}
 		            
 	// top laser casing beam
