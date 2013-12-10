@@ -73,8 +73,8 @@ Z_screw_dia = 6;            // Studding for Z axis
 //
 // Feature sizes
 //
-default_wall = 3;
-thick_wall = 4;
+default_wall = 4*perim;
+thick_wall = 6*perim;
 
 include <colors.scad>
 include <utils.scad>
@@ -211,6 +211,9 @@ showLaserBeam = true;
 echo("Overall width = ", (frameCY[5]-frameCY[0]+16));
 echo("Overall depth = ", (frameCX[3]-frameCX[0]+16));
 echo("Overall height = ", (frameCZ[4]-frameCZ[0]+26));
+
+for (i=[0:3])
+	echo("X centres: ", frameCX[i]);
 
 
 include <assemblies.scad>

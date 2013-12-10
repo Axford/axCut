@@ -14,7 +14,7 @@
 // gussets protruding along z+  (print orientation)
 // endSide:  false= y-, true=y+
 
-module 20x20TGusset_stl(width=100, coreSide=true, screws=false, coreScrew=false) {
+module 20x20TGusset_stl(width=100, coreSide=true, showScrews=false, showCoreScrew=false) {
 	
 	h1 = 20;  // web height
 	
@@ -59,10 +59,10 @@ module 20x20TGusset_stl(width=100, coreSide=true, screws=false, coreScrew=false)
 					
 					// fixings
 					translate([h1/2,10,0])
-						circle(screw_clearance_radius(core_screw));
+						circle(screw_clearance_radius(screws));
 					
 					translate([h1 + gh/2,10,0])
-						circle(screw_clearance_radius(core_screw));
+						circle(screw_clearance_radius(screws));
 					
 				}
 			
@@ -103,13 +103,13 @@ module 20x20TGusset_stl(width=100, coreSide=true, screws=false, coreScrew=false)
 				}
 		}
 		
-	if (coreScrew) 
+	if (showCoreScrew) 
 		mirror([0,coreSide?0:1,0])
 		translate([0,10 - default_wall,0])
 		rotate([90,0,0])
 		screw_and_washer(core_screw,16);
 	
-	if (screws)
+	if (showScrews)
 		for (i=[0,1],j=[0,1])
 		mirror([i,0,0]) {
 			translate([width/2,0,j*(h1/2 + gh/2)])

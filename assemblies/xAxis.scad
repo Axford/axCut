@@ -171,10 +171,27 @@ module xCarriageBracket_stl() {
 				
 		
 			// cable chain bracket
-			translate([12,ch/2-1,0])
-				cube([20,19,ct]);
-			translate([12,ch/2 + 9,-36])
-				cube([20,9,37]);
+			// upstand
+			translate([cw/2-20,ch/2-10,0])
+				cube([20,29,thick_wall]);
+			// outrigger 
+			difference() {
+				translate([cw/2-20,ch/2 + 19-thick_wall,-36])
+					cube([20,thick_wall,37]);
+					
+				translate([cw/2-10,0,-5])
+					rotate([-90,0,0])	
+					cylinder(r=screw_clearance_radius(M4_cap_screw),h=100);
+					
+				translate([cw/2-10,0,-30])
+					rotate([-90,0,0])	
+					cylinder(r=screw_clearance_radius(M4_cap_screw),h=100);
+			}
+			// fillet
+			translate([cw/2-default_wall, ch/2 + 19 - thick_wall + eta, eta])
+				rotate([-90,0,-90])
+				right_triangle(12, 30, default_wall, center = false);
+			
 		
 		}
 }

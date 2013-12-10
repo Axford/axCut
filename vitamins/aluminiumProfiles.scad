@@ -136,6 +136,81 @@ module aluProHollow(cornerType) {
 	translate([w1/2,0]) square([2*w3 - 2*t, w1 - 2*t],center=true);
 }
 
+
+// TNut 
+// Substitute printable t-nut
+module aluProTNut_stl(profileType, $fn=8) {
+	//BR_20x20_Corner = [20, 7, 1.5, 0.5, 4];
+	//BR_20x20_Core = [9,2,0.75];
+	
+	coreType = profileType[1];
+	cornerType = profileType[2];
+	 
+	w1 = cornerType[0];
+	w2 = cornerType[1];
+	t = cornerType[2];
+	cham = cornerType[3];
+	w3 = cornerType[4];	
+
+	tol = 0.3;  // mm tolerance, total per gap
+
+	slotW = w1- 2*w2 - tol;
+	slotD = (w1 - coreType[0]) / 2 - tol;
+	slotOffset = coreType[0]/2 + tol;
+	
+	wingW = w1 - 2*w3 - 4*tol;
+	wingInset = t + tol/2;
+
+	nutR = nut_flat_radius(M4_nut) + 0.7;
+
+	h = nutR * 3;
+
+	x1 = w1/2-wingInset - slotOffset;
+
+	translate([h/2,0,0])
+		rotate([0,-90,0])
+		union() {
+			// print support
+			for (i=[0,1]) 
+				mirror([0,i,0])
+				translate([0,nutR-0.5,h/2-1])
+				cube([2,0.7,2]);
+		
+			// nut body
+			difference() {
+				intersection() {
+					linear_extrude(h)
+						union()
+						for (i=[0,1]) mirror([0,i,0]) {
+							polygon(points=[
+								[0,-eta],
+								[0,slotW/2],
+								[w3/2 + tol,wingW/2],
+								[x1,wingW/2],
+								[x1, slotW/2],
+								[x1,-eta]
+							], paths=[[0,1,2,3,4,5]]);
+						}
+					
+					// nice rounded thing
+					translate([-1,-wingW/2,-eta])
+						roundedRectX([10,wingW,h+2*eta],3, $fn=16);
+				}
+		
+				// nut trap
+				translate([-eta,0,h/2])
+					rotate([0,90,0])
+					cylinder(r=nutR,h=10,$fn=6);
+		
+				// washer
+				translate([x1-1,0,h/2])
+					rotate([0,90,0])
+					cylinder(r=washer_diameter(M4_washer)/2 + 0.2,h=10,$fn=16);
+			}
+		}
+		
+}
+
 // TSlot - to be unioned onto a printed part for engaging tightly with the aluprofile
 //  same centre and orientation as a full profile section, x+ side
 // protrudes eta beyond external boundary of section to allow for union
@@ -406,22 +481,22 @@ module aluProGusset(tg,screws=false,nibs=true) {
 				}
 			}
 			
-		// nibs - must add these at some point!
+		// nibs
 		if (nibs && !simplify)
 			for (i=[0,1],j=[0,1])
 			mirror([0,-i,i])
 			rotate([0,-90,0])
 			translate([j*(w-2*nib),0,-nibw/2])
 			linear_extrude(nibw)
-			polygon([[0,0],
-			         [2*nib,0],
+			polygon([[0,eta],
+			         [2*nib,eta],
 			         [nib,-nib],
 			         [-nib,-nib]]);
 		
 		//sides
 		for (i=[0,1])
 			mirror([i,0,0])
-			translate([w/2-t/2,t,t])
+			translate([w/2-t/2,t-eta,t-eta])
 			rotate([0,-90,0])
 			right_triangle(width=w-t, height=w-t, h=t, center = true);
 	
