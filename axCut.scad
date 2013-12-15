@@ -5,7 +5,7 @@ yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
 
 *laserAssembly();
 
-frameAssembly();
+*frameAssembly();
 
 *zAxesAssembly();
 

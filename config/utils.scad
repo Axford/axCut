@@ -18,6 +18,10 @@ include <../utils/vector.scad>
 include <../utils/cables.scad>
 //include <../utils/shields.scad>
 
+include <../utils/obiscad/vector.scad>
+include <../utils/obiscad/attach.scad>
+
+
 module slot(h, r, l, center = true)
     linear_extrude(height = h, convexity = 6, center = center)
         hull() {
@@ -97,18 +101,6 @@ module fillet(r, h) {
 module right_triangle(width, height, h, center = true) {
     linear_extrude(height = h, center = center)
         polygon(points = [[0,0], [width, 0], [0, height]]);
-}
-
-module rounded_square(w, h, r)
-{
-    union() {
-        square([w - 2 * r, h], center = true);
-        square([w, h - 2 * r], center = true);
-        for(x = [-w/2 + r, w/2 - r])
-            for(y = [-h/2 + r, h/2 - r])
-                translate([x, y])
-                    circle(r = r);
-    }
 }
 
 module rounded_rectangle(size, r, center = true)

@@ -1,5 +1,9 @@
 
 
+module 20x20TwistLockFixing(wall, screw=M4_cap_screw, screwLen = 8) {
+	translate([0,0,wall]) screw_and_washer(screw,screwLen);
+	translate([0,0,0]) rotate([0,0,90]) aluProTwistLockNut(BR_20x20_TwistLockNut);
+}
 
 
 

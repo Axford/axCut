@@ -6,6 +6,9 @@ yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
 
 
 
+xAxisMotorPlate_stl(showMotor=false);
+
+
 
 *BR20x20WGBP([-50,0,0],[-50,0,100]);
 		   
@@ -36,7 +39,7 @@ yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
 
 *translate([-350,0,-100]) xAxisAssembly();
 
-rotate([0,90,0])
+*rotate([0,90,0])
 	xCarriageBracket_stl();		            
 
 

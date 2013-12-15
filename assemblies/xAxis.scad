@@ -333,6 +333,70 @@ module xAxisCableChain() {
 }
 
 
+// dims
+xAxisMotorPlate_width = NEMA_width(NEMA17);
+
+// connections
+xAxisMotorPlateConnectors = [
+	[[xAxisMotorPlate_width/2,10,0], [0,0,1], 0],   // to frame
+	[[xAxisMotorPlate_width/2,38,thick_wall], [0,0,-1], 0]    // to motor
+];
+
+module xAxisMotorPlate_stl( showMotor=false) {
+	w = xAxisMotorPlate_width;
+	d = xAxisMotorPlateConnectors[1][0][1] + NEMA_width(NEMA17)/2;
+	h = thick_wall;
+	w2 = w / 4;
+	
+	mcon = [[0,0,0],[0,0,1],0];
+	
+	color(x_carriage_color)
+		linear_extrude(h)
+		difference() {
+			rounded_square(w,d,5,center=false);
+			
+			translate([w/2,xAxisMotorPlateConnectors[1][0][1],0]) {
+				// boss
+				circle(r=NEMA_big_hole(NEMA17));
+				
+				// motor fixings
+				for(a = [0: 90 : 90 * (4 - 1)])
+        			rotate([0, 0, a])
+            		translate([NEMA_holes(NEMA17)[0], NEMA_holes(NEMA17)[1], 0])
+					circle(r=screw_clearance_radius(M3_cap_screw));
+			}
+			
+			
+			// frame fixings
+			for (i=[0,1])
+				translate([w2 + 2*w2*i,10,0])
+				circle(r=screw_clearance_radius(M4_hex_screw));
+		}
+		
+	//connector(xAxisMotorPlateConnectors[0]);
+	//connector(xAxisMotorPlateConnectors[1]);
+		
+	if (showMotor) {
+		
+		// frame fixings
+		for (i=[0,1])
+			translate([w2 + 2*w2*i,10,0])
+			20x20TwistLockFixing(h, screw=M4_cap_screw, screwLen = 8);	
+		
+		// motor
+		attach(xAxisMotorPlateConnectors[1], mcon) 
+			union() {
+				NEMA(NEMA17);
+				//connector(mcon, "Red");
+			
+				translate([0,0,h]) NEMA_screws(NEMA17);
+			
+				translate([0,0,3])
+					metal_pulley(pulley_type);
+			}
+	}
+}
+
 module xRailAssembly() {
 
 	l = frameCY[4] - frameCY[1] + ORPlateWidth(ORPLATE20);
@@ -342,10 +406,10 @@ module xRailAssembly() {
 	
 	// drive belt centres
 	beltCX = [frameCY[1]+20 , frameCY[4]];
-	beltCY = [-13 - openrail_plate_offset];
+	beltCY = [-14 - openrail_plate_offset];
 	beltCZ = [16];
 	
-	beltIR = pulley_ir(T5x10_metal_pulley);
+	beltIR = pulley_ir(T2p5x18_metal_pulley);
 	
 	assembly("xRail");
 	
@@ -363,12 +427,12 @@ module xRailAssembly() {
 	}
 	
 	// xCarriage
-	translate([xCarriagePos,-openrail_plate_offset - openrail_groove_offset,0]) 	
+	*translate([xCarriagePos,-openrail_plate_offset - openrail_groove_offset,0]) 	
 		xCarriageAssembly();
 	
 	
 	// cable chain
-	xAxisCableChain();
+	*xAxisCableChain();
 	
 	
 	// y belt clips
@@ -381,16 +445,13 @@ module xRailAssembly() {
 				roundedRectX([5,20,53],3);
 		}
 		
-		
-	// motor assembly
-	translate([beltCX[1],beltCY[0],beltCZ[0]]) {
-		rotate([0,180,0]) {
-			NEMA(NEMA17);
-			metal_pulley(pulley_type);
-		}
-		
-		translate([-25,-23,-6]) roundedRect([50,60,6],6);
-	}
+	// motor mount plate
+	con_xAxis_to_motorMount = [[beltCX[1],0,10], [0,0,1], 180];
+	
+	attach(con_xAxis_to_motorMount, xAxisMotorPlateConnectors[0]) 
+		xAxisMotorPlate_stl(showMotor=true);
+	
+	
 
 	// idler/mirror assembly
 	translate([beltCX[0],beltCY[0],beltCZ[0]]) {
@@ -412,7 +473,7 @@ module xRailAssembly() {
 	
 	// belt
 	translate([0,0,beltCZ[0] - 15])
-		belt(T5x10, beltCX[0], beltCY[0], beltIR , beltCX[1], beltCY[0], beltIR, gap = 0); 	
+		belt(T2p5x6, beltCX[0], beltCY[0], beltIR , beltCX[1], beltCY[0], beltIR, gap = 0); 	
 	
 	
 	

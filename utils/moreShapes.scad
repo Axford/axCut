@@ -220,14 +220,16 @@ module roundedRightTriangle(width, height, h, r=[1,1,1], center = true, $fn=12) 
 }
 
 
-module rounded_square(w, h, r)
+module rounded_square(w, h, r, center=true)
 {
 	// 2D
     union() {
-        square([w - 2 * r, h], center = true);
-        square([w, h - 2 * r], center = true);
-        for(x = [-w/2 + r, w/2 - r])
-            for(y = [-h/2 + r, h/2 - r])
+        translate([center?0:r,0,0])
+        	square([w - 2 * r, h], center);
+        translate([0,center?0:r,0])
+        	square([w, h - 2 * r], center);
+        for(x = [center?-w/2:0 + r, center?w/2:w - r])
+            for(y = [center?-h/2:0 + r, center?h/2:h - r])
                 translate([x, y])
                     circle(r = r);
     }
