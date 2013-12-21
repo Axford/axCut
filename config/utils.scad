@@ -125,18 +125,6 @@ module rounded_cylinder(r, h, r2)
         }
 }
 
-module sector(r, a, h, , center = true) {
-    linear_extrude(height = h, center = center)
-        intersection() {
-            circle(r = r, center = true);
-                polygon(points = [
-                    [0, 0],
-                    [2 * r * cos(a / 2),  2 * r * sin(a / 2)],
-                    [2 * r * cos(a / 2), -2 * r * sin(a / 2)],
-                ]);
-        }
-}
-
 module tube(or, ir, h, center = true) {
     linear_extrude(height = h, center = center, convexity = 5)
         difference() {

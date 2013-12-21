@@ -7,3 +7,4 @@ include <../assemblies/xAxis.scad>
 include <../assemblies/frame.scad>
 include <../assemblies/laser.scad>
 include <../assemblies/yAxes.scad>
+include <../assemblies/yIdler.scad>

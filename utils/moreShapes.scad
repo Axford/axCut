@@ -225,11 +225,11 @@ module rounded_square(w, h, r, center=true)
 	// 2D
     union() {
         translate([center?0:r,0,0])
-        	square([w - 2 * r, h], center);
+        	square([w - 2 * r, h], center=center);
         translate([0,center?0:r,0])
-        	square([w, h - 2 * r], center);
-        for(x = [center?-w/2:0 + r, center?w/2:w - r])
-            for(y = [center?-h/2:0 + r, center?h/2:h - r])
+        	square([w, h - 2 * r], center=center);
+        for(x = [(center?-w/2:0) + r, (center?w/2:w) - r])
+            for(y = [(center?-h/2:0) + r, (center?h/2:h) - r])
                 translate([x, y])
                     circle(r = r);
     }
@@ -264,8 +264,12 @@ module sector2D(r, a, center = true) {
             circle(r = r, center = true);
                 polygon(points = [
                     [0, 0],
-                    [2 * r * cos(a / 2),  2 * r * sin(a / 2)],
-                    [2 * r * cos(a / 2), -2 * r * sin(a / 2)],
+                    [2 * r * cos(0),  2 * r * sin(0)],
+                    [2 * r * cos(a * 0.2),  2 * r * sin(a * 0.2)],
+                    [2 * r * cos(a * 0.4),  2 * r * sin(a * 0.4)],
+                    [2 * r * cos(a * 0.6),  2 * r * sin(a * 0.6)],
+                    [2 * r * cos(a * 0.8),  2 * r * sin(a * 0.8)],
+                    [2 * r * cos(a), 2 * r * sin(a)],
                 ]);
         }
 }

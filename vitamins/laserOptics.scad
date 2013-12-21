@@ -245,6 +245,18 @@ module laserMirrorBase() {
 					translate([w/2 + i*ofc/2,-1,d/2])
 					rotate([-90,0,0])
 					cylinder(r=ofr, h=w/2);
+					
+				// side fixings
+				// inner
+				translate([-1,w/2,d/2])
+					rotate([0,90,0])
+					cylinder(r=cfr, h=w/2);
+				
+				// outer
+				for (i=[-1,1])
+					translate([-1,w/2 + i*ofc/2,d/2])
+					rotate([0,90,0])
+					cylinder(r=ofr, h=w/2);
 			}
 			
 	// adjustment screws

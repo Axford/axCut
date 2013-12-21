@@ -1,5 +1,8 @@
 
 
+
+
+
 module yAxesAssembly() {
 
 	railLen = bedDM + ORPlateDepth(ORPLATE20)/2;
@@ -25,8 +28,8 @@ module yAxesAssembly() {
 		BR20x20WGBP([frameCY[i],frameCX[0]+10,frameCZ[2]], 
 		            [frameCY[i],frameCX[3]-10,frameCZ[2]],
 		            roll=0,
-		            startGussets=[0,1,0,1], 
-		            endGussets=[0,1,0,1]);
+		            startGussets=[0,0,0,0], 
+		            endGussets=[0,0,0,0]);
 	}
 	
 	// end brackets for rails
@@ -45,35 +48,33 @@ module yAxesAssembly() {
 			translate([0,20,0]) openrail_doubled(railLen,true,true);
 		}
 		
-	// motors
-	for (i=[0,1])
-		mirror([i,0,0]) {
-			translate([beltCX[0], beltCY[1], beltCZ[0]]) {
-				rotate([0,0,90]) NEMA(NEMA17);
-				metal_pulley(pulley_type);
-			
-		
-				translate([-d+w/2,-w/2,0]) roundedRect([d,w,6],6);
-			}	
-		}
 	
+	
+	
+	// alternate motor position
+	// motor mount plate
+	con_xAxis_to_motorMount = [[frameCY[1]+10,beltCY[1]-28,frameCZ[2]], [1,0,0], 90];
+	
+	attach(con_xAxis_to_motorMount, xAxisMotorPlateConnectors[0]) 
+		xAxisMotorPlate_stl(showMotor=true);
+		
+		
+	// idlers
+	con_yAxis_to_yIdler = [[frameCY[1],frameCX[0]+15,frameCZ[2]], [0,1,0], 0];
+	
+	attach(con_yAxis_to_yIdler, yIdlerAssemblyConnectors[0]) 
+		yIdlerAssembly();
+		
+		
 	
 	// belts
-	for (i=[0,1])
+	*for (i=[0,1])
 		mirror([i,0,0]) 
 		translate([0,0,beltCZ[0] + 15])
 		belt(T5x10, beltCX[0], beltCY[0], beltIR , beltCX[0], beltCY[1], beltIR, gap = 0);
 	
 	
-	// idlers
-	for (i=[0,1])
-		mirror([i,0,0]) {
-			translate([beltCX[0], beltCY[0], beltCZ[0]]) {
-				metal_pulley(pulley_type);
-			
-				translate([-30,-15,0]) roundedRect([40,30,6],6);
-			}	
-		}
+	
 		
 		
 	// mirror

@@ -11,6 +11,9 @@
 
 use <vector.scad>
 
+// default connector
+defCon = [[0,0,0],[0,0,1],0];
+
 //--------------------------------------------------------------------
 //-- Draw a connector
 //-- A connector is defined a 3-tuple that consist of a point
@@ -75,6 +78,7 @@ module attach(a,b)
 
   //-- Apply the transformations to the child ---------------------------
 
+  for (i=[0:$children-1])
   //-- Place the attachable part on the main part attachment point
   translate(pos1)
     //-- Orientate operator. Apply the orientation so that
@@ -82,13 +86,64 @@ module attach(a,b)
     rotate(a=roll, v=v)  rotate(a=ang, v=raxis)
       //-- Attachable part to the origin
       translate(-pos2)
-	child(0); 
+		child(i);
 }
 
 
-
+module attachWithOffset(a,b,o) {
+	// offsets attachment point on a by o
+	
+	newa = [
+		[
+			a[0][0] + o[0],
+			a[0][1] + o[1],
+			a[0][2] + o[2]
+		],
+		a[1],
+		a[2]
+	];
+	
+	for (i=[0:$children-1])
+		attach(newa,b) child(i);
+}
   
 
-
-
-
+// threads along neg z axis, starting at z=0 with first part
+// up to 12 children
+module threadTogether(a) {
+	echo($children);
+	child(0);
+	if ($children>1)
+		translate([0,0,-a[0]]) 
+		child(1);
+	if ($children>2)
+		translate([0,0,-a[0]-a[1]]) 
+		child(2);
+	if ($children>3)
+		translate([0,0,-a[0]-a[1]-a[2]]) 
+		child(3);
+	if ($children>4)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]]) 
+		child(4);
+	if ($children>5)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]-a[4]]) 
+		child(5);
+	if ($children>6)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]-a[4]-a[5]]) 
+		child(6);
+	if ($children>7)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]-a[4]-a[5]-a[6]]) 
+		child(7);
+	if ($children>8)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]-a[4]-a[5]-a[6]-a[7]]) 
+		child(8);
+	if ($children>9)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]-a[4]-a[5]-a[6]-a[7]-a[8]]) 
+		child(9);
+	if ($children>10)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]-a[4]-a[5]-a[6]-a[7]-a[8]-a[9]]) 
+		child(10);
+	if ($children>11)
+		translate([0,0,-a[0]-a[1]-a[2]-a[3]-a[4]-a[5]-a[6]-a[7]-a[8]-a[9]-a[10]]) 
+		child(11);
+}

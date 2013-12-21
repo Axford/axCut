@@ -12,6 +12,8 @@ simplify = false;    // reduces complexity of some parts, e.g. alu extrusions
 show_jigs = true;               // show printed jigs required to build the machine
 show_support = true;            // show support structures, must be set when generating STLs
 
+debugConnectors = true;  //  show "attach" points
+
 // Real-world colors for various parts & vitamins
 use_realistic_colors = true;    // true for "real" colors, false for "distinct" colors (useful during design and for build instructions)
 printed_plastic_color = "orange";

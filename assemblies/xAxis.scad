@@ -1,12 +1,20 @@
 
+
+beltOffset = 28;    // distance from centreline of 20x20 to belt
+
+
 xCarriageBracket_width = ORPlateWidth(ORPLATE20);
 xCarriageBracket_height = xCarriageBracket_width;
 xCarriageBracket_thickness = 9;
 
 
-yCarriageBracket_width = ORPlateWidth(ORPLATE20);
-yCarriageBracket_height = ORPlateWidth(ORPLATE20);
-yCarriageBracket_thickness=9;
+yCarriageBracketLeft_width = ORPlateWidth(ORPLATE20);
+yCarriageBracketLeft_height = ORPlateWidth(ORPLATE20);
+yCarriageBracketLeft_thickness=9;
+
+yCarriageBracketRight_width = ORPlateWidth(ORPLATE20);
+yCarriageBracketRight_height = ORPlateWidth(ORPLATE20);
+yCarriageBracketRight_thickness=9;
 
 
 xCarriageToLaserHeadIngressY = openrail_plate_offset + 
@@ -24,46 +32,93 @@ xBeltClamp_depth = 12 + 4*default_wall + 4*screw_clearance_radius(M3_hex_screw);
 xBeltClamp_height = default_wall;
 xBeltClamp_screwCentres = (xBeltClamp_depth - xBeltClamp_width);
 
+xBeltClampCon = [
+	[[xBeltClamp_width/2, xBeltClamp_screwCentres/2, 0],[0,0,1], 0],  // screw hole 1
+	[[xBeltClamp_width/2, -xBeltClamp_screwCentres/2, 0],[0,0,1], 0],   // screw hole 2
+	[[xBeltClamp_width/2, 0, xBeltClamp_height], [0,0,-1], 0]   // face to face centre
+];
+
 module xBeltClamp_stl() {
 	stl("xBeltClamp");
 	
-	// local coordinate frame
-	//frame();
+	if (debugConnectors) {
+		frame();
+		for (i=[0:2])
+			connector(xBeltClampCon[i]);
+	}
 	
 	color(x_belt_clamp_color)
 		render()
-		linear_extrude(xBeltClamp_height)
-		difference() {
-			hull()
-				for (i=[0,1])
-				mirror([0,i,0])
-				translate([xBeltClamp_width/2,xBeltClamp_screwCentres/2,0])
-				circle(r=xBeltClamp_width/2);
+		union() {
+			linear_extrude(xBeltClamp_height)
+				difference() {
+					hull()
+						for (i=[0,1])
+						mirror([0,i,0])
+						translate([xBeltClamp_width/2,xBeltClamp_screwCentres/2,0])
+						circle(r=xBeltClamp_width/2);
 			
 			
-			// screw holes
-			for (i=[0,1])
-				mirror([0,i,0])
-				translate([xBeltClamp_width/2,xBeltClamp_screwCentres/2,0])
-				circle(screw_clearance_radius(M3_hex_screw));
-		}
-	
+					// screw holes
+					for (i=[0,1])
+						mirror([0,i,0])
+						translate([xBeltClamp_width/2,xBeltClamp_screwCentres/2,0])
+						circle(screw_clearance_radius(M3_hex_screw));
+				}
+				
+			// teeth to engage belt on left side
+			for (i=[0:2])
+				translate([2+ i*2.5, 0, xBeltClamp_height + 0.5 - eta])
+				rotate([90,0,0])
+				trapezoidPrism(1,1.5,1 + eta,0.25,12,center=true);
+		}	
 }
 
 
 xBeltTensioner_radius = 5;
-
+xBeltTensionerCon = [
+	[[0,0,0],[0,0,1],0]  // face to face
+];
 
 module xBeltTensioner_stl() {
 	stl("xBeltTensioner");
 
 	//local coordinate frame
-	frame();
+	//frame();
 
+	color(x_carriage_color)
+		//render()
+		difference() {
+			rotate([90,0,0])
+				union () {
+					// core
+					sector(xBeltTensioner_radius, 180, 10, center = true);
+					
+					// flanges
+					for (i=[0,1])
+						mirror([0,0,i])
+						translate([0,0,5])
+						sector(xBeltTensioner_radius+1, 180, 1, center = true);
+				}
 	
-
+			// hole for screw
+			translate([0,0,-eta])
+				cylinder(r=screw_clearance_radius(M3_hex_screw), h=xBeltTensioner_radius/2);
+		}
 }
 
+
+xCarriageBracketCon = [
+	[[-xCarriageBracket_width/2 + xBeltClamp_width/2, 
+	  0, 
+	  xCarriageBracket_thickness + 1], [0,0,1], 0],  // left belt clamp
+	[[xCarriageBracket_width/2 - xBeltClamp_width/2, 
+	  0, 
+	  xCarriageBracket_thickness + 2*xBeltTensioner_radius + 2], [0,0,1], 0],  // right belt clamp
+	  [[xCarriageBracket_width/2 - xBeltClamp_width - 2,
+	    0,
+	    xCarriageBracket_thickness + xBeltTensioner_radius],[-1,0,0],0]  // belt tensioner
+];
 
 module xCarriageBracket_stl() {
 	ct = xCarriageBracket_thickness;
@@ -83,7 +138,7 @@ module xCarriageBracket_stl() {
 						// screw holes for openrail plate
 						for (x=[-1,1],y=[-1,1])
 							translate([x*22.3,y*22.3,ct])
-							circle(screw_clearance_radius(M5_cap_screw));
+							circle(screw_clearance_radius(M5_cap_screw)+1);
 							
 						// screw holes for laser head
 						translate([-laserHeadBody_mountSlotToTubeX,
@@ -107,8 +162,8 @@ module xCarriageBracket_stl() {
 				
 				// screw countersinks for openrail plate
 				for (x=[-1,1],y=[-1,1])
-					translate([x*22.3,y*22.3,ct - screw_head_height(M5_cap_screw)])
-					cylinder(r=screw_head_radius(M5_cap_screw), h=ct);
+					translate([x*22.3,y*22.3,ct - screw_head_height(M5_cap_screw) - 0.5])
+					cylinder(r=screw_head_radius(M5_cap_screw)+1, h=ct);
 					
 				// screw head traps for laser head
 				translate([-laserHeadBody_mountSlotToTubeX,
@@ -218,7 +273,19 @@ module xCarriageAssembly() {
 				laserHead(100);
 	
 			// bracket
-			xCarriageBracket_stl();
+			xCarriageBracket_stl(showClamps=true, showScrews=true);
+			
+			// left belt clamp
+			attach(xCarriageBracketCon[0], xBeltClampCon[2]) 
+				xBeltClamp_stl();
+				
+			// right belt clamp
+			attach(xCarriageBracketCon[1], xBeltClampCon[2]) 
+				xBeltClamp_stl();
+				
+			// belt tensioner
+			attach(xCarriageBracketCon[2], xBeltTensionerCon[0]) 
+				xBeltTensioner_stl();
 			
 			
 			// screws, nuts, washers for laserhead
@@ -243,8 +310,7 @@ module xCarriageAssembly() {
 				screw(M5_cap_screw, 30);
 		
 		
-			// belt clamp left
-			translate([-cw/2,0,ct]) xBeltClamp_stl();
+			
 			
 			// screws, washers, nuts for belt clamp left
 			for (i=[0,1])
@@ -252,52 +318,326 @@ module xCarriageAssembly() {
 				translate([-cw/2+xBeltClamp_width/2, xBeltClamp_screwCentres/2, screw_head_height(M3_hex_screw)])
 				mirror([0,0,1])
 				screw_washer_and_nut(M3_hex_screw, M3_nut, 16, ct + xBeltClamp_height - screw_head_height(M3_hex_screw));
+				
+			// screws, washers, nuts for belt clamp right
+			for (i=[0,1])
+				mirror([0,i,0])
+				translate([cw/2-xBeltClamp_width/2, xBeltClamp_screwCentres/2, screw_head_height(M3_hex_screw)])
+				mirror([0,0,1])
+				screw_washer_and_nut(M3_hex_screw, M3_nut, 25, xCarriageBracketCon[1][0][2] + xBeltClamp_height - screw_head_height(M3_hex_screw));
 			
 		}
 		
 	end("xCarriage");
 }
 
-module yCarriageBracket() {
-	
-	ct = yCarriageBracket_thickness;
-	cw = yCarriageBracket_width;
-	ch = yCarriageBracket_height;
-	
-	vitamin("yCarriageBracket");
+yCarriageBracketRightCon = [
+	[[yCarriageBracketRight_width/2 - 20 - 3*xBeltClamp_width/2, 
+	  0, 
+	  yCarriageBracketRight_thickness + 1], [0,0,1], 0],  // left belt clamp
+	[[yCarriageBracketRight_width/2 - xBeltClamp_width/2, 
+	  0, 
+	  yCarriageBracketRight_thickness + 1], [0,0,1], 0],  // right belt clamp
+	[[yCarriageBracketRight_width/2 - xBeltClamp_width,
+	  -yCarriageBracketRight_width/3, 
+	  yCarriageBracketRight_thickness+10
+	 ],[-1,0,0],0], // frame fixing 1
+	[[yCarriageBracketRight_width/2 - xBeltClamp_width,
+	  yCarriageBracketRight_width/3, 
+	  yCarriageBracketRight_thickness+10
+	 ],[-1,0,0],0], // frame fixing 2
+	 [[
+	 	yCarriageBracketRight_width/2 - xBeltClamp_width - 10,
+	 	yCarriageBracketRight_width/2,
+	 	yCarriageBracketRight_thickness + 10
+	 ], [0,-1,0], 0]  // xRail origin
+]; 
 
-	color("blue")
+module yCarriageBracketRight_stl() {
+	
+	ct = yCarriageBracketRight_thickness;
+	cw = yCarriageBracketRight_width;
+	ch = yCarriageBracketRight_height;
+	con = yCarriageBracketRightCon;
+	
+	stl("yCarriageBracketRight");
+	
+	if (debugConnectors) {
+		for (i=[0:4])
+			connector(con[i]);
+	}
+
+	color(x_carriage_color)
 		render()
-		difference() {
-			linear_extrude(ct) 
-				difference() {
-					roundedSquare([cw,ch],10);
+		union() {
+			difference() {
+				linear_extrude(ct) 
+					difference() {
+						roundedSquare([cw,ch],10);
 			
-					// screw holes
-					for (x=[-1,1],y=[-1,1])
-						translate([x*22.3,y*22.3,ct])
-						circle(screw_clearance_radius(M5_cap_screw));
-				}
+						// screw holes for openrail plate
+						for (x=[-1,1],y=[-1,1])
+							translate([x*22.3,y*22.3,ct])
+							circle(screw_clearance_radius(M5_cap_screw)+0.5);
+			           			   
+			           	// screw holes for belt clamps
+			           	for (i=[0,1],j=[0,1])
+							mirror([0,i,0])
+							translate([con[j][0][0], xBeltClamp_screwCentres/2, 0])
+							circle(screw_clearance_radius(M3_hex_screw));
+					}
 				
-			// screw countersinks
-			for (x=[-1,1],y=[-1,1])
-				translate([x*22.3,y*22.3,thick_wall])
-				cylinder(r=screw_head_radius(M5_cap_screw), h=ct);
+				// screw countersinks for openrail plate
+				for (x=[-1,1],y=[-1,1])
+					translate([x*22.3,y*22.3,ct - screw_head_height(M5_cap_screw) - 0.5])
+					cylinder(r=screw_head_radius(M5_cap_screw)+0.7, h=ct);
+					
+				
+				// notch for belt
+				translate([-cw/2-1,-6,ct-1.7])
+					cube([cw+2,12,10]);
+					
+				// screw head traps for belt clamps
+				for (i=[0,1],j=[0,1])
+					mirror([0,i,0])
+					translate([con[j][0][0], xBeltClamp_screwCentres/2, -eta])
+					cylinder(r=screw_head_radius(M3_hex_screw),h=screw_head_height(M3_hex_screw), $fn=6);
+					
+			
+			}
+			
+			
+			// teeth to engage belt on left side
+			for (i=[0:3])
+				translate([cw/2 - 0.75 - i*2.5,0,ct-1.7 - eta + 0.5])
+				rotate([90,0,0])
+				trapezoidPrism(1,1.5,1 + eta,0.25,12,center=true);
+			
+			// mounts for x rail
+			for (i=[0,1]) 
+				difference() {
+					translate([cw/2 - xBeltClamp_width/2, -cw/3 + (i*2*cw/3), (20 + ct)/2]) 
+						roundedRectX([xBeltClamp_width, cw/4, 20 + ct],5,center=true, $fn=16);
+						
+					// screw hole
+					translate(con[2 + i][0])
+						rotate([0,90,0])
+						cylinder(r=screw_clearance_radius(M4_cap_screw), h=100, center=true);
+				}
+		
 		}
 	
 }
 
-module yCarriageAssembly() {
-	assembly("yCarriage");
+yCarriageBracketLeftCon = [
+	[[yCarriageBracketLeft_width/2 - 20 - 3*xBeltClamp_width/2, 
+	  0, 
+	  yCarriageBracketLeft_thickness + 1], [0,0,1], 0],  // left belt clamp
+	[[yCarriageBracketLeft_width/2 - xBeltClamp_width/2, 
+	  0, 
+	  yCarriageBracketLeft_thickness + 1], [0,0,1], 0],  // right belt clamp
+	[[yCarriageBracketLeft_width/2 - xBeltClamp_width,
+	  -yCarriageBracketLeft_width/3, 
+	  yCarriageBracketLeft_thickness+10
+	 ],[-1,0,0],0], // frame fixing 1
+	[[yCarriageBracketLeft_width/2 - xBeltClamp_width,
+	  yCarriageBracketLeft_width/3, 
+	  yCarriageBracketLeft_thickness+10
+	 ],[-1,0,0],0], // frame fixing 2
+	 [[
+	 	yCarriageBracketLeft_width/2 - xBeltClamp_width - 10,
+	 	yCarriageBracketLeft_width/2,
+	 	yCarriageBracketLeft_thickness + 10
+	 ], [0,-1,0], 0],  // xRail origin
+	 [[yCarriageBracketLeft_width/2 - xBeltClamp_width - 10 - beltOffset, -yCarriageBracketLeft_width/2 + 15,0], [0,0,1], 0]  // bearing axle
+]; 
+
+
+module yCarriageBracketLeft_stl() {
+	
+	ct = yCarriageBracketLeft_thickness;
+	cw = yCarriageBracketLeft_width;
+	ch = yCarriageBracketLeft_height;
+	con = yCarriageBracketLeftCon;
+	
+	mw = laserMirror_width;
+	md = 2*laserMirror_depth + laserMirror_separation + default_wall;
+	mo = (laserMirror_depth + laserMirror_separation)/2;
+	
+	mirrorYOffset = xCarriageToLaserHeadIngressY + laserMirror_fixingOffset - con[4][0][0];
+	
+	stl("yCarriageBracketLeft");
+	
+	if (debugConnectors) {
+		for (i=[0:5])
+			connector(con[i]);
+	}
+
+	color(x_carriage_color)
+		render()
+		union() {
+			difference() {
+				linear_extrude(ct) 
+					difference() {
+						union () {
+							roundedSquare([cw,ch],10);
+						
+							translate([-mirrorYOffset,laserMirror_fixingOffset,0])
+								rotate([0,0,-135])
+								translate([0,mo,0])
+								roundedSquare([mw,md],5,center=true);	
+						}
+			
+						// screw holes for openrail plate
+						for (x=[-1,1],y=[-1,1])
+							translate([x*22.3,y*22.3,ct])
+							circle(screw_clearance_radius(M5_cap_screw)+0.5);
+			           			   
+			           	// screw holes for belt clamps
+			           	for (i=[0,1],j=[0,1])
+							mirror([0,i,0])
+							translate([con[j][0][0], xBeltClamp_screwCentres/2, 0])
+							circle(screw_clearance_radius(M3_hex_screw));
+							
+						// screw hole for bearing axle
+						translate([con[5][0][0], con[5][0][1], 0])
+							circle(screw_clearance_radius(M4_hex_screw));
+							
+						// screw holes for mirror
+						translate([-mirrorYOffset,laserMirror_fixingOffset,0])
+								rotate([0,0,-135]) {
+									circle(screw_clearance_radius(M6_cap_screw));
+								
+									translate([laserMirror_outerFixingCentres/2,0,0])
+										circle(screw_clearance_radius(M4_hex_screw));
+									translate([-laserMirror_outerFixingCentres/2,0,0])
+										circle(screw_clearance_radius(M4_hex_screw));
+								}
+					}
+				
+				// screw countersinks for openrail plate
+				for (x=[-1,1],y=[-1,1])
+					translate([x*22.3,y*22.3,ct - screw_head_height(M5_cap_screw) - 0.5])
+					cylinder(r=screw_head_radius(M5_cap_screw)+0.7, h=ct);
+					
+				
+				// notch for belt
+				translate([-cw,-6,ct-1.7])
+					cube([2*cw,12,10]);
+					
+				// screw head traps for belt clamps
+				for (i=[0,1],j=[0,1])
+					mirror([0,i,0])
+					translate([con[j][0][0], xBeltClamp_screwCentres/2, -eta])
+					cylinder(r=screw_head_radius(M3_hex_screw),h=screw_head_height(M3_hex_screw), $fn=6);
+					
+				// screw head trap for bearing axle
+				translate([con[5][0][0], con[5][0][1], -eta])
+					cylinder(r=screw_head_radius(M4_hex_screw), h=screw_head_height(M4_hex_screw), $fn=6);
+			
+			}
+			
+			
+			// teeth to engage belt on left side
+			for (i=[0:3])
+				translate([cw/2 - 0.75 - i*2.5,0,ct-1.7 - eta + 0.5])
+				rotate([90,0,0])
+				trapezoidPrism(1,1.5,1 + eta,0.25,12,center=true);
+			
+			// mounts for x rail
+			for (i=[0,1]) 
+				difference() {
+					translate([cw/2 - xBeltClamp_width/2, -cw/3 + (i*2*cw/3), (20 + ct)/2]) 
+						roundedRectX([xBeltClamp_width, cw/4, 20 + ct],5,center=true, $fn=16);
+						
+					// screw hole
+					translate(con[2 + i][0])
+						rotate([0,90,0])
+						cylinder(r=screw_clearance_radius(M4_cap_screw), h=100, center=true);
+				}
+				
+			// bearing spacer
+			translate([con[5][0][0], con[5][0][1],ct-eta])
+				difference() {
+					cylinder(r1=10,r2=7,h=2.8);
+					
+					translate([0,0,-1]) 
+						cylinder(r=screw_clearance_radius(M4_hex_screw), h=100);
+				}
+		
+		}
+	
+}
+
+module yCarriageAssemblyLeft() {
+	ct = yCarriageBracketLeft_thickness;
+	cw = yCarriageBracketLeft_width;
+	ch = yCarriageBracketLeft_height;
+	con = yCarriageBracketLeftCon;
+	
+	assembly("yCarriageLeft");
 
 	translate([0,0,openrail_plate_offset]) {
 
 		// plate and wheels
-		rotate([0,0,180]) 
+		*rotate([0,0,180]) 
 			openrail_plate20(wheels=true);
 	
 		// bracket
-		yCarriageBracket();
+		rotate([0,0,90]) {
+			yCarriageBracketLeft_stl();
+			
+			// left belt clamp
+			attach(yCarriageBracketLeftCon[0], xBeltClampCon[2]) 
+				xBeltClamp_stl();
+				
+			// right belt clamp
+			attach(yCarriageBracketLeftCon[1], xBeltClampCon[2]) 
+				xBeltClamp_stl();
+				
+			// screws, washers, nuts for belt clamps
+			for (i=[0,1],j=[0,1])
+				attachWithOffset(con[j], screwCon, [
+					0, 
+					-xBeltClamp_screwCentres/2 + i*xBeltClamp_screwCentres, 
+					-con[j][0][2] + screw_head_height(M3_hex_screw)
+				])
+				screw_washer_and_nut(M3_hex_screw, M3_nut, 16, ct + 2);
+				
+			// frame fixings
+			for (i=[2,3])
+				attach(con[i],20x20TwistLockFixingCon)
+				20x20TwistLockFixing(xBeltClamp_width, screw=M4_cap_screw, screwLen = 16, rot=0);
+				
+			// bearing axle
+			attach(
+				con[5],
+				[[0,0,screw_head_height(M4_hex_screw)],[0,0,-1],0]
+			) 
+				threadTogether([
+					washer_thickness(M4_washer),
+					ct - screw_head_height(M4_hex_screw) - washer_thickness(M4_washer) + 2.8 + washer_thickness(M5_penny_washer),
+					washer_thickness(M4_washer),
+					ball_bearing_width(BB624)/2,
+					ball_bearing_width(BB624),
+					ball_bearing_width(BB624)/2 + washer_thickness(M4_washer),
+					washer_thickness(M5_penny_washer),
+					2.8 + thick_wall + washer_thickness(M4_washer),
+					0
+				]) {
+					screw(M4_hex_screw,40);
+					washer(M4_washer);
+					washer(M5_penny_washer);
+					washer(M4_washer);
+					ball_bearing(BB624);
+					ball_bearing(BB624);
+					washer(M4_washer);
+					washer(M5_penny_washer);
+					washer(M4_washer);
+					rotate([180,0,0]) nut(M4_nut,nyloc=true);
+				}	
+				
+		}
 		
 		// long screws
 			for (x=[-1,1],y=[-1,1])
@@ -306,7 +646,59 @@ module yCarriageAssembly() {
 	}
 	
 
-	end("yCarriage");
+	end("yCarriageLeft");
+}
+
+module yCarriageAssemblyRight() {
+	ct = yCarriageBracketRight_thickness;
+	cw = yCarriageBracketRight_width;
+	ch = yCarriageBracketRight_height;
+	con = yCarriageBracketRightCon;
+	
+	assembly("yCarriageRight");
+
+	translate([0,0,openrail_plate_offset]) {
+
+		// plate and wheels
+		rotate([0,0,180]) 
+			openrail_plate20(wheels=true);
+	
+		// bracket
+		rotate([0,0,90]) {
+			yCarriageBracketRight_stl();
+			
+			// left belt clamp
+			attach(yCarriageBracketRightCon[0], xBeltClampCon[2]) 
+				xBeltClamp_stl();
+				
+			// right belt clamp
+			attach(yCarriageBracketRightCon[1], xBeltClampCon[2]) 
+				xBeltClamp_stl();
+				
+			// screws, washers, nuts for belt clamps
+			for (i=[0,1],j=[0,1])
+				attachWithOffset(con[j], screwCon, [
+					0, 
+					-xBeltClamp_screwCentres/2 + i*xBeltClamp_screwCentres, 
+					-con[j][0][2] + screw_head_height(M3_hex_screw)
+				])
+				screw_washer_and_nut(M3_hex_screw, M3_nut, 16, ct + 2);
+				
+			// frame fixings
+			for (i=[2,3])
+				attach(con[i],20x20TwistLockFixingCon)
+				20x20TwistLockFixing(xBeltClamp_width, screw=M4_cap_screw, screwLen = 16, rot=0);
+				
+		}
+		
+		// long screws
+			for (x=[-1,1],y=[-1,1])
+				translate([x*22.3,y*22.3,thick_wall])
+				screw(M5_cap_screw, 30);
+	}
+	
+
+	end("yCarriageRight");
 }
 
 module xAxisCableChain() {
@@ -334,47 +726,90 @@ module xAxisCableChain() {
 
 
 // dims
-xAxisMotorPlate_width = NEMA_width(NEMA17);
+xAxisMotorPlate_width = NEMA_width(NEMA17) + 2 * default_wall;
 
 // connections
 xAxisMotorPlateConnectors = [
 	[[xAxisMotorPlate_width/2,10,0], [0,0,1], 0],   // to frame
-	[[xAxisMotorPlate_width/2,38,thick_wall], [0,0,-1], 0]    // to motor
+	[[xAxisMotorPlate_width/2,10 + beltOffset,thick_wall], [0,0,-1], 0],    // to motor
+	[[xAxisMotorPlate_width/2,0,0], [0,0,1], 0]  // 2nd optional frame fixing
 ];
 
-module xAxisMotorPlate_stl( showMotor=false) {
+module xAxisMotorPlate_stl( showMotor=false, singleFlange=false) {
 	w = xAxisMotorPlate_width;
 	d = xAxisMotorPlateConnectors[1][0][1] + NEMA_width(NEMA17)/2;
 	h = thick_wall;
 	w2 = w / 4;
 	
+	fw = 2*screw_clearance_radius(M4_hex_screw) + 2 * default_wall;
+	
+	
 	mcon = [[0,0,0],[0,0,1],0];
 	
 	color(x_carriage_color)
-		linear_extrude(h)
-		difference() {
-			rounded_square(w,d,5,center=false);
+		union() {	
+			// base
+			linear_extrude(h)
+				difference() {
+					rounded_square(w,d,5,center=false);
 			
-			translate([w/2,xAxisMotorPlateConnectors[1][0][1],0]) {
-				// boss
-				circle(r=NEMA_big_hole(NEMA17));
+					translate([w/2,xAxisMotorPlateConnectors[1][0][1],0]) {
+						// boss
+						circle(r=NEMA_big_hole(NEMA17));
 				
-				// motor fixings
-				for(a = [0: 90 : 90 * (4 - 1)])
-        			rotate([0, 0, a])
-            		translate([NEMA_holes(NEMA17)[0], NEMA_holes(NEMA17)[1], 0])
-					circle(r=screw_clearance_radius(M3_cap_screw));
-			}
+						// motor fixings
+						for(a = [0: 90 : 90 * (4 - 1)])
+							rotate([0, 0, a])
+							translate([NEMA_holes(NEMA17)[0], NEMA_holes(NEMA17)[1], 0])
+							circle(r=screw_clearance_radius(M3_cap_screw));
+					}
 			
 			
-			// frame fixings
-			for (i=[0,1])
-				translate([w2 + 2*w2*i,10,0])
-				circle(r=screw_clearance_radius(M4_hex_screw));
+					// frame fixings
+					for (i=[0,1])
+						translate([w2 + 2*w2*i,10,0])
+						circle(r=screw_clearance_radius(M4_hex_screw));
+				}
+
+			// fixing flanges
+			for (i=[singleFlange?1:0,1])
+				translate([-fw + i*(w + 2*fw),20,-20])
+				mirror([i,0,0])
+				difference() {
+					hull() {
+						translate([fw-1+eta,0,0])
+							cube([1, default_wall, 20 + h]);
+						
+						translate([fw/2,0,10])
+						rotate([-90,0,0])
+							cylinder(r=fw/2, h=default_wall, center=false);
+					}
+					
+					translate([fw/2,0,10])
+						rotate([90,0,0])
+						cylinder(r=screw_clearance_radius(M4_hex_screw), h=100, center=true);
+				}
+			
+			// fillets
+			for (i=[singleFlange?1:0,1])
+				translate([default_wall + i*(w-default_wall),20,eta]) 
+				rotate([-90,0,90])
+				difference() {
+					trapezoidPrism(17,25,20+eta,0,default_wall,center=false);
+				
+					// notch for belt
+					translate([8,3,-1])
+						trapezoidPrism(10,10,14,-5,default_wall+2,center=false);	
+				}
+		
 		}
 		
-	//connector(xAxisMotorPlateConnectors[0]);
-	//connector(xAxisMotorPlateConnectors[1]);
+	if (debugConnectors) {
+		frame();
+		
+		for (i=[0:2])
+			connector(xAxisMotorPlateConnectors[i]);
+	}
 		
 	if (showMotor) {
 		
@@ -382,6 +817,11 @@ module xAxisMotorPlate_stl( showMotor=false) {
 		for (i=[0,1])
 			translate([w2 + 2*w2*i,10,0])
 			20x20TwistLockFixing(h, screw=M4_cap_screw, screwLen = 8);	
+			
+		for (i=[0,1])
+			translate([-fw/2 + i*(w+fw),20,-10])
+			rotate([-90,0,0])
+			20x20TwistLockFixing(default_wall, screw=M4_cap_screw, screwLen = 10);	
 		
 		// motor
 		attach(xAxisMotorPlateConnectors[1], mcon) 
@@ -397,9 +837,15 @@ module xAxisMotorPlate_stl( showMotor=false) {
 	}
 }
 
+xRailLen = frameCY[4] - frameCY[1] + ORPlateWidth(ORPLATE20);
+
+xRailCon = [
+	[[-xRailLen/2,0,-openrail_plate_offset],[1,0,0],0]
+];
+
 module xRailAssembly() {
 
-	l = frameCY[4] - frameCY[1] + ORPlateWidth(ORPLATE20);
+	l = xRailLen;
 	railLen = bedWM + ORPlateWidth(ORPLATE20)/2;
 	
 	mirrorYOffset = xCarriageToLaserHeadIngressY + laserMirror_fixingOffset;
@@ -427,23 +873,13 @@ module xRailAssembly() {
 	}
 	
 	// xCarriage
-	*translate([xCarriagePos,-openrail_plate_offset - openrail_groove_offset,0]) 	
+	translate([xCarriagePos,-openrail_plate_offset - openrail_groove_offset,0]) 	
 		xCarriageAssembly();
 	
 	
 	// cable chain
-	*xAxisCableChain();
+	xAxisCableChain();
 	
-	
-	// y belt clips
-	for (i=[0,1])
-		mirror([i,0,0]) {
-		
-			translate([l/2-10,-28.3, -63]) 
-				cube([10,12,30]);
-			translate([l/2,-32.3, -63]) 
-				roundedRectX([5,20,53],3);
-		}
 		
 	// motor mount plate
 	con_xAxis_to_motorMount = [[beltCX[1],0,10], [0,0,1], 180];
@@ -451,18 +887,6 @@ module xRailAssembly() {
 	attach(con_xAxis_to_motorMount, xAxisMotorPlateConnectors[0]) 
 		xAxisMotorPlate_stl(showMotor=true);
 	
-	
-
-	// idler/mirror assembly
-	translate([beltCX[0],beltCY[0],beltCZ[0]]) {
-	
-		// idler screw
-		screw(M5_cap_screw);
-		
-		// idler
-		rotate([0,180,0]) 
-			metal_pulley(pulley_type);
-	}
 	
 	// mirror
 	translate([frameCY[1] - laserMirror_fixingOffset, -mirrorYOffset, -10])
@@ -492,20 +916,29 @@ module xAxisAssembly() {
 	assembly("xAxis");
 	
 	// show co-ordinate frame
-	frame();
-
-	// x rail
-	translate([0,
-			   22.3,
-			   openrail_plate_offset + yCarriageBracket_thickness + 10]) 
-		xRailAssembly();
+	
+	if (debugConnectors) {
+		frame();
+	}
 
 
-	// y carriages
-	for (i=[0,1])
-		mirror([i,0,0])
-		translate([frameCY[4],0, 0]) 
-		yCarriageAssembly();
+	// left
+	translate([frameCY[1],0, 0]) {
+		yCarriageAssemblyLeft();
+		
+		// x rail
+		rotate([0,0,90])
+		attach(
+			yCarriageBracketLeftCon[4],
+			xRailCon[0]
+		)
+			xRailAssembly();
+	}	
+	
+	
+	// right
+	translate([frameCY[4],0, 0])
+		yCarriageAssemblyRight();
 		
 		
 	// y sealing plates
