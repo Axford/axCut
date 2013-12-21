@@ -11,7 +11,9 @@ debugConnectors=false;
 //yCarriageAssemblyLeft();	
 *yAxesAssembly();
 
-laserMirrorBase();
+fixedMirrorHolder_stl();
+*fixedMirrorHolderAssembly();
+*BR20x20WGBP([0,0,0],[0,100,0], startGussets=[0,0,0,0]);
 
 *rotate([180,0,0]) 
 	xAxisMotorPlate_stl(showMotor=false,singleFlange=true);
