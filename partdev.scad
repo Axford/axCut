@@ -7,15 +7,23 @@ yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
 debugConnectors=true;
 
 if (true) { 
-	frameAssembly();
 
 	laserAssembly();
 	
+	frameAssembly();
+
 	yAxesAssembly();
-	
+
+	*zAxesAssembly();
+
+	*translate([0,0,bedVPos]) bedAssembly();
+
 }
 
 *laserBracket_stl();
+
+
+
 
 *rotate([0,90,0]) 
 	yCarriageBracketLeft_stl();

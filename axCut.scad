@@ -7,7 +7,7 @@ laserAssembly();
 
 frameAssembly();
 
-*zAxesAssembly();
+zAxesAssembly();
 
 translate([0,0,bedVPos]) bedAssembly();
 

@@ -122,6 +122,14 @@ module ellipsePart(width,height,numQuarters)
 			translate([-o,0,0]) square([width/2+o*2,height/2+o]);
 	}
 }
+
+module donut(or,ir) {
+	difference() {
+        circle(or);
+    	circle(ir);
+    }
+}
+
 module donutSlice(innerSize,outerSize, start_angle, end_angle) 
 {   
     difference()

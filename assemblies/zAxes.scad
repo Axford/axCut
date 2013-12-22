@@ -6,6 +6,8 @@ module zRodAssembly() {
 	
 	rodLen = frameCZ[1] - frameCZ[0] - 30;
 	
+	echo("Rodlen",rodLen);
+	
 	assembly("zRod");
 	
 	// linear rod

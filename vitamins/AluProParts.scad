@@ -1,9 +1,62 @@
 
+
+// twist lock fixing utility
+
 20x20TwistLockFixingCon = [[0,0,0],[0,0,-1],0];
 
 module 20x20TwistLockFixing(wall, screw=M4_cap_screw, screwLen = 8, rot=90) {
 	translate([0,0,wall]) screw_and_washer(screw,screwLen);
 	translate([0,0,0]) rotate([0,0,rot]) aluProTwistLockNut(BR_20x20_TwistLockNut);
+}
+
+
+M4SquareNut_thickness = 1.6;
+M4SquareNut_width = 7;
+
+module M4SquareNut() {
+
+	color()
+		render()
+		linear_extrude(M4SquareNut_thickness)
+		difference() {
+			square([M4SquareNut_width,M4SquareNut_width],center=true);
+			
+			circle(screw_radius(M4_hex_screw));
+		}
+}
+
+module 20x20SquareNutCarrier_stl() {
+
+	w = 5.8;
+
+	difference() {
+		translate([-w/2,-4,4.5])
+			cube([w,11,5]);
+		
+		translate([0,0,10-1.5-1.6 + 5 - 0.6])
+			rotate([0,0,45])
+			cube([M4SquareNut_width,M4SquareNut_width,10],center=true);
+			
+		// flatten the end
+		translate([-5,-6,10-1.5-1.6 - 0.4])
+			cube([10,4,10]);	
+			
+		//screw hole
+		translate()
+			cylinder(r=screw_radius(M4_hex_screw), h=100);
+	}
+
+
+	*translate([0,0,10-1.5-1.6])
+		rotate([0,0,45])
+		M4SquareNut();	
+	
+	*translate([0,-20,0])
+	BR20x20WGBP([0,0,0], 
+		            [0,100,0],
+		            roll=0,
+		            startGussets=[0,0,0,0], 
+		            endGussets=[0,0,0,0]);
 }
 
 

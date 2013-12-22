@@ -3,6 +3,8 @@ fixedMirrorZOffset = openrail_plate_offset +
 							   openrail_groove_offset + 
 							   xCarriageBracket_thickness;
 
+laserTubeOffsetY = 45;
+
 
 module laserTube() {
 	color([1,1,1,0.4]) 
@@ -28,7 +30,7 @@ module laserBracket_stl() {
 	
 	ir = 60/2;
 	
-	lp = [-50, frameCZ[2] - frameCZ[1] + fixedMirrorZOffset + laserMirror_width/2];
+	lp = [-laserTubeOffsetY, frameCZ[2] - frameCZ[1] + fixedMirrorZOffset + laserMirror_width/2];
 
 	color(x_carriage_color)
 		render()
@@ -80,13 +82,13 @@ module laserBracket_stl() {
 							circle(r=screw_clearance_radius(M3_hex_screw));
 			
 					// weight loss
-					translate([-10,15,0])
-						roundedSquare([16,rc - 40],6,center=false);
+					translate([-6,15,0])
+						roundedSquare([12,rc - 40],4,center=false);
 				
 					hull() {
-						translate([-18,26,0]) circle(4);
-						translate([-18,60,0]) circle(4);
-						translate([-40,40,0]) circle(4);
+						translate([-14,24,0]) circle(4);
+						translate([-14,56,0]) circle(4);
+						translate([-36,38,0]) circle(4);
 					}
 			
 				}
@@ -129,10 +131,10 @@ module laserBracket_stl() {
 					
 							// frame fixings
 							translate([-10,10 + default_wall,0])
-								square([20 - default_wall,default_wall],center=false);
+								square([20 +1,default_wall],center=false);
 					
 							translate([-10,rc - 20 - 2*default_wall,0])
-								square([20 - default_wall,default_wall],center=false);
+								square([20 +1,default_wall],center=false);
 				
 						}
 			
@@ -178,7 +180,7 @@ module laserBracket_stl() {
 			cylinder(r=screw_clearance_radius(M5_cap_screw), h=100, center=true);
 			
 		// screw driver acces hole
-		translate([0,lp[1],10])
+		*translate([0,lp[1],10])
 			rotate([0,90,0])
 			cylinder(r=7, h=100);
 		
@@ -188,7 +190,7 @@ module laserBracket_stl() {
 			cylinder(r=screw_clearance_radius(M4_cap_screw),h=2*rc);
 		
 		// weight loss
-		for (i=[0:2])
+		*for (i=[0:2])
 			translate([0,24+i*20,10])
 			rotate([0,90,0])
 			cylinder(r=7, h=100);
@@ -196,9 +198,9 @@ module laserBracket_stl() {
 			
 		for (i=[0:2])
 			rotate([0,0,57])
-			translate([-2,26+i*20,10])
+			translate([-2,26+i*18,10])
 			rotate([0,90,0])
-			cylinder(r=7, h=10);
+			cylinder(r=6, h=10);
 			
 		for (i=[0:2])
 			translate([lp[0],lp[1],10])
@@ -213,7 +215,7 @@ module laserBracket_stl() {
 
 
 module laserBracketAssembly() {
-	lp = [-50, frameCZ[2] - frameCZ[1] + fixedMirrorZOffset + laserMirror_width/2];
+	lp = [-laserTubeOffsetY, frameCZ[2] - frameCZ[1] + fixedMirrorZOffset + laserMirror_width/2];
 	rc = laserBracket_railCentres;
 	
 	assembly("laserBracketAssembly");
@@ -267,7 +269,7 @@ module laserAssembly() {
 	
 	
 
-	translate([-350, frameCX[3]-50,frameCZ[2] + fixedMirrorZOffset + laserMirror_width/2]) 
+	translate([-350, frameCX[3]-laserTubeOffsetY,frameCZ[2] + fixedMirrorZOffset + laserMirror_width/2]) 
 		rotate([0,90,0]) 
 		laserTube();
 
@@ -413,4 +415,36 @@ module fixedMirrorHolderAssembly() {
 		
 	// frame fixings
 	
+}
+
+
+
+
+
+// print these to align the fixed mirror to the laser tube
+module laserTubeCalibrator_stl() {
+	or = 50/2;
+	ir = or - perim;
+
+	union () {
+		// base
+		linear_extrude(3*layers)
+			union() {
+				// outer ring
+				donut(or,ir-perim);
+				
+				// aiming hole
+				donut(3,1);
+				
+				// arms
+				for (i=[0:4]) {
+					rotate([0,0,i*360/5])
+						translate([1,-2*perim,0])
+						square([ir - 1,4*perim]);
+				}
+			}
+		
+		// wall
+		tube(or,ir,10,center=false);
+	}
 }

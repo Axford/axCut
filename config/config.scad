@@ -197,7 +197,7 @@ frameCY = [-bedWM/2-rightW+10,
            
 //  centres lines lying in z axis
 frameCZ = [20, 
-		   zTravel + 45,   //  top of z rails	
+		   zTravel + 50,   //  top of z rails	
            zTravel + 65,   //  y rails
 		   zTravel + 170,   // outer corners
            zTravel + 170];  // top
