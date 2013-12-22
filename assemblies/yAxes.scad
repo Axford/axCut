@@ -78,9 +78,8 @@ module yAxesAssembly() {
 		
 		
 	// mirror
-	translate([frameCY[1]-laserMirror_fixingOffset,frameCX[3]-laserMirror_fixingOffset - 15,frameCZ[2] + 34])
-		rotate([0,0,45])
-		laserMirror([300, frameCX[3] - bedD/2]);
+	translate([frameCY[1],frameCX[3] - 45,frameCZ[2]])
+		fixedMirrorHolderAssembly();
 	
 	
 	// sealing belts

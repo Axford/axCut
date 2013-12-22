@@ -1,22 +1,284 @@
-module laserTube() {
-	color([1,1,1,0.4]) 
-		cylinder(r=60/2, h=700);
-}
-
-module laserAssembly() {
-
-	translate([-350, frameCX[3]-50,frameCZ[2]+60]) 
-		rotate([0,90,0]) 
-		laserTube();
-
-}
-
-
-
 
 fixedMirrorZOffset = openrail_plate_offset + 
 							   openrail_groove_offset + 
 							   xCarriageBracket_thickness;
+
+
+module laserTube() {
+	color([1,1,1,0.4]) 
+		cylinder(r=50/2, h=700);
+}
+
+
+
+
+laserBracket_railCentres = frameCZ[3] - frameCZ[1] - 10;
+
+module laserBracket_stl() {
+
+	stl("laserBracket");
+	
+	rc = laserBracket_railCentres;
+
+	t = default_wall;
+	h = 20;
+	
+	nh = 2*nut_radius(M5_nut) + 2*default_wall;
+	nw = nut_thickness(M5_nut) + 2*default_wall;
+	
+	ir = 60/2;
+	
+	lp = [-50, frameCZ[2] - frameCZ[1] + fixedMirrorZOffset + laserMirror_width/2];
+
+	color(x_carriage_color)
+		render()
+		difference() {
+		union() {
+			// base plate
+			linear_extrude(t) 
+				difference() {
+					hull() {
+						// spring collars
+						for (i=[0,1])
+							translate([lp[0],lp[1],0])
+							rotate([0,0,25 -i*165])
+							translate([50/2 + 5 + nw/2,0,0])
+							rotate([0,90,0]) 
+							circle(r=nw/2);
+							
+						// nut traps
+							for (i=[0,1])
+								translate([lp[0],lp[1],0])
+								rotate([0,0,-i*120])
+								translate([50/2 + 5,-nh/2,0])
+								rotate([0,90,0]) 
+								roundedSquare([nw,nh],3,center=false);
+					
+						// frame fixings
+						translate([-10,10,0])
+							square([20,default_wall],center=false);
+					
+						translate([-10,rc - 20 - default_wall,0])
+							square([20,default_wall],center=false);
+				
+					}
+			
+					// hollow for laser tube
+					translate([lp[0],lp[1],0])
+						circle(r=ir);
+						
+					// hollow for frame
+					translate([-10,rc-20,0])
+						square([20,40],center=false);
+						
+					// spring fixings
+						for (i=[0,1])
+							translate([lp[0],lp[1],0])
+							rotate([0,0,25 -i*165])
+							translate([50/2 + 5 + nw/2,0,0])
+							rotate([0,90,0]) 
+							circle(r=screw_clearance_radius(M3_hex_screw));
+			
+					// weight loss
+					translate([-10,15,0])
+						roundedSquare([16,rc - 40],6,center=false);
+				
+					hull() {
+						translate([-18,26,0]) circle(4);
+						translate([-18,60,0]) circle(4);
+						translate([-40,40,0]) circle(4);
+					}
+			
+				}
+			
+			linear_extrude(h) 
+				difference() {
+					difference() {					
+						hull() {
+							// nut traps
+							for (i=[0,1])
+								translate([lp[0],lp[1],0])
+								rotate([0,0,-i*120])
+								translate([50/2 + 5,-nh/2,0])
+								rotate([0,90,0]) 
+								roundedSquare([nw,nh],3,center=false);
+					
+							// frame fixings
+							translate([-10,10,0])
+								square([20,default_wall],center=false);
+					
+							translate([-10,rc - 20 - default_wall,0])
+								square([20,default_wall],center=false);
+				
+						}
+			
+						// hollow for laser tube
+						translate([lp[0],lp[1],0])
+							circle(r=ir);
+					}
+				
+					difference() {					
+						hull() {
+							// nut traps
+							for (i=[0,1])
+								translate([lp[0],lp[1],0])
+								rotate([0,0,-i*120])
+								translate([50/2 + 5 + default_wall,-nh/2,0])
+								rotate([0,90,0]) 
+								square([nw - 2*default_wall,nh - 2*default_wall],3,center=false);
+					
+							// frame fixings
+							translate([-10,10 + default_wall,0])
+								square([20 - default_wall,default_wall],center=false);
+					
+							translate([-10,rc - 20 - 2*default_wall,0])
+								square([20 - default_wall,default_wall],center=false);
+				
+						}
+			
+						// hollow for laser tube
+						translate([lp[0],lp[1],0])
+							circle(r=ir + default_wall);
+					}
+				
+			
+				}
+			
+			// nut traps
+			for (i=[0,1])
+				linear_extrude(h)
+				translate([lp[0],lp[1],0])
+				rotate([0,0,-i*120])
+				translate([50/2 + 5,-nh/2,0])
+				rotate([0,90,0]) 
+				difference() {
+					roundedSquare([nw,nh],3,center=false);
+			
+					translate([nw/2, nh/2])
+						square([nut_thickness(M5_nut)+0.5, 2*nut_flat_radius(M5_nut)+0.5],center=true);	
+				}
+			
+			// frame fixings
+			linear_extrude(h) {
+				translate([-10,10,0])
+					square([20,default_wall],center=false);
+					
+				translate([-10,rc - 20 - default_wall,0])
+					square([20,default_wall],center=false);
+			}
+		
+		}
+	
+		// laser tube screws
+		for (i=[0,1])
+			translate([lp[0],lp[1],10])
+			rotate([0,0,-i*120])
+			translate([50/2 + 20,0,0])
+			rotate([0,90,0]) 
+			cylinder(r=screw_clearance_radius(M5_cap_screw), h=100, center=true);
+			
+		// screw driver acces hole
+		translate([0,lp[1],10])
+			rotate([0,90,0])
+			cylinder(r=7, h=100);
+		
+		// frame fixings
+		translate([0,0,10])
+			rotate([-90,0,0])
+			cylinder(r=screw_clearance_radius(M4_cap_screw),h=2*rc);
+		
+		// weight loss
+		for (i=[0:2])
+			translate([0,24+i*20,10])
+			rotate([0,90,0])
+			cylinder(r=7, h=100);
+		
+			
+		for (i=[0:2])
+			rotate([0,0,57])
+			translate([-2,26+i*20,10])
+			rotate([0,90,0])
+			cylinder(r=7, h=10);
+			
+		for (i=[0:2])
+			translate([lp[0],lp[1],10])
+			rotate([0,0,-30 - i*30])
+			translate([ir-5,0,0])
+			rotate([0,90,0])
+			cylinder(r=6, h=10);
+		
+	}
+	
+}
+
+
+module laserBracketAssembly() {
+	lp = [-50, frameCZ[2] - frameCZ[1] + fixedMirrorZOffset + laserMirror_width/2];
+	rc = laserBracket_railCentres;
+	
+	assembly("laserBracketAssembly");
+	
+	laserBracket_stl();
+			
+	// laser adjustment screws
+	for (i=[0,1])
+		translate([lp[0],lp[1],10])
+		rotate([0,0,-i*120])
+		translate([50/2 + 20,0,0])
+		rotate([0,90,0]) 
+		screw(M5_cap_screw, 20);
+
+	// nuts
+	for (i=[0,1])
+		translate([lp[0],lp[1],10])
+		rotate([0,0,-i*120])
+		translate([50/2 + 5 + default_wall,0,0])
+		rotate([0,90,0]) 
+		nut(M5_nut);
+
+	// frame fixings
+	translate([0,10,10])
+		rotate([-90,0,0])
+		20x20TwistLockFixing(default_wall, screw=M4_cap_screw, screwLen = 10, rot=0);	
+
+	translate([0,rc-20,10])
+		rotate([-90,0,180])
+		20x20TwistLockFixing(default_wall, screw=M4_cap_screw, screwLen = 10, rot=0);
+	
+	
+	end("laserBracketAssembly");
+}
+
+
+
+module laserAssembly() {
+
+	
+
+	assembly("laserAssembly");
+
+	translate([190, frameCX[3], frameCZ[1]])
+	 	rotate([90,0,90]) 
+	 	laserBracketAssembly();	
+			
+	translate([-210, frameCX[3], frameCZ[1]])
+	 	rotate([90,0,90]) 
+	 	laserBracketAssembly();		
+	
+	
+
+	translate([-350, frameCX[3]-50,frameCZ[2] + fixedMirrorZOffset + laserMirror_width/2]) 
+		rotate([0,90,0]) 
+		laserTube();
+
+	end("laserAssembly");
+
+}
+
+
+
+
+
 
 fixedMirrorHolderConnectors = [
 	[],  // to frame
@@ -148,4 +410,7 @@ module fixedMirrorHolderAssembly() {
 	translate([-laserMirror_fixingOffset,laserMirror_fixingOffset,fixedMirrorZOffset])
 		rotate([0,0,45])
 		laserMirror([300, frameCX[3] - bedD/2]);
+		
+	// frame fixings
+	
 }

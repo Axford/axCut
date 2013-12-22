@@ -4,14 +4,25 @@ include <config/config.scad>
 xCarriagePos = -bedW/2 + (0.5+cos($t*360)/2) * bedW;
 yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
 
-debugConnectors=false;
+debugConnectors=true;
+
+if (true) { 
+	frameAssembly();
+
+	laserAssembly();
+	
+	yAxesAssembly();
+	
+}
+
+*laserBracket_stl();
 
 *rotate([0,90,0]) 
 	yCarriageBracketLeft_stl();
 //yCarriageAssemblyLeft();	
-*yAxesAssembly();
 
-fixedMirrorHolder_stl();
+
+*fixedMirrorHolder_stl();
 *fixedMirrorHolderAssembly();
 *BR20x20WGBP([0,0,0],[0,100,0], startGussets=[0,0,0,0]);
 

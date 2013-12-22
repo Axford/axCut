@@ -162,7 +162,7 @@ bedRibs = 6;  // number of ribs (along y axis)
 
 bedVPos = 200;
 
-zTravel = 200;
+zTravel = 210;
 
 yCarriagePos = +bedD/2 -300;   // +-bedD
 xCarriagePos = -bedW/2;    // +-bedW
@@ -199,8 +199,8 @@ frameCY = [-bedWM/2-rightW+10,
 frameCZ = [20, 
 		   zTravel + 45,   //  top of z rails	
            zTravel + 65,   //  y rails
-		   zTravel + 180,   // outer corners
-           zTravel + 180];  // top
+		   zTravel + 170,   // outer corners
+           zTravel + 170];  // top
 
 
 showSealingBelts = false;
