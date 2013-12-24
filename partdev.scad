@@ -6,7 +6,7 @@ yCarriagePos = -bedD/2 + (0.5+cos($t*360)/2) * bedD;
 
 debugConnectors=true;
 
-if (true) { 
+if (false) { 
 
 	laserAssembly();
 	
@@ -20,10 +20,24 @@ if (true) {
 
 }
 
+*translate([0,30,0]) 
+	rotate([0,0,-90])
+	cableChainV3();
+
+difference() {
+	union() {
+		cableChainLink();
+		translate([26 - 12,0,0]) cableChainLink();
+	}
+		
+}
+
+*arduino(MEGA2560);
+
 *laserBracket_stl();
 
-
-
+//rotate([-90,0,0])
+	cableClip();
 
 *rotate([0,90,0]) 
 	yCarriageBracketLeft_stl();

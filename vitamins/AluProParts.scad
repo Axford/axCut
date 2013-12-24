@@ -251,3 +251,81 @@ module 20x40HeavyGusset_stl(screws=false) {
 			}
 	}
 }
+
+
+// set embed to true to make this an embeddable part (within other parts)
+// embed sets part origin to x=y=z=0
+
+module 20x20SnapFitting_stl(embed=false) {
+	
+	w = 9;
+	d=12;
+	t = 2*perim;
+	d2 = d - 4perim;
+	d3 = d - 6*perim;
+	
+	r = screw_clearance_radius(M4_hex_screw);
+	
+	if (!embed)
+		stl("20x20SnapFitting");
+	
+	translate([0,0,embed?-10:0])
+		render()
+		difference() {
+		union() {
+			// cap
+			if (!embed) 
+				translate([-w/2,-d3/2,10])
+				cube([w,d3,t]);
+				
+			// folds
+			for (i=[0,1])
+				mirror([i,0,0])
+				translate([0,0,11])
+				rotate([0,10,0])
+				translate([0,-d3/2,-6])
+				union() {
+					translate([-0.5,0,0])
+						cube([3,d3,6]);
+					
+					translate([1.8,0,2])
+						cube([2,d3,2]);
+					
+					translate([2.5-eta,0,2])
+						rotate([-90,0,0])
+						right_triangle(1.3, 2 + eta, d3, center = false);
+				}
+	
+		}
+		
+		// pilot hole
+		translate([0,0,10 + t + eta - 2*r])
+			cylinder(r1=0, r2=r, h=2*r);
+			
+		// screw hole
+		cylinder(r=r/2, h=20);
+			
+		// central split line
+		translate([-perim/2,-d3/2-eta,0])
+			cube([perim, d3+2*eta, 10 + perim/2]);
+			
+		// fold relief
+		*for (i=[0,1])
+			mirror([0,i,0])
+			translate([-3,-d2/2,0])
+			cube([6, perim, 20]);
+		
+		// fracture lines
+		*for (i=[0,1])
+			mirror([i,0,0])
+			translate([3,-d2/2, 10+t+eta-2*layers])
+			cube([perim,d2,2*layers]);
+	}
+	
+	*translate([0,-20,0])
+	BR20x20WGBP([0,0,0], 
+		            [0,100,0],
+		            roll=0,
+		            startGussets=[0,0,0,0], 
+		            endGussets=[0,0,0,0]);
+}
