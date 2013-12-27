@@ -28,18 +28,30 @@ module M4SquareNut() {
 module 20x20SquareNutCarrier_stl() {
 
 	w = 5.8;
+	barbW = 0.3;
+	
+	lockOffset = -2.7;
 
 	difference() {
-		translate([-w/2,-4,4.5])
-			cube([w,11,5]);
+		union() {
+			// body of carrier
+			translate([-w/2,-4,4.5])
+				cube([w,11,5]);
+			
+			// add retaining barbs
+			translate([-w/2,7,4.5])
+				rotate([90,0,0])
+				trapezoidPrism(w+2*barbW,w,4,-barbW,5);
+		}
 		
-		translate([0,0,10-1.5-1.6 + 5 - 0.6])
+		// hollow for square nut
+		translate([0,0,4.5 + 5 + 3*layers])
 			rotate([0,0,45])
 			cube([M4SquareNut_width,M4SquareNut_width,10],center=true);
 			
 		// flatten the end
-		translate([-5,-6,10-1.5-1.6 - 0.4])
-			cube([10,4,10]);	
+		translate([-5,-6,4.5 + 3*layers])
+			cube([10,5,10]);	
 			
 		//screw hole
 		translate()
@@ -47,7 +59,8 @@ module 20x20SquareNutCarrier_stl() {
 	}
 
 
-	*translate([0,0,10-1.5-1.6])
+	*color([0.7,0.7,0.7,1])
+		translate([0,0,10-1.5-1.6])
 		rotate([0,0,45])
 		M4SquareNut();	
 	
@@ -59,6 +72,43 @@ module 20x20SquareNutCarrier_stl() {
 		            endGussets=[0,0,0,0]);
 }
 
+module 20x20SquareNutCarrierLock_stl() {
+
+	w = 6;
+	barbW = 0.3;
+	
+	lockOffset = -2.7;
+
+	color([0.5,1,0.5,1])
+		//render()
+		difference() {
+			union() {
+				// body of carrier
+				translate([-w/2,-7,4.5 + 3*layers])
+					cube([w,11,4]);
+			}
+		
+			// hollow for square nut
+			translate([0,0,10-1.5-1.6 + 5 - 0.5])
+				rotate([0,0,45])
+				cube([M4SquareNut_width,M4SquareNut_width,10],center=true);
+				
+			// trim the ends to mesh with carrier
+			for (i=[0,1])
+				rotate([0,0,45 - i*90])
+				translate([-3,M4SquareNut_width/2 -eta,4])
+				cube([6,6,6]);
+			
+			// flatten the end
+			*translate([-5,-6,10-1.5-1.6 - 0.5])
+				cube([10,5,10]);	
+			
+			//screw hole
+			translate()
+				cylinder(r=screw_radius(M4_hex_screw), h=100);
+		}
+
+}
 
 
 // composite connector that joins two parallel extrusions (mid-rail) to an orthogonal extrusion (end)

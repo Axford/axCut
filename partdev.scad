@@ -24,13 +24,17 @@ if (false) {
 	rotate([0,0,-90])
 	cableChainV3();
 
-difference() {
+*difference() {
 	union() {
 		cableChainLink();
 		translate([26 - 12,0,0]) cableChainLink();
 	}
 		
 }
+
+20x20SquareNutCarrier_stl();
+translate([8,0,-3*layers]) 
+	20x20SquareNutCarrierLock_stl();
 
 *arduino(MEGA2560);
 
