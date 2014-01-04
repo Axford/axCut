@@ -24,7 +24,7 @@ module bedBearingClamp(incBearing=true) {
 	z1 = -bh - default_wall + 20;
 
 	color(plastic_part_color("lime"))
-		render()
+		//render()
 		union() {
 			if (incBearing) {
 			
@@ -34,7 +34,7 @@ module bedBearingClamp(incBearing=true) {
 		
 				// bearing clamp
 				translate([0,0,z1])
-					linear_extrude(bh)
+					linear_extrude(bh + default_wall)
 					difference() {
 						union() {
 							translate([-or,0]) square([or*2,y2]);
@@ -55,37 +55,51 @@ module bedBearingClamp(incBearing=true) {
 			
 			// mount plate
 			difference() {
-				translate([br,0,-20]) 
-					cube([x1+2, thick_wall, 40]);
+				hull() {
+					translate([br,0,-5]) 
+						cube([x1+0.5, thick_wall, 25]);
+					
+					translate([x2,0 ,10 - 20])
+						rotate([-90,0,0])	
+						cylinder(r=screw_clearance_radius(M5_cap_screw)+thick_wall,h=thick_wall);
+					
+				}
 			
 				// screw holes
 				for (i=[0,1])
 					translate([x2,-1 ,10 - i*20])
 					rotate([-90,0,0])	
 					cylinder(r=screw_clearance_radius(M5_cap_screw),h=10);	
+				
 			}
 				
 			// fillets
-			translate([x1-10 + default_wall/2,thick_wall,10]) 
+			translate([x1-10 + thick_wall/2,thick_wall,10]) 
 				rotate([0,90,0])
-				right_triangle(15,15,h=default_wall);
+				right_triangle(15,15,h=thick_wall);
 			
-			translate([x1+10 - default_wall/2,thick_wall,10]) 
+			translate([x1+10 - thick_wall/2,thick_wall,10]) 
 				rotate([0,90,0])
-				right_triangle(15,15,h=default_wall);
+				right_triangle(15,15,h=thick_wall);
 				
 			// nut plate
 			difference() {
 				translate([x1 - 10,0, 10]) 
 					cube([20, y1 + 10, 10]);
 			
+				// for nut
 				translate([x1,y1, 9]) 
-					cylinder(r=nut_radius(M5_nut), h=nut_thickness(M6_nut)+2, $fn=6);	
+					rotate([0,0,0])
+					cylinder(r=nut_radius(M6_nut), h=nut_thickness(M6_nut)+2, $fn=6);	
+					
+				// for threaded rod
+				translate([x1,y1, 0]) 
+					cylinder(r=screw_clearance_radius(M6_cap_screw), h=100);
 			}
 		}
 		
 	// t-nuts and screws
-	for (i=[0,1]) {
+	*for (i=[0,1]) {
 		translate([x2,thick_wall ,10 - i*20])
 			rotate([-90,0,0])
 			screw(M4_cap_screw, 8);
@@ -96,13 +110,13 @@ module bedBearingClamp(incBearing=true) {
 	}
 
 	// bearing
-	if (incBearing)
+	*if (incBearing)
 		translate([0,y2,-bh/2+20-4perim]) 
 		rotate([0,90,0]) 
 		linear_bearing(Z_bearings);
 		
 	// nut
-	translate([x1,y1,10])
+	*translate([x1,y1,10-1])
 		nut(M6_nut);
 }
 
@@ -112,6 +126,9 @@ module bedAssembly() {
 
 	ribSpacing = (bedWM - 20) / (bedRibs - 1);
 	ribL = bedDM - 40;
+	
+	echo("ribSpacing: ",ribSpacing);
+	echo("firstRibOffset: ",(bFW - bedWM + 20)/2);
 	
 	assembly("bed");
 

@@ -233,6 +233,77 @@ module 20x20TGusset_stl(width=100, coreSide=true, showScrews=false, showCoreScre
 
 
 
+module 20x20PrintedGusset_stl(screws=false,nibs=true) {
+	// width, wall_thickness, slot width, slot height, slot offset from base, nib depth, nib width, label
+	tg = [18, 2, 5, 7, 7.7, 1, 5.8, "BR20x20Gusset"];
+
+	// sits on z=0
+	// faces along y+ and z+	
+	
+	w = tg[0];
+	t = tg[1];
+	slotw = tg[2];
+	sloth = tg[3];
+	sloto = tg[4];
+	nib = tg[5];
+	nibw = tg[6];
+	
+	vitamin("20x20PrintedGusset");
+	
+	//color(grey80)
+	color(plastic_part_color())  // colour as plastic for axCut build
+	render()
+	union() {
+		// ends
+		for (i=[0,1])
+			mirror([0,-i,i])
+			linear_extrude(t) {
+				difference() {
+					translate([-w/2,0,0]) square([w,w]);
+					
+					// slot for screw
+					translate([(-slotw/2),sloto,0]) square([slotw,sloth]);
+				}
+			}
+			
+		// nibs
+		if (nibs && !simplify)
+			for (i=[0,1],j=[0,1])
+			mirror([0,-i,i])
+			rotate([0,-90,0])
+			translate([j*(w-2*nib),0,-nibw/2])
+			linear_extrude(nibw)
+			polygon([[0,eta],
+			         [2*nib,eta],
+			         [nib,-nib],
+			         [-nib,-nib]]);
+		
+		//sides
+		for (i=[0,1])
+			mirror([i,0,0])
+			translate([w/2-t/2,t-eta,t-eta])
+			rotate([0,-90,0])
+			right_triangle(width=w-t, height=w-t, h=t, center = true);
+	
+		// tips
+		if (!simplify)
+			for (i=[0,1])
+			mirror([0,-i,i])
+			translate([w/2-t-eta,w-1,t-eta])
+			rotate([0,-90,0])
+			right_triangle(width=1, height=1, h=w-2*t+2*eta, center=false);
+	}
+	
+	if (screws) {
+		for (i=[0,1])
+			mirror([0,-i,i]) {
+				translate([0,12,t]) screw(M4_cap_screw,8);
+				translate([0,12,0]) aluProTwistLockNut(BR_20x20_TwistLockNut);
+			}
+	}
+}
+
+
 // heavy duty 90 degree gusset to join 20x40 profile
 // designed for the base of the axCut machine
 
@@ -313,6 +384,7 @@ module 20x20SnapFitting_stl(embed=false) {
 	t = 2*perim;
 	d2 = d - 4perim;
 	d3 = d - 6*perim;
+	splitW = 0.7;
 	
 	r = screw_clearance_radius(M4_hex_screw);
 	
@@ -322,60 +394,62 @@ module 20x20SnapFitting_stl(embed=false) {
 	translate([0,0,embed?-10:0])
 		render()
 		difference() {
-		union() {
-			// cap
-			if (!embed) 
-				translate([-w/2,-d3/2,10])
-				cube([w,d3,t]);
+			union() {
+				// cap
+				if (!embed) 
+					translate([-w/2,-d3/2,10])
+					cube([w,d3,t]);
 				
-			// folds
-			for (i=[0,1])
-				mirror([i,0,0])
-				translate([0,0,11])
-				rotate([0,10,0])
-				translate([0,-d3/2,-6])
-				union() {
-					translate([-0.5,0,0])
-						cube([3,d3,6]);
+				// folds
+				for (i=[0,1])
+					mirror([i,0,0])
+					translate([0,0,11])
+					rotate([0,10,0])
+					translate([0,-d3/2,-6])
+					union() {
+						translate([-0.5,0,0])
+							cube([3,d3,5.5]);
 					
-					translate([1.8,0,2])
-						cube([2,d3,2]);
+						translate([1.8,0,2])
+							cube([2,d3,2]);
 					
-					translate([2.5-eta,0,2])
-						rotate([-90,0,0])
-						right_triangle(1.3, 2 + eta, d3, center = false);
-				}
+						translate([2.5-eta,0,2])
+							rotate([-90,0,0])
+							right_triangle(1.3, 2 + eta, d3, center = false);
+					}
 	
+			}
+		
+			// pilot hole
+			translate([0,0,11])
+				mirror([0,0,1])
+				cylinder(r1=r, r2=0, h=7);
+			
+			// screw hole
+			//cylinder(r=r/2, h=20);
+			
+			// central split line
+			translate([-splitW/2,-d3/2-eta,0])
+				cube([splitW, d3+2*eta, 10 + splitW/2]);
 		}
-		
-		// pilot hole
-		translate([0,0,10 + t + eta - 2*r])
-			cylinder(r1=0, r2=r, h=2*r);
-			
-		// screw hole
-		cylinder(r=r/2, h=20);
-			
-		// central split line
-		translate([-perim/2,-d3/2-eta,0])
-			cube([perim, d3+2*eta, 10 + perim/2]);
-			
-		// fold relief
-		*for (i=[0,1])
-			mirror([0,i,0])
-			translate([-3,-d2/2,0])
-			cube([6, perim, 20]);
-		
-		// fracture lines
-		*for (i=[0,1])
-			mirror([i,0,0])
-			translate([3,-d2/2, 10+t+eta-2*layers])
-			cube([perim,d2,2*layers]);
-	}
 	
+	// for dev
 	*translate([0,-20,0])
 	BR20x20WGBP([0,0,0], 
 		            [0,100,0],
 		            roll=0,
 		            startGussets=[0,0,0,0], 
 		            endGussets=[0,0,0,0]);
+}
+
+
+module 20x20DropInNut() {
+	intersection() {
+		linear_extrude(6)
+			aluProTSlot(BR_20x20);
+			
+		%translate([0,0,3])
+			rotate([0,90,0])
+			cylinder(r=6,h=100);
+	}
 }

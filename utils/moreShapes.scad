@@ -78,6 +78,15 @@ module allRoundedRect(size, radius, center=false) {
 	}
 }
 
+module chamferedRect(size, chamfer, center=false) {
+	hull() {
+		translate([0,center?0:chamfer,0])
+			square([size[0],size[1]-2*chamfer],center);
+			
+		translate([center?0:chamfer,0,0])
+			square([size[0]-2*chamfer,size[1]],center);
+	}
+}
 
 // Extended rotational extrude, allows control of start/end angle
 
@@ -135,6 +144,12 @@ module torusSlice(r1, r2, start_angle, end_angle, convexity=10, r3=0, $fn=64) {
 
 		rotate_extrude(convexity) translate([r1,0,0]) circle(r3, $fn=$fn/4);
 	}
+}
+
+module torus(r1, r2, $fn=64) {
+	rotate_extrude() 
+		translate([r1,0,0]) 
+		circle(r2, $fn=$fn/4);
 }
 
 
@@ -272,6 +287,15 @@ module sector2D(r, a, center = true) {
                     [2 * r * cos(a), 2 * r * sin(a)],
                 ]);
         }
+}
+
+module donutSector2D(or,ir,a, center=true) {
+	difference() {
+		sector2D(or,a,center);
+		
+		circle(ir);
+	}
+
 }
 
 module tube(or, ir, h, center = true) {

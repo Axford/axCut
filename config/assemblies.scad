@@ -9,5 +9,6 @@ include <../assemblies/laser.scad>
 include <../assemblies/yAxes.scad>
 include <../assemblies/yIdler.scad>
 include <../assemblies/electronics.scad>
-use <../assemblies/CableChainv3.scad>
 include <../assemblies/cableChain.scad>
+include <../assemblies/xLimitSwitch.scad>
+include <../assemblies/cooling.scad>

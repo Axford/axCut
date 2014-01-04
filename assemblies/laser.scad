@@ -448,3 +448,193 @@ module laserTubeCalibrator_stl() {
 		tube(or,ir,10,center=false);
 	}
 }
+
+
+
+// 12mm aluminium tube to hold calibrating laser diode
+module laserDiodeTube(l=750) {
+	or = 12.1/2;
+	ir = 9.6/2;
+	
+	color("silver")
+		tube(or,ir,l);
+}
+
+
+module laserDiodeTubeHolder_stl() {
+	or = 50/2;
+	ir = or - 2*perim - 0.1;
+	
+	tubeor = 12.1/2 + 0.1;
+
+	render()
+		difference() {
+			union () {
+				// base
+				linear_extrude(10)
+					union() {
+						// outer ring
+						donut(or,ir);
+				
+						// aiming hole
+						donut(tubeor + 2perim + 0.1,tubeor);
+				
+						// arms
+						for (i=[0:4]) {
+							rotate([0,0,i*360/5])
+								translate([tubeor,-perim,0])
+								square([ir - tubeor,2*perim + 0.1]);
+						}
+					}
+			
+				// arm stiffeners
+				linear_extrude(3*layers)
+					union() {
+						// arms
+						for (i=[0:4]) {
+							rotate([0,0,i*360/5])
+								translate([tubeor,-3*perim,0])
+								square([ir - tubeor,6*perim]);
+						}
+					}
+			}
+			
+			// weight loss
+			translate([0,0,5])
+				torus(ir/2, 3);
+			translate([0,0,5])
+				torus(3.2*ir/4, 3);
+				
+		}
+}
+
+
+// cheap 5V red laser diode for calibrating laser optics
+module laserDiode() {
+	or = 6/2;
+	or2 = 5/2;
+	ir = 3/2;
+	
+	h=10;
+	h1=3.6;
+	h2=5.5;
+	
+	pw = 6.2;
+	pd = 4.5;
+	
+	// body
+	union() {
+		// inner core
+		cylinder(r=or2, h=h-2);
+		
+		cylinder(r=or, h=h1);
+		
+		translate([0,0,h-h2])
+			tube(or, ir, h2, center=false);
+	}
+	
+	// pcb
+	translate([-pw/2,0,-pd])
+		cube([pw,1,pd]);
+	
+	// wires
+	color("red")
+		translate([-1,-0.5,-30])
+		cylinder(r=1/2, h=30);
+	color("blue")
+		translate([-1,1.5,-30])
+		cylinder(r=1/2, h=30);
+	
+}
+
+
+// target to fit end of diode laser tube to ensure beam is centred
+module laserDiodeTubeTarget_stl() {
+	
+	or = 9.6/2;
+	
+	ir = 3/2;
+	
+	union() {
+		// target
+		tube(or+2*perim,ir, 3*layers, center=false);
+		
+		// case
+		tube(or,or-2perim-0.1, 10, center=false);
+	}
+	
+}
+
+// holds laser diode in end of 12mm tube, sticks out the end for adjustment
+module laserDiodeHolder_stl() {
+	or = 9.6/2;
+	
+	ir = 6/2 + 0.1;
+	
+	pw = 6.2 + 0.6;
+	
+	
+	difference() {
+		union() {
+			// centring cap
+			tube(or,ir,2,center=false);
+			
+			// holder
+			tube(ir+2perim+0.1,ir,20,center=false);
+			
+		}
+		
+		// gap for pcb
+		translate([-pw/2,-0.5,-1])
+			cube([pw,2,11]);
+	}
+}
+
+// allows 3 point adjustment of the diode angle down the tube
+module laserDiodeAdjuster_stl() {
+
+	tubeor = 12.1/2 + 0.1;
+	
+	clampIR = tubeor;
+	clampOR = clampIR + 4perim + 0.1;
+	
+	sr = screw_radius(M4_cap_screw);
+	
+	armOffset = 4;
+	armD = 2*sr + 2*default_wall;
+	
+	
+	
+	union() {
+		// clamp to hold tube
+		tube(clampOR, clampIR, 15, center=false);
+		
+		// adjustment arms
+		for (i=[0:2])
+			rotate([0,0,i*360/3])
+			translate([clampOR-eta, 0, 0])
+			difference() {
+				hull() {
+					translate([armOffset,-armD/2,22]) 
+						roundedRect([thick_wall, armD, 8],2);
+				
+					translate([-(clampOR-clampIR),-2perim,0])
+						roundedRect([(clampOR-clampIR) + 2, 4perim, 15],1);		
+				}
+				
+				// screw hole
+				translate([0,0,26])
+					rotate([0,90,0])
+					cylinder(r=sr, h=20);
+			}
+			
+	}
+	
+	// screws
+	*for (i=[0:2])
+		rotate([0,0,i*360/3])
+		translate([clampOR + armOffset + thick_wall,0,26])
+		rotate([0,90,0])
+		screw(M4_cap_screw,8);
+	
+}

@@ -133,12 +133,12 @@ module xCarriageBracket_stl() {
 			difference() {
 				linear_extrude(ct) 
 					difference() {
-						roundedSquare([cw,ch],10);
+						roundedSquare([cw,ch],20);
 			
 						// screw holes for openrail plate
 						for (x=[-1,1],y=[-1,1])
 							translate([x*22.3,y*22.3,ct])
-							circle(screw_clearance_radius(M5_cap_screw)+1);
+							circle(screw_clearance_radius(M5_cap_screw)+0.5);
 							
 						// screw holes for laser head
 						translate([-laserHeadBody_mountSlotToTubeX,
@@ -163,7 +163,7 @@ module xCarriageBracket_stl() {
 				// screw countersinks for openrail plate
 				for (x=[-1,1],y=[-1,1])
 					translate([x*22.3,y*22.3,ct - screw_head_height(M5_cap_screw) - 0.5])
-					cylinder(r=screw_head_radius(M5_cap_screw)+1, h=ct);
+					cylinder(r=screw_head_radius(M5_cap_screw)+0.7, h=ct);
 					
 				// screw head traps for laser head
 				translate([-laserHeadBody_mountSlotToTubeX,
@@ -176,11 +176,9 @@ module xCarriageBracket_stl() {
 			           	   -eta]) 
 					cylinder(r=screw_head_radius(M4_hex_screw),h=screw_head_height(M4_hex_screw), $fn=6);
 			
-				// notches for belt
-				for (i=[0,1])
-					mirror([i,0,0])
-					translate([cw/2 - 15,-6,ct-1.7])
-					cube([20,12,10]);
+				// notch for belt
+				translate([-cw/2-1,-6,ct-1.7])
+					cube([cw+2,12,10]);
 					
 				// screw head traps for belt clamps
 				for (i=[0,1],j=[-1,1])
@@ -192,7 +190,7 @@ module xCarriageBracket_stl() {
 			}
 			
 			// teeth to engage belt on left side
-			for (i=[0:5])
+			*for (i=[0:5])
 				translate([-cw/2 + 0.75 + i*2.5,0,ct-1.7 - eta + 0.5])
 				rotate([90,0,0])
 				trapezoidPrism(1,1.5,1 + eta,0.25,12,center=true);
@@ -227,8 +225,15 @@ module xCarriageBracket_stl() {
 		
 			// cable chain bracket
 			// upstand
-			translate([cw/2-20,ch/2-10,0])
-				cube([20,29,thick_wall]);
+			difference() {
+				translate([cw/2-20,ch/2-20,0])
+					cube([20,39,thick_wall]);
+				
+				// screw hole
+				translate([22.3,22.3,-1])
+					cylinder(r=6, h=20);
+			}
+				
 			// outrigger 
 			difference() {
 				translate([cw/2-20,ch/2 + 19-thick_wall,-36])
@@ -886,6 +891,10 @@ module xRailAssembly() {
 	
 	attach(con_xAxis_to_motorMount, xAxisMotorPlateConnectors[0]) 
 		xAxisMotorPlate_stl(showMotor=true);
+		
+	// limit switch
+	translate([beltCX[1] - 45,0,10])
+		xLimitSwitchAssembly();
 	
 	
 	// mirror

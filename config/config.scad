@@ -25,7 +25,7 @@ eta = 0.01;                     // small fudge factor to stop CSG barfing on coi
 $fa = 5;
 $fs = 0.5;
 
-perim = 0.7;
+perim = 0.5;    // perim extrusion width for 0.2 or 0.3 layer height
 layers = 0.3;
 2perim = 2*perim;
 4perim = 4*perim;
@@ -76,7 +76,7 @@ Z_screw_dia = 6;            // Studding for Z axis
 // Feature sizes
 //
 default_wall = 4*perim;
-thick_wall = 6*perim;
+thick_wall = 8*perim;
 
 include <colors.scad>
 include <utils.scad>

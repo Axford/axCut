@@ -21,6 +21,8 @@ M8_penny_washer = [8,  30, 1.5, false, 13.8];
 M3_rubber_washer= [3,  10, 1.5, true];
 
 function washer_diameter(type)  = type[1];
+function washer_radius(type)    = type[1]/2;
+function washer_clearance_radius(type) = type[1]/2 + 0.2;
 function washer_thickness(type) = type[2];
 function washer_soft(type)      = type[3];
 function washer_color(type) = washer_soft(type) ? soft_washer_color : hard_washer_color;

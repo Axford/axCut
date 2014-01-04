@@ -10,7 +10,7 @@
 include <../vitamins/washers.scad>
 include <../vitamins/nuts.scad>
 include <../vitamins/screws.scad>
-include <../vitamins/microswitch.scad>
+include <../vitamins/microswitch2.scad>
 include <../vitamins/stepper-motors.scad>
 include <../vitamins/ball-bearings.scad>
 include <../vitamins/linear-bearings.scad>
@@ -22,7 +22,7 @@ include <../vitamins/belts.scad>
 //include <../vitamins/ziptie.scad>
 //include <../vitamins/bulldog.scad>
 //include <../vitamins/cable_strip.scad>
-//include <../vitamins/fans.scad>
+include <../vitamins/fans.scad>
 //include <../vitamins/electronics.scad>
 //include <../vitamins/spools.scad>
 //include <../vitamins/terminals.scad>

@@ -6,12 +6,13 @@
 
 // based on http://www.thingiverse.com/thing:8063 by MiseryBot, CC license
 
-fan80x38 = [80, 38, 75, 35.75, M4_cap_screw, 40,   4.3, 84];
-fan70x15 = [70, 15, 66, 30.75, M4_cap_screw, 29,   3.8, 70];
-fan60x25 = [60, 25, 57, 25,    M4_cap_screw, 31.5, 3.6, 64];
-fan60x15 = [60, 15, 57, 25,    M4_cap_screw, 29,   2.4, 60];
-fan40x11 = [40, 11, 37, 16,    M3_cap_screw, 25,   10, 100];
-fan30x10 = [30, 10, 27, 12,    M3_cap_screw, 17,   10, 100];
+fan120x25 =[120, 25,116,105/2, M4_cap_screw, 35,   4,   120, 9];
+fan80x38 = [80, 38, 75, 35.75, M4_cap_screw, 40,   4.3, 84,  7];
+fan70x15 = [70, 15, 66, 30.75, M4_cap_screw, 29,   3.8, 70,  7];
+fan60x25 = [60, 25, 57, 25,    M4_cap_screw, 31.5, 3.6, 64,  7];
+fan60x15 = [60, 15, 57, 25,    M4_cap_screw, 29,   2.4, 60,  7];
+fan40x11 = [40, 11, 37, 16,    M3_cap_screw, 25,   10, 100,  7];
+fan30x10 = [30, 10, 27, 12,    M3_cap_screw, 17,   10, 100,  7];
 
 function fan_width(type)          = type[0];
 function fan_depth(type)          = type[1];
@@ -21,6 +22,7 @@ function fan_screw(type)          = type[4];
 function fan_hub(type)            = type[5];
 function fan_thickness(type)      = type[6];
 function fan_outer_diameter(type) = type[7];
+function fan_blades(type)         = type[8];
 
 
 module fan(type) {
@@ -32,6 +34,8 @@ module fan(type) {
     screw = fan_screw(type);
 
     vitamin(str("FAN", fan_width(type), fan_depth(type), ": Fan ", fan_width(type), "mm x ", fan_depth(type), "mm"));
+   
+    color("grey")
     difference() {
         linear_extrude(height = depth, center = true, convexity = 4)
             difference() {
@@ -59,9 +63,10 @@ module fan(type) {
     }
 
     //Seven Blades
+    color("white")
     linear_extrude(height = depth - 1, center = true, convexity = 4, twist = -30, slices = depth / 2)
-        for(i= [0 : 6])
-            rotate((360 * i) / 7)
+        for(i= [0 : fan_blades(type)-1])
+            rotate((360 * i) / fan_blades(type))
                 translate([0, -1.5 / 2])
                     square([fan_bore(type) / 2 - 0.75, 1.5]);
 }
