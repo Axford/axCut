@@ -306,6 +306,16 @@ module tube(or, ir, h, center = true) {
         }
 }
 
+// tube that tapers
+module conicalTube(or1,ir1,or2,ir2,h) {
+	difference() {
+		cylinder(r1=or1, r2=or2, h=h);
+		
+		translate([0,0,-eta])
+			cylinder(r1=ir1, r2=ir2, h=h+2*eta);
+	}
+}
+
 
 module moreShapesExamples() {
 	arrangeShapesOnGrid(xSpacing=100, ySpacing=80, cols=4, showLocalAxes=true) {

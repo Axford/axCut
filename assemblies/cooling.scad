@@ -244,7 +244,7 @@ module radBracket_stl() {
 
 
 	// mating parts
-	if (false) {
+	if (true) {
 		translate([rc + 10 -(bw/2), bd/2 + 25 + 20 + radOY, 0]) {
 			for (i=[0:2])
 				translate([0, -25/2 - bd/2, fi + fc/2 + i*(fc+fs)])
@@ -263,5 +263,146 @@ module radBracket_stl() {
 		
 		// y rail
 		BR20x20WGBP([rc/2,rz2,0],[rc/2,rz2,400]);
+	}
+}
+
+
+
+module coolingTubeGrommet_stl() {
+	ir = 14/2;
+	wall = 4*perim;
+	h = 12;
+	
+	flangeW = 6;
+	flangeH = 4;
+
+	union() {
+		difference() {
+			tube(ir+wall, ir, h, center=false);
+			
+			// flare the ends
+			translate([0,0,-eta])
+				cylinder(r1=ir+2perim, r2=ir, h=2perim);
+				
+			translate([0,0,h+eta])
+				mirror([0,0,1])
+				cylinder(r1=ir+2perim, r2=ir, h=2perim);
+		}
+				
+		tube(ir + flangeW, ir+wall-eta, flangeH, center=false);		
+	}
+}
+
+module coolingTubeReturnElbow_stl() {
+	tubeOR = 14/2;
+	tubeIR = 10/2;
+	wall = 8*perim;
+	
+	elbowOR = tubeIR + wall;
+	
+	outletH = 15;
+	
+	inletH = 20;
+	
+	flangeW = 6;
+	flangeH = 4;
+	flangeR = elbowOR + flangeW;
+	
+	elbowR = 30;
+	
+	barbH = 4;
+	
+	union() {
+
+		// barbed inlet
+		translate([elbowR,eta,0])
+			rotate([90,0,0])
+			conicalTube(tubeOR, tubeIR, tubeOR-2perim, tubeIR-2perim, inletH, $fn=24);
+			
+		// barbs
+		translate([elbowR,-inletH + barbH,0])
+			rotate([90,0,0])
+			conicalTube(tubeOR, tubeIR, tubeOR-2perim, tubeIR-2perim, barbH, $fn=24);
+			
+		// flare inlet base
+		translate([elbowR,eta,0])
+			rotate([90,0,0])
+			conicalTube(elbowOR, tubeIR, tubeOR-2perim, tubeIR-2perim, 6, $fn=24);
+		
+		
+		// flanged outlet
+		translate([eta,elbowR,0])
+			rotate([0,-90,0])
+			tube(tubeIR+4*perim, tubeIR, outletH, center=false, $fn=24);
+		translate([eta,elbowR,0])
+			rotate([0,-90,0])
+			tube(flangeR, tubeIR+eta, flangeH, center=false, $fn=24);	
+
+
+		// stiffener + print support
+		sector(elbowR - elbowOR + perim, 90, 4perim, center = true);
+		
+		translate([-flangeH,0,-2perim])
+			cube([flangeH+eta, elbowR-tubeIR-flangeW, 4perim]);
+		
+		*translate([0,eta,0])
+			mirror([0,1,0])
+			right_triangle(elbowR-elbowOR,inletH+eta,4perim);
+		
+		
+		// supports for outlet
+		for (i=[0:2])
+			translate([-outletH+perim + i*(outletH)/3,0,0])
+			rotate([0,-90,0])
+			linear_extrude(perim)
+			difference() {
+				translate([-cos(45)*tubeOR,-inletH,0])
+					square([2*cos(45)*tubeOR, elbowR + inletH]);
+					
+				translate([0,elbowR,0])
+					circle(tubeOR);
+			}
+			
+		// supports for flange
+		for (i=[0:1])
+			translate([-flangeH+perim + i*(flangeH-perim),0,0])
+			rotate([0,-90,0])
+			linear_extrude(perim)
+			difference() {
+				translate([-cos(45)*flangeR,-inletH,0])
+					square([2*cos(45)*flangeR, elbowR + inletH]);
+					
+				translate([0,elbowR,0])
+					circle(tubeOR);
+			}
+			
+		// elbow
+		difference() {
+			union() {
+				intersection() {
+					rotate_extrude(convexity=10)
+						translate([elbowR,0,0])
+						circle(elbowOR, $fn=24);
+				
+					translate([0,0,-50])
+						cube([100,100,100]);
+				}
+				
+				// supports for elbow
+				for (i=[0:2])
+					translate([5 + i*6,0,0])
+					rotate([0,-90,0])
+					linear_extrude(perim)
+					translate([-cos(45)*elbowOR,-inletH,0])
+					square([2*cos(45)*elbowOR, elbowR + inletH]);
+			
+			}
+			
+			// hollow the torus
+			rotate_extrude(convexity=10)
+				translate([elbowR,0,0])
+				circle(tubeIR, $fn=24);			
+		}
+	
 	}
 }

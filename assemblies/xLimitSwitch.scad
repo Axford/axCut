@@ -6,7 +6,7 @@ xLimitSwitchOffset = openrail_plate_offset +
 
 xLimitSwitchBracket_connectors = [
 	[[0,0,0],[0,0,1],0],  // frame fixing
-	[[0,-xLimitSwitchOffset,12],[0,0,-1],-90]   // microswitch
+	[[0,-xLimitSwitchOffset,13],[0,0,-1],-90]   // microswitch
 ];
 
 
@@ -23,7 +23,7 @@ module xLimitSwitchBracket_stl() {
 	//steps 5mm from centreline of rail
 	armW = -con[1][0][1] + mw - 5 - mcon[0][0][0];
 
-	armH = con[1][0][2] - md - default_wall;
+	armH = con[1][0][2] - md - thick_wall;
 	
 	
 
@@ -45,7 +45,7 @@ module xLimitSwitchBracket_stl() {
 					union() {
 						// fixing arm
 						translate([armH,-armW - 5,0])
-							square([default_wall, armW]);
+							square([thick_wall, armW + 10]);
 			
 						// frame fixing 
 						translate([0,-5,0])
