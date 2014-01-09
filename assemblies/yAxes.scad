@@ -112,3 +112,46 @@ module yAxesAssembly() {
 			
 	}
 }
+
+
+// little holder for 3x  6x1mm disc neodymium magnets for use with hall sensor on Y2
+module yMagnetHolder_stl() {
+	mr = 6/2 + 0.5;
+	mh = 3*1 + 0.5;
+	
+	h = mh + 3*layers;
+	
+	sr = screw_clearance_radius(M4_cap_screw);
+	
+	r = washer_radius(M4_washer);
+
+	dw = default_wall;
+	
+	mo = sr + mr + 3;
+
+	color(x_carriage_color)
+		difference() {
+			linear_extrude(h)
+			difference() {
+				hull() {
+					circle(r);
+					
+					translate([mo,0,0])
+						circle(mr + dw);
+				}
+			
+				// screw hole
+				circle(sr);
+			}
+		
+			// hollow for magnets
+			translate([mo,0,-eta])
+				cylinder(r=mr, h=mh + eta);
+		}
+	
+	// mating parts	
+	if (false) {
+		translate([0,0,h])
+			screw_and_washer(M4_cap_screw, M4_washer);
+	}
+}

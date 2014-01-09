@@ -10,7 +10,7 @@ xLimitSwitchBracket_connectors = [
 ];
 
 
-module xLimitSwitchBracket_stl() {
+module xLimitSwitchBracket_stl(noSnapFitting=false) {
 
 	con = xLimitSwitchBracket_connectors;
 	mcon = microswitch2_connectors;
@@ -45,11 +45,11 @@ module xLimitSwitchBracket_stl() {
 					union() {
 						// fixing arm
 						translate([armH,-armW - 5,0])
-							square([thick_wall, armW + 10]);
+							square([thick_wall, armW + 15]);
 			
 						// frame fixing 
 						translate([0,-5,0])
-							square([thick_wall, 10]);
+							square([thick_wall, 15]);
 			
 						// fillet
 						translate([0,-10+eta,0])
@@ -62,22 +62,24 @@ module xLimitSwitchBracket_stl() {
 		
 		
 				// union to snap fitting
-				rotate([0,0,90])
+				if (!noSnapFitting)
+					rotate([0,0,90])
 					20x20SnapFitting_stl(embed=true);
 		
 			}
 		
 			// fracture line
-			translate([-50,-5+perim,perim])
-				cube([100,10 - 2perim,perim]);
+			if (!noSnapFitting)
+				translate([-50,-5+perim,0.7])
+				cube([100,15 - 2perim,0.7]);
 		
 			// hollow for screw
-			translate([0,0,0])
+			translate([0,0,-eta])
 				cylinder(r=screw_clearance_radius(M4_cap_screw),h=50);
 		
-			// hollow for screw head
-			translate([0,0,thick_wall])
-				cylinder(r=screw_head_radius(M4_cap_screw),h=50);
+			// countersink
+			translate([0,0,thick_wall + 2perim])
+				cylinder(r=screw_head_radius(M4_cap_screw) + 0.3,h=50);
 		
 	
 			// mswitch fixing holes

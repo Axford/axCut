@@ -47,6 +47,24 @@ if (false) {
 
 //coolingTubeGrommet_stl();
 
-//coolingTubeReturnElbow_stl();
+//translate([30,0,-10]) rotate([0,90,90]) coolingTubeReturnElbow_stl();
 
-xLimitSwitchBracket_stl();
+//xLimitSwitchBracket_stl(noSnapFitting=true);
+
+//coolingTubeGrommetCap_stl();
+
+//coolingTubeReturnElbowCap_stl();
+
+//coolingFlowSensor();
+
+//coolingFlowSensorBracket_stl();
+
+//pumpCableGrommet_stl();
+
+//translate([25,0,0]) pumpCableGrommetCap_stl();
+
+//yMagnetHolder_stl();
+
+//waterPumpBracket_stl();
+
+fixedMirrorHolder_stl();

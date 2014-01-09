@@ -293,6 +293,21 @@ module coolingTubeGrommet_stl() {
 	}
 }
 
+
+// cap to mate with gromment inside reservoir
+module coolingTubeGrommetCap_stl() {
+	ir = 14/2;
+	wall = 4*perim;
+	h = 12;
+	
+	flangeW = 6;
+	flangeH = 4;
+
+	union() {		
+		tube(ir + flangeW, ir+wall+0.1, flangeH, center=false);		
+	}
+}
+
 module coolingTubeReturnElbow_stl() {
 	tubeOR = 14/2;
 	tubeIR = 10/2;
@@ -406,3 +421,244 @@ module coolingTubeReturnElbow_stl() {
 	
 	}
 }
+
+module coolingTubeReturnElbowCap_stl() {
+	wall = 4*perim;
+	h = 12;
+	
+	flangeW = 6;
+	flangeH = 4;
+
+	tubeOR = 14/2;
+	tubeIR = 10/2;
+
+	union() {		
+		tube(tubeIR + flangeW + 4, tubeIR + wall + 0.3, flangeH, center=false);		
+	}
+}
+
+
+
+// placeholder for an assembled flow sensor
+module coolingFlowSensor() {
+	bodyR = 36/2;
+	bodyH = 34;
+	pipeOffsetY = 9;  // offset of pipe entreline from body centreline in y
+	pipeOffsetZ = 13;
+	bodyOutletR = 21/2;
+	
+	// water flow is towards x+
+	
+	// pipework
+	color("brass")
+		for(i=[0:1])
+		mirror([i,0,0]) {
+			translate([37/2,0,0])
+				rotate([0,90,0])
+				cylinder(r=27/2,h=7, $fn=6);
+				
+			translate([37/2,0,0])
+				rotate([0,90,0])
+				cylinder(r=24/2,h=19);
+				
+			translate([37/2 + 19,0,0])
+				rotate([0,90,0])
+				cylinder(r=20/2,h=9);
+				
+			translate([37/2 + 19 + 9,0,0])
+				rotate([0,90,0])
+				cylinder(r=24/2,h=14, $fn=6);
+				
+			translate([37/2 + 19 + 9 + 14,0,0])
+				rotate([0,90,0])
+				cylinder(r=12/2,h=17);
+		}
+	
+	// body
+	color("grey")
+		union() {
+			translate([0,pipeOffsetY,-pipeOffsetZ]) {
+				cylinder(r=bodyR, h=bodyH, $fn=32);
+			
+				// fixings
+				for (i=[0:3])
+					rotate([0,0,45 + i*90])
+					translate([bodyR,0,bodyH-25])
+					cylinder(r=8/2, h=26, $fn=16);	
+			}
+		
+			translate([-bodyH/2-5,0,0])
+				rotate([0,90,0])
+				cylinder(r=bodyOutletR, h=bodyH+10, $fn=24);
+		}
+		
+		
+	// wires
+	color("red")
+		translate([-3,bodyR,bodyH-pipeOffsetZ-3])
+		cube([6,30,2]);
+}
+
+
+
+// print x2
+module coolingFlowSensorBracket_stl() {
+	sensorOffsetX = -30;
+	sensorOffsetY = -20;
+	
+	pipeOR = 24/2 + 0.5;
+	
+	dw  =default_wall;
+	tw = thick_wall;
+	
+	t = 9;
+	
+	color(x_carriage_color)
+		difference() {
+			
+			union() {
+				// snap fitting
+				translate([0,-10,9/2])
+					rotate([90,0,0])
+					20x20SnapFitting_stl(embed=true);
+			
+				
+				linear_extrude(t)
+					difference() {
+						hull() {
+							translate([sensorOffsetX,sensorOffsetY,0])
+								rotate([0,0,180])
+								sector2D(pipeOR + tw,210);
+								
+							translate([-10,-10-tw,0])
+								rounded_square(20,tw,2,center=false);
+						}
+						
+						translate([sensorOffsetX,sensorOffsetY,0])
+							circle(pipeOR);
+					}
+			
+			}
+			
+			
+			// fracture line
+			translate([-9,-10 - 2perim - 0.7,-1])
+				cube([18,2perim,t+2]);
+			
+			// screw hole
+			translate([0,-10+eta,t/2])
+				rotate([90,0,0])
+				cylinder(r=screw_clearance_radius(M4_cap_screw), h=100);
+				
+			// countersink
+			translate([0,-10-tw - 3*perim,t/2])
+				rotate([90,0,0])
+				cylinder(r=screw_head_radius(M4_cap_screw)+0.3, h=100);
+		}
+	
+	// mating part placeholders
+	if (false) {
+		translate([sensorOffsetX, sensorOffsetY, -26])
+			rotate([0,-90,180])
+			coolingFlowSensor();
+		
+		
+		BR20x20WGBP([0,0,0],[0,0,400]);
+	}
+}
+
+
+
+module pumpCableGrommet_stl() {
+	ir = 6/2;
+	wall = 4*perim;
+	h = 12;
+	
+	flangeW = 8;
+	flangeH = 4;
+
+	union() {
+		difference() {
+			tube(ir+wall, ir, h, center=false);
+			
+			// flare the ends
+			translate([0,0,-eta])
+				cylinder(r1=ir+2perim, r2=ir, h=2perim);
+				
+			translate([0,0,h+eta])
+				mirror([0,0,1])
+				cylinder(r1=ir+2perim, r2=ir, h=2perim);
+		}
+				
+		tube(ir + flangeW, ir+wall-eta, flangeH, center=false);		
+	}
+}
+
+
+// cap to mate with gromment inside reservoir
+module pumpCableGrommetCap_stl() {
+	ir = 6/2;
+	wall = 4*perim;
+	h = 12;
+	
+	flangeW = 8;
+	flangeH = 4;
+
+	union() {		
+		tube(ir + flangeW, ir+wall+0.1, flangeH, center=false);		
+	}
+}
+
+module waterPumpBracket_stl() {
+	
+	rc = frameCY[5] - frameCY[3];
+	
+	w = rc + 20;
+	d = 9;
+	t = thick_wall;
+	
+	ardW = 53.3;
+	fixW = 48.3;
+	ardO = (ardW - fixW)/2 + (rc-ardW)/2;
+	
+	r1 = screw_clearance_radius(M4_hex_screw);
+	r2 = 3/2;
+
+	pumpW = 46;
+	pumpFixingC = 30;
+	pumpFixingR = screw_clearance_radius(M4_cap_screw);
+
+	color(x_carriage_color)	
+		//render()
+		difference() {
+			union() {
+				linear_extrude(t)
+					difference() {
+						translate([-10,-d/2])
+							square([w,d]);
+						
+						// frame fixing holes
+						circle(r1);
+						translate([rc,0,0])
+							circle(r1);
+							
+						// pump fixing hole
+						translate([pumpFixingC,0,0])
+							circle(pumpFixingR);
+
+					}
+		
+				20x20SnapFitting_stl(embed=true);
+			
+				translate([rc,0,0]) 
+					20x20SnapFitting_stl(embed=true);
+				
+			}
+		
+			// fracture lines
+			for (i=[0,1])
+				translate([-9 + i*rc,-d/2-1,0.7])
+				cube([18,d+2,2perim]);	
+		}
+}
+

@@ -706,3 +706,4 @@ module PowerSocketMount_stl() {
 				circle(screw_clearance_radius(M4_hex_screw));
 		}
 }
+
