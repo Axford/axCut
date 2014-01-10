@@ -1,0 +1,129 @@
+var path, bpath;
+
+var textItem = new PointText({
+content: 'Click and drag to draw a line.',
+point: new Point(20, 30),
+fillColor: 'black',
+});
+
+function onMouseDown(event) {
+// If we produced a path before, deselect it:
+if (path) {
+path.selected = false;
+}
+
+// Create a new path and set its stroke color to black:
+path = new Path({
+segments: [event.point],
+strokeColor: 'grey'
+// Select the path, so we can see its segment points:
+//fullySelected: true
+});
+}
+
+// While the user drags the mouse, points are added to the path
+// at the position of the mouse:
+function onMouseDrag(event) {
+path.add(event.point);
+
+// Update the content of the text item to show how many
+// segments it has:
+textItem.content = 'Segment count: ' + path.segments.length;
+}
+
+function isInflection(seg) {
+if (seg.next == null || seg.previous == null) {
+return true;
+}
+
+var prev = seg.previous;
+var next = seg.next;
+
+iny = seg.handleIn.y;
+outy = seg.handleOut.y;
+
+if (seg.handleIn.x ==0 && seg.handleIn.y ==0)
+iny = prev.point.y - seg.point.y;
+
+if (seg.handleOut.x ==0 && seg.handleOut.y ==0)
+outy = next.point.y - seg.point.y;
+
+
+if ((outy <= 0 && iny <= 0) ||
+(outy >= 0 && iny >= 0))
+return true
+else 
+return false;
+}
+
+// When the mouse is released, we simplify the path:
+function onMouseUp(event) {
+//path.closePath();
+
+var segmentCount = path.segments.length;
+
+// When the mouse is released, simplify it:
+path.simplify(10);
+
+// divide all non-linear curves
+var i = 0;
+while (i < path.curves.length) {
+if (!path.curves[i].isLinear()) {
+path.curves[i].divide();
+i++;
+}
+i++;
+}
+
+var inflections = [];
+
+// look for inflections in y
+for (i=0; i<path.curves.length; i++) {
+var curve = path.curves[i];
+
+// check end points 
+if (isInflection(curve.segment1))
+inflections.push(curve.segment1.point);
+
+if (isInflection(curve.segment2))
+inflections.push(curve.segment2.point);
+
+// if end points do not lie on ymin/ymax, then mark inflection point
+if ((curve.bounds.top == curve.point1.y && curve.bounds.bottom == curve.point2.y) || 
+(curve.bounds.top == curve.point2.y && curve.bounds.bottom == curve.point1.y)) {
+// do nothing :)
+
+} else {
+
+var cpath = new Path();
+cpath.add(curve.segment1);
+cpath.add(curve.segment2);
+cpath.strokeColor = 'orange';
+
+var bpath = new Path();
+
+if (curve.point1.y > curve.bounds.top && curve.point2.y > curve.bounds.top) {
+bpath.add([curve.bounds.left,curve.bounds.top],[curve.bounds.right,curve.bounds.top]);
+} else {
+bpath.add([curve.bounds.left,curve.bounds.bottom],[curve.bounds.right,curve.bounds.bottom]);
+}
+
+var intersections = bpath.getIntersections(cpath);
+for (var j=0; j<intersections.length; j++) {
+var p = intersections[j].point;
+
+inflections.push(p);
+}
+
+}
+}
+
+for (var i=0; i< inflections.length;i++) {
+var c = new Path.Circle({
+center: inflections[i],
+radius: 4,
+fillColor: 'red'
+});	
+}
+
+}

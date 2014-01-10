@@ -349,38 +349,18 @@ module fixedMirrorHolder_stl() {
 		//render()
 		union() {	
 			
-		
+			// frame lips
+			translate([-10-tw,-10,10])
+				cube([tw+dw, 5, dw]);
+			
+			translate([-10-tw,30,10])
+				cube([tw+dw, 5, dw]);
+				
 		
 			difference() {
 				translate([0,0,0])
 					union() {
-						*translate()
-							rotate()
-							right_triangle(-mx, -mx, h=fixedMirrorZOffset  + 10 + mw/2 + 10, center=false, $fn=12);
 						
-							
-						*translate([0,0,-10])
-							linear_extrude(mw/2 + 10)
-							hull($fn=16) {
-								translate([mc[0][0] + 2, mc[0][1] - 2, 0]) circle(thick_wall);
-								translate([mc[3][0] -5, mc[3][1] + 5, 0]) circle(thick_wall);
-							};	
-							
-						// base to support the mirror
-						*translate([-laserMirror_fixingOffset,laserMirror_fixingOffset,fixedMirrorZOffset-tw])
-							rotate([0,0,45])
-							difference() {
-								union() {
-									translate([-mw/2 - tw,-md/2,0])
-										cube([mw/2 + tw,md,tw]);
-							
-									cylinder(r=screw_clearance_radius(M6_cap_screw)+tw, h=tw);							
-								}
-							
-								// screw fixing
-								translate([0,0,-1])
-										cylinder(r=screw_clearance_radius(M6_cap_screw), h=tw+2);	
-							}
 						
 						// side clamp to support the mirror
 						translate([-laserMirror_fixingOffset,laserMirror_fixingOffset,fixedMirrorZOffset])
@@ -400,19 +380,14 @@ module fixedMirrorHolder_stl() {
 										cylinder(r=screw_clearance_radius(M6_cap_screw), h=2*tw+2);	
 							}
 							
-						// frame fixing plate
-						*translate([-10-tw,-10,-10])
-							cube([tw, 50, 20]);
 							
-						// frame lip
-						translate([-10-tw,-10,10])
-							cube([tw+dw, 50, dw]);
+						
 							
 							
 						// join
 						hull() {
 							translate([-10-tw,-10,-10])
-								cube([tw, 50, 20 + dw]);
+								cube([tw, 45, 20 + dw]);
 								
 							translate([-laserMirror_fixingOffset,laserMirror_fixingOffset,fixedMirrorZOffset - tw])
 								rotate([0,0,45])
@@ -431,6 +406,10 @@ module fixedMirrorHolder_stl() {
 				// flatten the edge for printing
 				translate([-100,-110,-20])
 					cube([100,100,200]);
+					
+				// flatten the frame side to avoid clash with motor bracket
+				translate([-10,-20,-20])
+					cube([100,100,200]);
 				
 					
 				// hole for M6 bottom fixing
@@ -440,11 +419,11 @@ module fixedMirrorHolder_stl() {
 				
 				// countersink for M6 nut
 				translate([-laserMirror_fixingOffset,laserMirror_fixingOffset,-20])
-					cylinder(r=11/2, h=fixedMirrorZOffset + 20 - tw);
+					cylinder(r=10.6/2, h=fixedMirrorZOffset + 20 - tw);
 					
 			
 				// frame fixings
-				translate([0,0,0])
+				translate([0,-4,0])
 					 {
 						rotate([0,90,0])
 							cylinder(r=screw_clearance_radius(M4_cap_screw),h=100,center=true);	
@@ -454,7 +433,7 @@ module fixedMirrorHolder_stl() {
 							cylinder(r=screw_head_radius(M4_cap_screw)+1,h=50);
 					}
 					
-				translate([0,30,0])
+				translate([0,29,0])
 					 {
 						rotate([0,90,0])
 							cylinder(r=screw_clearance_radius(M4_cap_screw),h=100,center=true);	
@@ -718,7 +697,7 @@ module laserDiodeAdjuster_stl() {
 module laserCollar_stl() {
 	linear_extrude(10)
 		difference() {
-			circle(50/2 + 3*perim + 0.1);
+			circle(50/2 + 4*perim + 0.1);
 			
 			circle(50/2);
 		
