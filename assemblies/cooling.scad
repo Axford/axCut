@@ -662,3 +662,173 @@ module waterPumpBracket_stl() {
 		}
 }
 
+
+module fillPort() {
+	od1 = 26;
+	h1 = 11;
+	
+	od2 = 16;
+	h2 = 10;
+	
+	od3 = 22;
+	h3 = 4.5;
+
+
+	color("grey")
+		union() {
+			cylinder(r=od1/2, h=h1);
+		
+			translate([0,0,-h2])
+				cylinder(r=od2/2, h=h2);
+			
+			translate([0,0,-h2])
+				cylinder(r=od3/2, h=h3);
+		}
+}
+
+module fillPortBracket_stl() {
+	od1 = 26;
+	h1 = 11;
+	
+	od2 = 16;
+	h2 = 10;
+	
+	dw = default_wall;
+	tw = thick_wall;
+	
+	fo = [-25,0,10 + tw];
+	
+	d = od1;
+	
+	union() {
+		difference() {	
+			hull() {
+				translate(fo)
+					translate([0,0,-tw])
+					cylinder(r=od1/2, h=tw, center=false);
+	
+	
+				// mounting plate
+				translate([0,0,10])
+					cylinder(r=10, h=tw, center=false);
+			}
+		
+			// hollow for od2
+			translate(fo)
+				cylinder(r=od2/2+0.3, h=100, center=true);
+				
+			// hollow for frame fixing
+			translate()
+				cylinder(r=screw_clearance_radius(M4_cap_screw), h=100, center=true);
+		}
+		
+		// nib
+		translate([-10-dw,-10,10-dw+eta])
+			cube([dw, 20, dw]);
+	}
+	
+
+	// mating parts
+	if (false) {
+		BR20x20WGBP([0,0,0],[0,100,0]);
+	
+		translate(fo)
+			fillPort();
+	}
+}
+
+
+module coolingTubeBracket_stl() {
+	tubeR  = 14/2;
+	
+	h = thick_wall + screw_head_height(M4_cap_screw);
+	
+	difference() {	
+		union() {
+		
+			// tube clip
+			translate([0,tubeR + h,0])
+				rotate([0,0,90 + 100/2])
+				linear_extrude(thick_wall)
+				donutSector2D(tubeR+default_wall,tubeR,260);
+	
+	
+			// base
+			hull() {
+				translate([-8,0,0])
+					cube([16,thick_wall,9]);
+			
+				// joint
+				translate([-5,0,0])
+					cube([10,h,thick_wall]);
+			}
+	
+			// snap
+			translate([0,0,9/2])
+				rotate([-90,0,0])
+				20x20SnapFitting_stl(embed=true);	
+		}
+		
+		// screw hole
+		translate([0,-eta,9/2])
+			rotate([-90,0,0])
+			cylinder(r=screw_clearance_radius(M4_cap_screw), h=100);
+			
+		// countersink
+		translate([0,thick_wall,9/2])
+			rotate([-90,0,0])
+			cylinder(r=screw_head_radius(M4_cap_screw), h=100);
+			
+		// fracture line
+		translate([-7,perim,-1])
+			cube([14,0.7, 20]);
+	}
+}
+
+module coolingTubeThermistorBracket_stl() {
+	tubeR  = 10/2;
+	tubeOffset = 14;
+	
+	h = thick_wall + screw_head_height(M4_cap_screw);
+	
+	difference() {	
+		union() {
+		
+			// tube clip
+			translate([0,tubeR + tubeOffset,0])
+				rotate([0,0,90 + 100/2])
+				linear_extrude(thick_wall)
+				donutSector2D(tubeR+default_wall,tubeR,260);
+	
+	
+			// base
+			hull() {
+				translate([-8,0,0])
+					cube([16,thick_wall,9]);
+			
+				// joint
+				translate([-5,tubeOffset-h,0])
+					cube([10,h,thick_wall]);
+			}
+	
+			// snap
+			translate([0,0,9/2])
+				rotate([-90,0,0])
+				20x20SnapFitting_stl(embed=true);	
+		}
+		
+		// screw hole
+		translate([0,-eta,9/2])
+			rotate([-90,0,0])
+			cylinder(r=screw_clearance_radius(M4_cap_screw), h=100);
+			
+		// countersink
+		translate([0,thick_wall,9/2])
+			rotate([-90,0,0])
+			cylinder(r=screw_head_radius(M4_cap_screw), h=100);
+			
+		// fracture line
+		translate([-7,perim,-1])
+			cube([14,0.7, 20]);
+	}
+}

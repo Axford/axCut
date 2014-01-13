@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>SVG To GCode</title>
+	<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+	
+	<script src="js/paper.js"></script>
+	
+	<script>
+	
+	var machine = { 
+		bedW: 850,
+		bedD: 650,
+		bedH: 150
+	};
+	
+	
+	paper.install(window);
+	
+	$( document ).ready(function() {
+  		var canvas = document.getElementById('canvas');
+		paper.setup(canvas);
+		
+		// illustrate the machine bed
+		var b = new Path.Rectangle(0,0,machine.bedW, machine.bedD);
+		b.strokeColor = 'red';
+	
+		var file = document.getElementById('file');
+		file.addEventListener('change', function (event) {
+			var files = event.target.files;
+			for (var i = 0; i < files.length; i++) {
+				var file = files[i];
+				if (file.type.match('svg')) {
+					project.importSVG(file, function(item) {
+					
+						// scale to 96mm width
+						var w1  = item.bounds.width;
+						var scale = 100/w1;
+					
+						// scale to fit bed
+						item.transformContent = true;
+						item.scale(scale);
+						
+						item.fillColor = new Color(0,0,0,0);
+						item.strokeWidth = 0.5;
+						item.strokeColor = 'red';
+						
+						// position
+						item.position = new Point(machine.bedW/2, machine.bedD/2);
+						
+						
+						
+						// generate gcode
+						genGCode(item);
+						
+						view.draw();
+						
+					});
+				}
+			}
+		});
+	
+	
+		view.draw();
+		
+		view.on('resize', function(event) {
+			view.draw();
+		});
+	});
+	
+	function clamp(val, min, max){
+   	    return Math.max(min, Math.min(max, val));
+	}
+	
+	
+	function genG1(x,y) {
+		return 'G1 X'+clamp(x, 0, machine.bedW).toFixed(2)+
+		       ' Y'+clamp(machine.bedD-y, 0, machine.bedD).toFixed(2)+
+		       '\r\n';
+	}
+	
+	function genG5(x,y,i,j,k,l) {
+		return 'G5'+
+		       'X'+clamp(x, 0, machine.bedW).toFixed(1)+
+		       'Y'+clamp(machine.bedD-y, 0, machine.bedD).toFixed(1)+
+		       'I'+clamp(i, 0, machine.bedW).toFixed(1)+
+		       'J'+clamp(machine.bedD-j, 0, machine.bedD).toFixed(1)+
+		       'K'+clamp(k, 0, machine.bedW).toFixed(1)+
+		       'L'+clamp(machine.bedD-l, 0, machine.bedD).toFixed(1)+
+		       '\r\n';
+	}
+	
+	function genM4(pwr) {
+		return 'M4 S'+clamp(pwr,0,100) + '\r\n';
+	}
+	
+	function genM5() {
+		return 'M5\r\n';
+	}
+	
+	function genGCodeForPath(path) {
+		var gcode = '; Path\r\n';
+		
+		
+		// move to start point
+		gcode += genG1(path.curves[0].point1.x, path.curves[0].point1.y);
+		
+		// start laser
+		gcode += genM4(100);
+		
+		// process curves
+		for (var i=0; i<path.curves.length; i++) {
+			var curve = path.curves[i];
+			
+			if (curve.isLinear()) {
+			
+				gcode += genG1(curve.point2.x, curve.point2.y);
+			
+			} else {
+				gcode += genG5(curve.point2.x, 
+						       curve.point2.y,
+							   curve.handle1.x + curve.point1.x, 
+							   curve.handle1.y + curve.point1.y,
+							   curve.handle2.x + curve.point2.x, 
+							   curve.handle2.y + curve.point2.y);
+			
+			}
+		}
+		
+		// stop laser
+		gcode += genM5();
+		
+		return gcode;
+	}
+	
+	function genGCodeForItem(item) {
+		var gcode = '';
+		
+		if (item.children && item.children.length > 0) {
+			gcode += '; Group\r\n';
+		
+			for (var i=0; i<item.children.length; i++) {
+				gcode += genGCodeForItem(item.children[i]);
+			}
+		} else if (item._class == 'Path') {
+			gcode += genGCodeForPath(item);
+		}
+		
+		return gcode;
+	}
+	
+	
+	function genGCode(item) {
+		// parse item to generate GCode
+		var gcode = 'G28 XY\r\n'+
+				    'G1 F4000\r\n';
+		
+		gcode += genGCodeForItem(item);
+		
+		
+		gcode += 'G1 X850 Y650\r\n'+
+				 'G28 XY\r\n';
+		
+		$('#gcode').html(gcode);
+	}
+	
+	
+	</script>
+
+</head>
+<body>
+	<form>
+	<input type="file" id="file">
+	</form>
+	<div id="debug"></div>
+	<canvas id="canvas" width="900" height="700"></canvas>
+	
+	<br/>
+	
+	<textarea id="gcode" style="clear:both; width:300px; height:700px; position:absolute; left: 900px; top:0px;"></textarea>
+</body>
+</html>

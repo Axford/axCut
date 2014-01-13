@@ -707,3 +707,31 @@ module PowerSocketMount_stl() {
 		}
 }
 
+
+
+// simple protective case for relay module
+module relayModuleCase_stl() {
+	dw = default_wall;
+	pcbW = 50.5;
+	pcbD = 39;
+	fixingInset = 3;  // fixings are 3mm from each corner
+	fixingR = screw_clearance_radius(M3_cap_screw);
+	caseW =  pcbW + 2 + 2*dw;
+	caseD =  pcbD + 2 + 2*dw;
+	
+	difference() {
+		union() {
+			roundedRect([caseW, caseD, 3*layers],3,center=true);
+			
+			// walls
+			for (j=[-1,1])
+				translate([0,j*(caseD/2 - dw/2),5/2])
+				cube([pcbW,dw, 5], center=true);	
+		}
+		
+		// fixings
+		for (i=[-1,1],j=[-1,1])
+			translate([i*(pcbW/2-fixingInset), j*(pcbD/2-fixingInset), 0])
+			cylinder(r=fixingR, h=10, center=true);
+	}
+}
