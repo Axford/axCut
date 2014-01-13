@@ -100,7 +100,7 @@
 	}
 	
 	function genGCodeForPath(path) {
-		var gcode = '; Path\r\n';
+		var gcode = '\r\n';
 		
 		
 		// move to start point
@@ -138,7 +138,7 @@
 		var gcode = '';
 		
 		if (item.children && item.children.length > 0) {
-			gcode += '; Group\r\n';
+			gcode += '\r\n';
 		
 			for (var i=0; i<item.children.length; i++) {
 				gcode += genGCodeForItem(item.children[i]);
