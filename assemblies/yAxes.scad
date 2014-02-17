@@ -58,6 +58,12 @@ module yAxesAssembly() {
 	attach(con_xAxis_to_motorMount, xAxisMotorPlateConnectors[0]) 
 		xAxisMotorPlate_stl(showMotor=true);
 		
+	// 2nd y-axis motor
+	con_xAxis_to_motorMount2 = [[frameCY[4]-10,beltCY[1]-28,frameCZ[2]], [-1,0,0], -90];
+	
+	attach(con_xAxis_to_motorMount2, xAxisMotorPlateConnectors[0]) 
+		xAxisMotorPlate_stl(showMotor=true);
+		
 		
 	// idlers
 	con_yAxis_to_yIdler = [[frameCY[1],frameCX[0]+15,frameCZ[2]], [0,1,0], 0];
