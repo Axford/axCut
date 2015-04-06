@@ -11,7 +11,7 @@
 	
 	var machine = { 
 		bedW: 850,
-		bedD: 650,
+		bedD: 3000,
 		bedH: 150
 	};
 	
@@ -34,9 +34,10 @@
 				if (file.type.match('svg')) {
 					project.importSVG(file, function(item) {
 					
-						// scale to 96mm width
+						// scale item
 						var w1  = item.bounds.width;
-						var scale = 100/w1;
+						var h1 = item.bounds.height;
+						var scale = machine.bedD/h1;
 					
 						// scale to fit bed
 						item.transformContent = true;
@@ -174,7 +175,7 @@
 	<input type="file" id="file">
 	</form>
 	<div id="debug"></div>
-	<canvas id="canvas" width="900" height="700"></canvas>
+	<canvas id="canvas" width="900" height="3000"></canvas>
 	
 	<br/>
 	
