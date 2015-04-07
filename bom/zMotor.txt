@@ -3,7 +3,7 @@ Vitamins:
  16 M3 cap screw x 20mm
   4 NEMA17 x 47mm stepper motor
  16 Nyloc nut M3
-  4 Threaded rod M6 x 165mm
+  4 Threaded rod M6 x 180mm
   4 Neoprene tubing OD 8mm ID 5mm x 16mm
  16 Washer M3 x 7mm x 0.5mm
 

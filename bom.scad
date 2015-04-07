@@ -14,6 +14,8 @@ yAxesAssembly();
 
 claddingAssembly();
 
+trolleyAssembly();
+
 
 *translate([frameCY[3] - 10, laserPowerSupply_depth,40])
 	rotate([90,-90,90])

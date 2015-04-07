@@ -1,0 +1,11 @@
+laserBracketAssembly:
+Vitamins:
+  4 Aluminium Extrusion Twist Nut
+  4 M4 cap screw x 10mm
+  4 M5 cap screw x 20mm
+  4 Nut M5
+  4 Washer M4 x 9mm x 0.8mm
+
+Printed:
+  2 laserBracket.stl
+

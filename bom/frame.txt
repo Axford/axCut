@@ -8,10 +8,10 @@ Vitamins:
   2 Aluminium Extrusion BR_20x40 1200mm
   6 Aluminium Extrusion BR_20x40 870mm
   1 Aluminium Extrusion BR_20x40 990mm
-180 Aluminium Extrusion Twist Nut
+148 Aluminium Extrusion Twist Nut
  40 BR20x20Gusset
-180 M4 cap screw x 8mm
- 36 Washer M4 x 9mm x 0.8mm
+148 M4 cap screw x 8mm
+  4 Washer M4 x 9mm x 0.8mm
 
 Printed:
 

@@ -453,3 +453,17 @@ module 20x20DropInNut() {
 			cylinder(r=6,h=100);
 	}
 }
+
+
+module aluProHingedFoot() {
+	footD = 20;
+	footH = 6;
+	threadD = 6;
+	h = 36;
+	
+	color(grey50)
+		union() {
+			cylinder(r=footD/2, h=footH);
+			cylinder(r=threadD/2, h=h);
+		}
+}

@@ -12,3 +12,4 @@ include <../assemblies/electronics.scad>
 include <../assemblies/cableChain.scad>
 include <../assemblies/xLimitSwitch.scad>
 include <../assemblies/cooling.scad>
+include <../assemblies/trolley.scad>

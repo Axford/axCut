@@ -210,6 +210,13 @@ bedMotorYOffset = 40;  // distance from centreline of front/back rails to centre
 
 showLaserBeam = true;
 
+
+// trolley
+trolleyHeight = 600;  // height from floor to top of trolley
+trolleyDepth = 760;  // outer dimensions, excluding cladding
+trolleyFloorClearance = 20;  // height above floor, to allow room for levelling feet
+
+
 echo("Overall width = ", (frameCY[5]-frameCY[0]+16));
 echo("Overall depth = ", (frameCX[3]-frameCX[0]+16));
 echo("Overall height = ", (frameCZ[4]-frameCZ[0]+26));

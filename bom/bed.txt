@@ -2,11 +2,9 @@ bed:
 Vitamins:
   6 Aluminium Extrusion BR_20x20 670mm
   2 Aluminium Extrusion BR_20x40 1100mm
- 32 Aluminium Extrusion Twist Nut
+ 24 Aluminium Extrusion Twist Nut
  12 BR20x20Gusset
- 32 M4 cap screw x 8mm
-  2 LM10UU linear bearing
-  4 Nut M5
+ 24 M4 cap screw x 8mm
 
 Printed:
 

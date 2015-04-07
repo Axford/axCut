@@ -1,24 +1,21 @@
-xCarriage:
+yCarriageRight:
 Vitamins:
+  2 Aluminium Extrusion Twist Nut
   8 Ball bearing 625_2RS 5mm x 16mm x 5mm
+  2 M4 cap screw x 16mm
   4 M5 cap screw x 25mm
   4 M5 cap screw x 30mm
   4 DelrinVGrooveWheel:
-  2 M3 hex screw x 16mm
-  2 M3 hex screw x 25mm
-  2 M4 hex screw x 20mm
+  4 M3 hex screw x 16mm
   4 Nut M3
-  2 Nyloc nut M4
   4 Nyloc nut M5
   1 OpenRailPlate20:
   4 OpenRailSpacer:
   4 Washer M3 x 7mm x 0.5mm
   2 Washer M4 x 9mm x 0.8mm
   4 Washer M5 x 10mm x 1mm
-  1 laserHead:
 
 Printed:
   2 xBeltClamp.stl
-  1 xBeltTensioner.stl
-  1 xCarriageBracket.stl
+  1 yCarriageBracketRight.stl
 

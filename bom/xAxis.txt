@@ -5,4 +5,5 @@ Printed:
 
 Sub-assemblies:
   1 xRail
-  2 yCarriage
+  1 yCarriageLeft
+  1 yCarriageRight

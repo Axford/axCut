@@ -1,0 +1,7 @@
+laserAssembly:
+Vitamins:
+
+Printed:
+
+Sub-assemblies:
+  2 laserBracketAssembly
