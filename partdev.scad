@@ -77,4 +77,8 @@ if (false) {
 
 //coolingTubeThermistorBracket_stl();
 
-relayModuleCase_stl();
+//relayModuleCase_stl();
+
+//20x20SnapFitting_stl();
+
+zLimitSwitchBracket_stl();

@@ -392,13 +392,13 @@ module 20x20SnapFitting_stl(embed=false) {
 		stl("20x20SnapFitting");
 	
 	translate([0,0,embed?-10:0])
-		render()
+		//render()
 		difference() {
 			union() {
-				// cap
+				// bridge
 				if (!embed) 
-					translate([-w/2,-d3/2,10])
-					cube([w,d3,t]);
+					translate([-5.8/2,-d3/2-2,9])
+					cube([5.8,d3+2,t]);
 				
 				// folds
 				for (i=[0,1])
@@ -431,6 +431,11 @@ module 20x20SnapFitting_stl(embed=false) {
 			// central split line
 			translate([-splitW/2,-d3/2-eta,0])
 				cube([splitW, d3+2*eta, 10 + splitW/2]);
+				
+			// level the top
+			if (!embed)
+				translate([-50,-50,10])
+				cube([100,100,100]);
 		}
 	
 	// for dev

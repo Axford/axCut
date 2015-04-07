@@ -6525,6 +6525,8 @@ var Path = PathItem.extend({
 				path = this;
 			} else if (index > 0) {
 				path = this._clone(new Path().insertAbove(this, true));
+			} else {
+				path = this;
 			}
 			path._add(segs, 0);
 			this.addSegment(segs[0]);
