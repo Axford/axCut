@@ -216,6 +216,10 @@ public void SendCommand(int v) {
   QueueCMD(cp5.get(Textfield.class, "NewCommand").getText());
 }
 
+public void NewCommand(String s) {
+  QueueCMD(cp5.get(Textfield.class, "NewCommand").getText());
+}
+
 public void Store(int v) {
    appendTextToFile("playback.gcode",lastCmd);
 }
@@ -380,7 +384,7 @@ void serialEvent(Serial p) {
   
   if (s.length() > 1 && s.substring(0,2).equals("ok")) cts = true;
   serialLog.append(s);
-  appendTextToFile("serial.log",s);
+  //appendTextToFile("serial.log",s);
   while (serialLog.size () > 20) serialLog.remove(0);
 }
 
@@ -417,6 +421,10 @@ void draw() {
     lastCmdRaw = c;
     SendCMD(AddCRC(lastLineNo, c));
   }
+  
+  // draw serial log size
+  String s2 = str(sendBuffer.size());
+  text(s2, 420, 300);
 }
 
 

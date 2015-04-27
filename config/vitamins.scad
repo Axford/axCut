@@ -43,6 +43,7 @@ include <../vitamins/openrailwheel.scad>
 include <../vitamins/openrailplates.scad>
 include <../vitamins/laserOptics.scad>
 include <../vitamins/laserPowerSupply.scad>
+include <../vitamins/StockMetal.scad>
 //include <../vitamins/arduino.scad>
 
 module rod(d , l, center=true) {

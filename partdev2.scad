@@ -32,4 +32,40 @@ debugConnectors=false;
 
 //20x20SnapFitting_stl(true);
 
-exhaustCoupling_stl();
+*exhaustCoupling_stl();
+
+*airLineXBracket_STL();
+
+*xLimitSwitchBracket_stl();
+
+*cableChainFrameFixingFemale_stl();
+
+*cableChainLink_stl();
+
+*cableChainXBracket_stl();
+
+*cableChainCarriageBracket_stl();
+
+*xAxisAssembly();
+
+*bedMaterialClamp_stl();
+
+*bedFrontEdgeClamp_stl();
+
+*mirror([1,0,0])
+	upperFrameBracket_stl(true);
+
+*mirror([1,0,0])
+	upperFrameBracketForPiston_stl();
+
+*mirror([1,0,0]) upperFrameBracketForHinge_stl();
+
+cableChainXSupportBracket_stl();
+
+*lidCornerBracket_stl();
+
+*translate([-6,0,0]) mirror([1,0,0]) lidCornerBracket_stl();
+
+*xCarriageBracket_stl();
+
+*laserNozzle_stl();

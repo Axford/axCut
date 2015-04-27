@@ -21,35 +21,35 @@ module roundedRect(size, radius, center=false, shell=0) {
 	x = size[0];
 	y = size[1];
 	z = size[2];
-	
+
 	translate([center?-x/2:0, center?-y/2:0, center?-z/2:0])
-	linear_extrude(height=z) 
+	linear_extrude(height=z)
 	difference() {
 		hull() {
 			translate([radius, radius, 0])
 			circle(r=radius);
-		
+
 			translate([x - radius, radius, 0])
 			circle(r=radius);
-		
+
 			translate([x - radius, y - radius, 0])
 			circle(r=radius);
-		
+
 			translate([radius, y - radius, 0])
 			circle(r=radius);
 		}
-		
+
 		if (shell > 0) {
 			hull() {
 			translate([radius + shell, radius + shell, 0])
 			circle(r=radius);
-		
+
 			translate([x - radius - shell, radius + shell, 0])
 			circle(r=radius);
-		
+
 			translate([x - radius - shell, y - radius - shell, 0])
 			circle(r=radius);
-		
+
 			translate([radius + shell, y - radius - shell, 0])
 			circle(r=radius);
 		}
@@ -82,7 +82,7 @@ module chamferedRect(size, chamfer, center=false) {
 	hull() {
 		translate([0,center?0:chamfer,0])
 			square([size[0],size[1]-2*chamfer],center);
-			
+
 		translate([center?0:chamfer,0,0])
 			square([size[0]-2*chamfer,size[1]],center);
 	}
@@ -147,8 +147,8 @@ module torusSlice(r1, r2, start_angle, end_angle, convexity=10, r3=0, $fn=64) {
 }
 
 module torus(r1, r2, $fn=64) {
-	rotate_extrude() 
-		translate([r1,0,0]) 
+	rotate_extrude()
+		translate([r1,0,0])
 		circle(r2, $fn=$fn/4);
 }
 
@@ -156,17 +156,17 @@ module torus(r1, r2, $fn=64) {
 module trapezoid(a,b,h,aOffset=0,center=false) {
 	// lies in x/y plane
 	// edges a,b are parallel to x axis
-	// h is in direction of y axis	
+	// h is in direction of y axis
 	// b is anchored at origin, extends along positive x axis
 	// a is offset along y by h, extends along positive x axis
 	// a if offset along x axis, from y axis, by aOffset
 	// centering is relative to edge b
 
-	translate([center?-b/2:0, center?-h/2:0, 0]) 
+	translate([center?-b/2:0, center?-h/2:0, 0])
 	polygon(points=[	[0,0],
 					[aOffset,h],
 					[aOffset + a, h],
-					[b,0]]); 
+					[b,0]]);
 }
 
 module trapezoidPrism(a,b,h,aOffset,height,center=false) {
@@ -182,7 +182,7 @@ module arrangeShapesOnAxis(axis=[1,0,0], spacing=50) {
 	}
 }
 
-module arrangeShapesOnGrid(xSpacing=50, ySpacing=50, cols=3, showLocalAxes=false) {	
+module arrangeShapesOnGrid(xSpacing=50, ySpacing=50, cols=3, showLocalAxes=false) {
 	// layout is cols, rows
 	for (i=[0:$children-1]) {
 		translate([(i - floor(i / cols)*cols) * xSpacing, floor(i / cols) * ySpacing, 0]) {
@@ -234,6 +234,16 @@ module roundedRightTriangle(width, height, h, r=[1,1,1], center = true, $fn=12) 
         }
 }
 
+module chamferedSquare(size, chamfer, center=false) {
+	hull() {
+		translate([0,center?0:chamfer,0])
+			square([size[0],size[1]-2*chamfer],center);
+
+		translate([center?0:chamfer,0,0])
+			square([size[0]-2*chamfer,size[1]],center);
+	}
+}
+
 
 module rounded_square(w, h, r, center=true)
 {
@@ -265,7 +275,7 @@ module rounded_cylinder(r, h, r2, roundBothEnds=false)
 				translate([r - r2, r2])
                 circle(r = r2);
 			}
-			
+
         }
 }
 
@@ -292,7 +302,7 @@ module sector2D(r, a, center = true) {
 module donutSector2D(or,ir,a, center=true) {
 	difference() {
 		sector2D(or,a,center);
-		
+
 		circle(ir);
 	}
 
@@ -310,7 +320,7 @@ module tube(or, ir, h, center = true) {
 module conicalTube(or1,ir1,or2,ir2,h) {
 	difference() {
 		cylinder(r1=or1, r2=or2, h=h);
-		
+
 		translate([0,0,-eta])
 			cylinder(r1=ir1, r2=ir2, h=h+2*eta);
 	}
@@ -346,7 +356,7 @@ module moreShapesExamples() {
 		rounded_square(w=30, h=20, r=5);
 		rounded_cylinder(r=10, h=50, r2=5, roundBothEnds=false);
 		rounded_cylinder(r=10, h=50, r2=5, roundBothEnds=true);
-		
+
 		// same as extruded pieSlice
 		sector(r=10, a=70, h=20, center = false);
 
@@ -362,8 +372,3 @@ module moreShapesExamples() {
 }
 
 *moreShapesExamples();
-
-
-
-
-
