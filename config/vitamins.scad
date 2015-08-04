@@ -35,7 +35,7 @@ include <../vitamins/pullies.scad>
 
 // new bits
 include <../vitamins/aluminiumProfiles.scad>
-include <../vitamins/aluProParts.scad>
+include <../vitamins/AluProParts.scad>
 include <../vitamins/curvedPipe.scad>
 include <../vitamins/microbore.scad>
 include <../vitamins/openrail.scad>
